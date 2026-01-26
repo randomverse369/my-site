@@ -1,115 +1,65 @@
-"use client";
-
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { ArrowRight, Mail } from "lucide-react";
 
 export default function Hero() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollY } = useScroll();
-    const y = useTransform(scrollY, [0, 1000], [0, 400]);
-    const opacity = useTransform(scrollY, [0, 500], [1, 0]);
-
     return (
         <section
-            ref={containerRef}
-            className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 pt-32 pb-20 overflow-hidden"
+            id="hero-section"
+            className="relative min-h-screen flex items-center justify-center px-6 md:px-12 pt-24 pb-12 overflow-hidden"
         >
-            {/* Background Ambience */}
-            <div className="absolute inset-0 z-0 pointer-events-none">
-                <motion.div
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.3, 0.5, 0.3],
-                        rotate: [0, 45, 0]
-                    }}
-                    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                    className="absolute top-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-purple-900/20 rounded-full blur-[120px] will-change-transform translate-z-0"
-                />
-                <motion.div
-                    animate={{
-                        scale: [1, 1.1, 1],
-                        opacity: [0.2, 0.4, 0.2],
-                        x: [0, -50, 0]
-                    }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear", delay: 2 }}
-                    className="absolute bottom-[-10%] left-[-20%] w-[70vw] h-[70vw] bg-blue-900/10 rounded-full blur-[120px] will-change-transform translate-z-0"
-                />
-            </div>
+            <div className="max-w-[90rem] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
 
-            <motion.div
-                style={{ y, opacity }}
-                className="relative z-10 max-w-[90rem] mx-auto w-full"
-            >
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-6"
-                >
-                    <div className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                    </div>
-                    <span className="text-xs font-medium tracking-widest uppercase text-white/80 font-mono">Available for work</span>
-                </motion.div>
+                {/* Left Column: Content */}
+                <div className="flex flex-col justify-center space-y-8 lg:col-span-7">
+                    <div className="space-y-6">
+                        <h1 className="hero-reveal text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-none text-white mix-blend-difference">
+                            Bridging human experiences &
+                            <br />
+                            <span className="text-gray-500">complex systems</span>
+                        </h1>
 
-                {/* Headline */}
-                <div className="space-y-2 mb-12">
-                    <div className="overflow-hidden">
-                        <motion.h1
-                            initial={{ y: "100%" }}
-                            animate={{ y: 0 }}
-                            transition={{ duration: 0.8, ease: [0.33, 1, 0.68, 1], delay: 0.4 }}
-                            className="text-6xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter leading-[1.1] md:leading-[1.1] mix-blend-difference text-white"
-                        >
-                            Bridging Human
-                        </motion.h1>
+                        <p className="hero-reveal max-w-2xl text-lg md:text-xl text-gray-400 leading-relaxed">
+                            6+ years of experience designing complex web and mobile products from discovery and research to UX, UI, and design systems.
+                            I work closely with founders, product managers, and engineers to turn ambiguity into usable, business-ready solutions.
+                        </p>
                     </div>
-                    <div className="overflow-hidden">
-                        <motion.h1
-                            initial={{ y: "100%" }}
-                            animate={{ y: 0 }}
-                            transition={{ duration: 0.8, ease: [0.33, 1, 0.68, 1], delay: 0.55 }}
-                            className="text-6xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter leading-[1.1] md:leading-[1.1] text-gray-400"
+
+                    <div className="hero-reveal flex flex-wrap gap-4">
+                        <Link
+                            href="#work"
+                            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-black font-medium hover:bg-gray-200 transition-colors"
                         >
-                            Behavior <span className="text-gray-600">&</span>
-                        </motion.h1>
-                    </div>
-                    <div className="overflow-hidden">
-                        <motion.h1
-                            initial={{ y: "100%" }}
-                            animate={{ y: 0 }}
-                            transition={{ duration: 0.8, ease: [0.33, 1, 0.68, 1], delay: 0.7 }}
-                            className="text-6xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter leading-[1.1] md:leading-[1.1] text-white"
+                            <ArrowRight className="w-4 h-4" />
+                            View Work
+                        </Link>
+                        <a
+                            href="mailto:hello@sachin.dev"
+                            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10 transition-colors"
                         >
-                            Complex Systems.
-                        </motion.h1>
+                            <Mail className="w-4 h-4" />
+                            hello@sachin.dev
+                        </a>
                     </div>
+
+
                 </div>
 
-                {/* Sub-headline */}
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 1 }}
-                    className="max-w-xl text-lg md:text-xl text-gray-400 leading-relaxed"
-                >
-                    Senior UI/UX Designer specialized in Fintech, SaaS, and AI. Building scalable design architectures that drive revenue, not just pixels.
-                </motion.p>
-            </motion.div>
+                {/* Right Column: Visual/Stats */}
+                <div className="hero-reveal relative h-[500px] w-full lg:h-[600px] bg-white/5 rounded-[3rem] overflow-hidden border border-white/5 lg:col-span-5">
+                    {/* Placeholder for Profile Image */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-black mix-blend-overlay opacity-50" />
 
-            {/* Abstract decorative line (Chart/Neural feel) */}
-            <svg className="absolute top-1/2 right-0 w-1/2 h-full opacity-20 pointer-events-none stroke-gray-700" style={{ transform: 'translateY(-50%)' }}>
-                <motion.path
-                    d="M0,100 Q200,50 400,100 T800,100"
-                    fill="none"
-                    strokeWidth="2"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 2, delay: 0.5, ease: "easeInOut" }}
-                />
-            </svg>
+                    {/* This would be the image tag */}
+                    {/* <Image src="/path/to/image.jpg" fill className="object-cover" alt="Sachin" /> */}
+
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-white/20 text-6xl font-bold">IMAGE</span>
+                    </div>
+
+
+                </div>
+
+            </div>
         </section>
     );
 }

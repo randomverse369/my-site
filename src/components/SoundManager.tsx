@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useContext, ReactNode, useEffect, useState } from "react";
-// import useSound from "use-sound"; // If installed, otherwise fallback
+import { createContext, useContext, ReactNode } from "react";
+import useSound from "use-sound";
 
 type SoundContextType = {
     playHover: () => void;
@@ -19,16 +19,8 @@ export const useSoundManager = () => {
 };
 
 export function SoundProvider({ children }: { children: ReactNode }) {
-    // Simple fallback implementation without external assets for now to avoid errors
-    // Ideally this would load real audio files
-
-    const playHover = () => {
-        // console.log("Hover sound");
-    };
-
-    const playClick = () => {
-        // console.log("Click sound");
-    };
+    const [playHover] = useSound("/sounds/hover.mp3", { volume: 0.2 });
+    const [playClick] = useSound("/sounds/click.mp3", { volume: 0.5 });
 
     return (
         <SoundContext.Provider value={{ playHover, playClick }}>

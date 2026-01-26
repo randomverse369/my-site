@@ -1,25 +1,13 @@
-"use client";
-
 import React from "react";
-import { MoveLeft, CheckCircle2, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+
 
 export default function ShoonyaCaseStudy() {
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-purple-500/30">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-50 px-6 py-6 mix-blend-difference">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link
-            href="/"
-            className="group flex items-center gap-2 text-sm font-medium text-white/60 hover:text-white transition-colors"
-          >
-            <MoveLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-            Back to Home
-          </Link>
-        </div>
-      </nav>
+
 
       <main className="pt-32 pb-24 px-6 relative overflow-hidden">
         {/* Decorative Background Elements */}
@@ -28,11 +16,9 @@ export default function ShoonyaCaseStudy() {
 
         <div className="max-w-4xl mx-auto relative z-10">
           {/* Header / Hero */}
-          <motion.header
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="mb-24"
+          {/* Header / Hero */}
+          <header
+            className="mb-24 reveal-anim"
           >
             <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
               Shoonya
@@ -60,7 +46,7 @@ export default function ShoonyaCaseStudy() {
                 <p className="font-medium text-white/90">6 Months</p>
               </div>
             </div>
-          </motion.header>
+          </header>
 
           {/* Content Sections */}
           <div className="space-y-24">
@@ -112,18 +98,18 @@ export default function ShoonyaCaseStudy() {
             {/* Interviews */}
             <Section title="03. User Research">
               <p className="text-lg text-white/70 leading-relaxed mb-8">
-                Detailed research wasn't part of the initial agency scope, so I independently conducted interviews with ~10 active users to ground our decisions in reality.
+                Detailed research wasn&apos;t part of the initial agency scope, so I independently conducted interviews with ~10 active users to ground our decisions in reality.
               </p>
               <div className="p-8 border-l-2 border-purple-500 bg-white/5 rounded-r-xl">
                 <h4 className="text-lg font-semibold mb-4 text-white">Key Insights</h4>
                 <ul className="space-y-4">
                   <li className="text-white/70">
                     <strong className="text-white block mb-1">Speed is Currency</strong>
-                     Traders need to execute high-frequency actions without navigating through deep menus.
+                    Traders need to execute high-frequency actions without navigating through deep menus.
                   </li>
                   <li className="text-white/70">
                     <strong className="text-white block mb-1">Information Density</strong>
-                     Users prefer dense, data-rich views over "clean" whitespace when monitoring markets.
+                    Users prefer dense, data-rich views over &quot;clean&quot; whitespace when monitoring markets.
                   </li>
                 </ul>
               </div>
@@ -135,19 +121,19 @@ export default function ShoonyaCaseStudy() {
                 <div>
                   <h3 className="text-2xl font-medium mb-6">What I Did</h3>
                   <div className="grid md:grid-cols-3 gap-6">
-                    <FeatureBlock 
-                      icon="🎨" 
-                      title="System Alignment" 
+                    <FeatureBlock
+                      icon="🎨"
+                      title="System Alignment"
                       desc="Audited inconsistencies and extended the design system for new features."
                     />
-                    <FeatureBlock 
-                      icon="⚡️" 
-                      title="Screen Execution" 
+                    <FeatureBlock
+                      icon="⚡️"
+                      title="Screen Execution"
                       desc="Recreated Watchlist, Trade Flow, and Positions with detailed specs."
                     />
-                    <FeatureBlock 
-                      icon="🤝" 
-                      title="Collaboration" 
+                    <FeatureBlock
+                      icon="🤝"
+                      title="Collaboration"
                       desc="Clarified requirements with BAs/SMEs and prioritized dev handoffs."
                     />
                   </div>
@@ -157,7 +143,7 @@ export default function ShoonyaCaseStudy() {
                   <h3 className="text-2xl font-medium mb-6">Reflections</h3>
                   <div className="bg-gradient-to-br from-white/10 to-transparent p-8 rounded-2xl border border-white/5">
                     <p className="text-xl text-white/80 leading-relaxed italic">
-                      "Working on Shoonya reinforced that strong systems matter more than perfect screens. In real-world constraints, adaptability and clear ownership are the true drivers of product quality."
+                      &quot;Working on Shoonya reinforced that strong systems matter more than perfect screens. In real-world constraints, adaptability and clear ownership are the true drivers of product quality.&quot;
                     </p>
                   </div>
                 </div>
@@ -180,15 +166,10 @@ export default function ShoonyaCaseStudy() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6 }}
-    >
+    <section className="reveal-anim">
       <h2 className="text-sm font-bold tracking-widest text-purple-400 uppercase mb-8">{title}</h2>
       {children}
-    </motion.section>
+    </section>
   );
 }
 

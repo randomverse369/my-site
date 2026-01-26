@@ -1,63 +1,67 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import { Download } from "lucide-react";
 import { useSoundManager } from "./SoundManager";
+import { useSmoothScroll } from "./SmoothScroll";
 
 const navItems = [
-    { name: "Selected Works", href: "#selected-work" },
+    { name: "Works", href: "#selected-work" },
+    { name: "How I Work?", href: "#how-i-work" },
+    { name: "Skills", href: "#skills" },
     { name: "Experience", href: "#experience" },
     { name: "Playground", href: "#playground" },
-    { name: "Insights", href: "#insights" },
 ];
 
 export default function Navbar() {
     const { playHover, playClick } = useSoundManager();
+    const lenis = useSmoothScroll();
+
+    const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+        e.preventDefault();
+        playClick();
+        if (lenis) {
+            lenis.scrollTo(href);
+        }
+    };
 
     return (
-        <motion.nav
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-6 flex items-center justify-between pointer-events-none"
+        <nav
+            className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 pointer-events-none"
         >
-            {/* Left: Wordmark */}
-            <div className="pointer-events-auto">
+            <div className="pointer-events-auto flex items-center justify-between gap-8 md:gap-12 bg-white/5 backdrop-blur-xl border border-white/10 px-6 py-3 rounded-full shadow-lg transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:shadow-xl hover:scale-[1.005]">
+                {/* Logo */}
                 <Link
                     href="/"
-                    className="text-white font-mono text-sm tracking-wider hover:text-gray-300 transition-colors"
+                    className="text-white font-mono text-sm tracking-wider hover:text-gray-300 transition-colors whitespace-nowrap"
                     onMouseEnter={playHover}
-                    onClick={playClick}
+                    onClick={() => lenis?.scrollTo(0)}
                 >
                     SACHIN BARNWAL
                 </Link>
-            </div>
 
-            {/* Center: Menu Items */}
-            <div className="hidden md:flex items-center gap-8 pointer-events-auto bg-black/50 backdrop-blur-md px-8 py-3 rounded-full border border-white/10">
-                {navItems.map((item) => (
-                    <Link
-                        key={item.name}
-                        href={item.href}
-                        className="text-sm text-gray-400 hover:text-white transition-colors relative group"
-                        onMouseEnter={playHover}
-                        onClick={playClick}
-                    >
-                        {item.name}
-                        <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
-                    </Link>
-                ))}
-            </div>
+                {/* Menu Items */}
+                <div className="hidden md:flex items-center gap-8">
+                    {navItems.map((item) => (
+                        <a
+                            key={item.name}
+                            href={item.href}
+                            className="text-sm text-gray-400 hover:text-white transition-colors relative group whitespace-nowrap cursor-pointer"
+                            onMouseEnter={playHover}
+                            onClick={(e) => handleScroll(e, item.href)}
+                        >
+                            {item.name}
+                        </a>
+                    ))}
+                </div>
 
-            {/* Right: CTA */}
-            <div className="pointer-events-auto">
+                {/* Right: CTA */}
                 <a
-                    href="/resume.pdf" // Placeholder path
+                    href="/resume.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center gap-2 px-5 py-2.5 bg-white text-black text-xs font-bold uppercase tracking-wider rounded-full hover:bg-gray-200 transition-all duration-300"
+                    className="group flex items-center gap-2 px-5 py-2.5 bg-white text-black text-xs font-bold uppercase tracking-wider rounded-full hover:bg-gray-200 transition-all duration-300 whitespace-nowrap"
                     onMouseEnter={playHover}
                     onClick={playClick}
                 >
@@ -65,6 +69,6 @@ export default function Navbar() {
                     <Download className="w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5" />
                 </a>
             </div>
-        </motion.nav>
+        </nav>
     );
 }
