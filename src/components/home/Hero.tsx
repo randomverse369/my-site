@@ -1,65 +1,128 @@
-import Link from "next/link";
-import { ArrowRight, Mail } from "lucide-react";
+"use client";
+
+import { useRef } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { ArrowDown } from "lucide-react";
 
 export default function Hero() {
+    const containerRef = useRef<HTMLDivElement>(null);
+
     return (
         <section
-            id="hero-section"
-            className="relative min-h-screen flex items-center justify-center px-6 md:px-12 pt-24 pb-12 overflow-hidden"
+            ref={containerRef}
+            className="relative min-h-screen w-full flex flex-col justify-center pt-12 pb-12 px-6 md:px-12 lg:px-24 overflow-hidden bg-background"
         >
-            <div className="max-w-[90rem] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            <div className="w-full max-w-7xl mx-auto flex flex-col justify-start gap-12 sm:gap-16 pt-0">
 
-                {/* Left Column: Content */}
-                <div className="flex flex-col justify-center space-y-8 lg:col-span-7">
-                    <div className="space-y-6">
-                        <h1 className="hero-reveal text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-none text-white mix-blend-difference">
-                            Bridging human experiences &
-                            <br />
-                            <span className="text-gray-500">complex systems</span>
-                        </h1>
+                {/* Main Heading Block */}
+                <div className="flex flex-col gap-4 md:gap-6 relative z-10 w-full max-w-none">
 
-                        <p className="hero-reveal max-w-2xl text-lg md:text-xl text-gray-400 leading-relaxed">
-                            6+ years of experience designing complex web and mobile products from discovery and research to UX, UI, and design systems.
-                            I work closely with founders, product managers, and engineers to turn ambiguity into usable, business-ready solutions.
-                        </p>
+                    {/* Main Headline */}
+
+
+                    {/* Line 2: I am a... */}
+                    <div className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] leading-[1.1] md:leading-[1.1] font-bold tracking-tight text-text-secondary/40">
+                        <div className="inline-block relative mr-4 align-middle group">
+                            <div className="relative w-[1.5em] h-[1.5em] bg-gray-200 rounded-full overflow-hidden border-[3px] border-yellow-400">
+                                <Image
+                                    src="/images/Hero/Sachin Barnwal.svg"
+                                    alt="Sachin Barnwal"
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+
+                            {/* Hover Speech Bubble */}
+                            <div className="absolute left-full top-1/2 -translate-y-1/2 ml-5 w-48 p-4 bg-white/90 backdrop-blur-sm border border-black/5 text-sm font-semibold tracking-normal text-foreground text-center leading-snug rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-left scale-90 group-hover:scale-100 z-50 pointer-events-none">
+                                I&apos;m still working on<br />this portfolio
+                                {/* Arrow Tip */}
+                                <div className="absolute top-1/2 -translate-y-1/2 -left-1.5 w-3 h-3 bg-white/90 border-l border-b border-black/5 rotate-45 rounded-[1px]"></div>
+                            </div>
+                        </div>
+                        I am a <span className="text-foreground">product designer</span> crafting <span className="text-foreground">digital experiences</span> that are <span className="text-foreground">scalable</span>, <span className="text-foreground">intuitive</span> and <span className="text-foreground">data informed.</span>
+
+                        {/* Inline Pill */}
+                        <div className="inline-flex items-center align-middle ml-2 md:ml-6 px-4 py-1.5 md:px-6 md:py-3 bg-white border border-border rounded-full shadow-sm text-base md:text-lg tracking-normal font-medium text-foreground align-middle transform -translate-y-1 md:-translate-y-2">
+                            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-emerald-500 mr-2 md:mr-3 animate-pulse"></span>
+                            Open to work
+                        </div>
                     </div>
-
-                    <div className="hero-reveal flex flex-wrap gap-4">
-                        <Link
-                            href="#work"
-                            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-black font-medium hover:bg-gray-200 transition-colors"
-                        >
-                            <ArrowRight className="w-4 h-4" />
-                            View Work
-                        </Link>
-                        <a
-                            href="mailto:hello@sachin.dev"
-                            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10 transition-colors"
-                        >
-                            <Mail className="w-4 h-4" />
-                            hello@sachin.dev
-                        </a>
-                    </div>
-
-
                 </div>
 
-                {/* Right Column: Visual/Stats */}
-                <div className="hero-reveal relative h-[500px] w-full lg:h-[600px] bg-white/5 rounded-[3rem] overflow-hidden border border-white/5 lg:col-span-5">
-                    {/* Placeholder for Profile Image */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-black mix-blend-overlay opacity-50" />
-
-                    {/* This would be the image tag */}
-                    {/* <Image src="/path/to/image.jpg" fill className="object-cover" alt="Sachin" /> */}
-
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-white/20 text-6xl font-bold">IMAGE</span>
-                    </div>
-
-
+                {/* Body Text */}
+                <div className="w-full max-w-5xl">
+                    <p className="text-lg md:text-xl text-text-secondary leading-relaxed font-medium text-left">
+                        6+ years of experience designing complex products end-to-end from early discovery and user research to UX, UI, and design systems. I work closely with founders, PMs, engineers, and stakeholders to turn messy requirements into <span className="text-foreground">clear, usable and habit forming products.</span>
+                    </p>
                 </div>
 
+                {/* Bottom Section: Scrolling Ticker & Arrow */}
+                <div className="flex flex-col gap-12 mt-4 md:mt-8">
+
+                    {/* Horizontal Scrolling Ticker */}
+                    <div className="w-full overflow-hidden border-y border-border py-4 bg-surface/30">
+                        <div className="flex whitespace-nowrap gap-12 md:gap-24 animate-marquee items-center text-sm md:text-base font-mono uppercase tracking-widest text-foreground/70">
+                            {/* Loop 1 */}
+                            <span>SaaS</span>
+                            <span>Fintech</span>
+                            <span>AI</span>
+                            <span>EdTech</span>
+                            <span>•</span>
+                            <span>Web & Mobile</span>
+                            <span>•</span>
+                            <span>Design Systems</span>
+                            <span>•</span>
+                            <span>Data-heavy platforms</span>
+
+                            {/* Loop 2 for seamlessness */}
+                            <span>SaaS</span>
+                            <span>Fintech</span>
+                            <span>AI</span>
+                            <span>EdTech</span>
+                            <span>•</span>
+                            <span>Web & Mobile</span>
+                            <span>•</span>
+                            <span>Design Systems</span>
+                            <span>•</span>
+                            <span>Data-heavy platforms</span>
+                            {/* Loop 3 for large screens */}
+                            <span>SaaS</span>
+                            <span>Fintech</span>
+                            <span>AI</span>
+                            <span>EdTech</span>
+                            <span>•</span>
+                            <span>Web & Mobile</span>
+                            <span>•</span>
+                            <span>Design Systems</span>
+                            <span>•</span>
+                            <span>Data-heavy platforms</span>
+                        </div>
+                    </div>
+
+                    {/* Blinking Down Arrow */}
+                    <div className="flex justify-center pb-4">
+                        <motion.div
+                            animate={{ y: [0, 10, 0], opacity: [0.5, 1, 0.5] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        >
+                            <ArrowDown className="w-6 h-6 md:w-8 md:h-8 text-foreground" />
+                        </motion.div>
+                    </div>
+
+                </div>
             </div>
+
+            {/* Custom Keyframe for Marquee */}
+            <style jsx global>{`
+                @keyframes marquee {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-50%); }
+                }
+                .animate-marquee {
+                    animation: marquee 30s linear infinite;
+                }
+            `}</style>
         </section>
     );
 }

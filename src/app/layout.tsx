@@ -1,45 +1,29 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Bricolage_Grotesque, Inter_Tight } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
-
-import { SoundProvider } from "@/components/SoundManager";
-import CustomCursor from "@/components/CustomCursor";
-import Navbar from "@/components/Navbar";
-import ThreeBackground from "@/components/ThreeBackground";
-import PageAnimations from "@/components/PageAnimations";
 import SmoothScroll from "@/components/SmoothScroll";
+import Navbar from "@/components/Navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import CustomCursor from "@/components/CustomCursor";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage-grotesque",
-  subsets: ["latin"],
-});
 
-const interTight = Inter_Tight({
-  variable: "--font-inter-tight",
+const manrope = Manrope({
   subsets: ["latin"],
+  variable: "--font-manrope",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Sachin Barnwal | Product Designer",
-  description: "6+ years designing complex web and mobile products. UX, UI, and design systems for remote teams.",
+  title: "Sachin | Creative Developer",
+  description: "Portfolio of Sachin, a creative developer focusing on interactive web experiences.",
   openGraph: {
-    title: "Sachin Barnwal | Product Designer",
-    description: "6+ years designing complex web and mobile products.",
+    title: "Sachin | Creative Developer",
+    description: "Portfolio of Sachin, a creative developer focusing on interactive web experiences.",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    creator: "@vyaktava",
+  icons: {
+    icon: "/images/Sachin Barnwal_Favicon.svg",
   },
 };
 
@@ -49,23 +33,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} ${bricolage.variable} ${interTight.variable} antialiased selection:bg-[#007AFF]/30 selection:text-white`}
-      >
-        <SoundProvider>
-          <SmoothScroll>
-            <ThreeBackground />
-            <PageAnimations />
-            <CustomCursor />
-            <Navbar />
-            <div className="noise-overlay" />
-            <div className="relative z-10">
-              {children}
-            </div>
-          </SmoothScroll>
-        </SoundProvider>
+    <html lang="en" className={`${manrope.variable} antialiased`} suppressHydrationWarning>
+      <body suppressHydrationWarning className="bg-background text-foreground font-sans selection:bg-black selection:text-white overflow-x-hidden">
+        <CustomCursor />
+        <SmoothScroll>
+          <Navbar />
+          <main className="relative z-10 min-h-screen flex flex-col pt-24">
+            {children}
+          </main>
+        </SmoothScroll>
       </body>
     </html>
   );

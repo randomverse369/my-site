@@ -1,74 +1,71 @@
 "use client";
 
-
-import Link from "next/link";
-import { Download } from "lucide-react";
-import { useSoundManager } from "./SoundManager";
-import { useSmoothScroll } from "./SmoothScroll";
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import Link from 'next/link';
 
 const navItems = [
-    { name: "Works", href: "#selected-work" },
-    { name: "How I Work?", href: "#how-i-work" },
-    { name: "Skills", href: "#skills" },
+    { name: "Works", href: "#works" },
     { name: "Experience", href: "#experience" },
-    { name: "Playground", href: "#playground" },
+    { name: "About Me", href: "#about" },
+    { name: "Contact", href: "#contact" },
 ];
 
 export default function Navbar() {
-    const { playHover, playClick } = useSoundManager();
-    const lenis = useSmoothScroll();
+    const [scrolled, setScrolled] = useState(false);
 
-    const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-        e.preventDefault();
-        playClick();
-        if (lenis) {
-            lenis.scrollTo(href);
-        }
-    };
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     return (
-        <nav
-            className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 pointer-events-none"
+        <motion.header
+            initial={{ y: -100 }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.5 }}
+            className={`fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 transition-all ${scrolled ? "pt-4" : "pt-6"}`}
         >
-            <div className="pointer-events-auto flex items-center justify-between gap-8 md:gap-12 bg-white/5 backdrop-blur-xl border border-white/10 px-6 py-3 rounded-full shadow-lg transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:shadow-xl hover:scale-[1.005]">
-                {/* Logo */}
-                <Link
-                    href="/"
-                    className="text-white font-mono text-sm tracking-wider hover:text-gray-300 transition-colors whitespace-nowrap"
-                    onMouseEnter={playHover}
-                    onClick={() => lenis?.scrollTo(0)}
-                >
-                    SACHIN BARNWAL
+            <div className={`
+                flex items-center gap-2 p-2 rounded-full border border-border/50 bg-white/80 backdrop-blur-xl shadow-sm transition-all duration-300
+                ${scrolled ? "scale-95" : "scale-100"}
+            `}>
+                {/* Logo Pill */}
+                <Link href="/" className="px-5 py-2.5 bg-[#529AEF] text-white rounded-full text-sm font-semibold tracking-wide hover:bg-[#529AEF]/90 transition-colors">
+                    Sachin Barnwal
                 </Link>
 
-                {/* Menu Items */}
-                <div className="hidden md:flex items-center gap-8">
+                {/* Nav Items - Pill Style */}
+                <nav className="hidden md:flex items-center mx-1">
                     {navItems.map((item) => (
                         <a
                             key={item.name}
                             href={item.href}
-                            className="text-sm text-gray-400 hover:text-white transition-colors relative group whitespace-nowrap cursor-pointer"
-                            onMouseEnter={playHover}
-                            onClick={(e) => handleScroll(e, item.href)}
+                            className="px-5 py-2.5 text-sm font-medium text-text-secondary hover:text-black hover:bg-surface rounded-full transition-all"
                         >
                             {item.name}
                         </a>
                     ))}
-                </div>
+                </nav>
 
-                {/* Right: CTA */}
+                {/* Call to Action */}
                 <a
                     href="/resume.pdf"
                     target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center gap-2 px-5 py-2.5 bg-white text-black text-xs font-bold uppercase tracking-wider rounded-full hover:bg-gray-200 transition-all duration-300 whitespace-nowrap"
-                    onMouseEnter={playHover}
-                    onClick={playClick}
+                    className="hidden md:block px-6 py-2.5 rounded-full border border-border text-sm font-semibold hover:bg-black hover:text-white hover:border-black transition-all"
                 >
-                    <span>Download Resume</span>
-                    <Download className="w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5" />
+                    Download Resume
                 </a>
+
+                {/* Mobile Menu */}
+                <button className="md:hidden p-3 rounded-full hover:bg-surface">
+                    <div className="w-5 h-0.5 bg-black mb-1.5" />
+                    <div className="w-5 h-0.5 bg-black" />
+                </button>
             </div>
-        </nav>
+        </motion.header>
     );
 }

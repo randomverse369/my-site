@@ -1,23 +1,17 @@
 import Hero from "@/components/home/Hero";
-import SelectedWork from "@/components/home/SelectedWork";
-import Skills from "@/components/home/Skills";
+import Works from "@/components/home/Works";
 import Experience from "@/components/home/Experience";
-import Playground from "@/components/home/Playground";
-import Footer from "@/components/home/Footer";
-import HowIWork from "@/components/home/HowIWork";
+import About from "@/components/home/About";
+import Contact from "@/components/home/Contact";
 
 export default function Home() {
     return (
-        <main className="min-h-screen text-white selection:bg-[#007AFF]/30 selection:text-white">
+        <main className="min-h-screen">
             <Hero />
-            <SelectedWork />
-            <HowIWork />
-            <Skills />
+            <Works />
             <Experience />
-            <Playground />
-            <Footer />
+            <About />
+            <Contact />
         </main>
     );
 }
-
-
