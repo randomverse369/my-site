@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/work/layout,_N_T_/work/tier-5/layout,_N_T_/work/tier-5/page,_N_T_/work/tier-5"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/work/tier-5/__PAGE__",
+    "/work/tier-5",
+    "/work",
+    "/_index",
+    "/_head"
+  ]
+}

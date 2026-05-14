@@ -3,7 +3,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Experience - Sachin Barnwal",
-  description: "7 Years. 4 Companies. One Direction.",
+  description: "7 Years. 4 Industries. 1 Direction.",
 };
 
 export default function Experience() {
@@ -13,10 +13,12 @@ export default function Experience() {
       {/* Page Header */}
       <div className="grid grid-cols-12 gap-6 pt-12 md:pt-24 mb-32 reveal-up in-view">
         <div className="col-span-12 md:col-span-10">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9] text-foreground mb-12">
-            7 Years. 4 Companies. One Direction.
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[0.9] text-foreground mb-12">
+            7 Years<br />
+            4 Industries<br />
+            1 Direction
           </h1>
-          <p className="text-xl md:text-2xl text-metadata max-w-3xl leading-relaxed">
+          <p className="text-xl md:text-2xl font-light text-metadata max-w-3xl leading-relaxed">
             From solo designer at a startup to building AI products at scale — every role moved closer to the intersection of design, systems, and intelligence.
           </p>
         </div>
@@ -46,15 +48,15 @@ export default function Experience() {
           </h2>
           <ul className="space-y-4">
             <li className="flex flex-col gap-1">
-              <span className="text-lg text-foreground font-bold">85% Usability Score</span>
+              <span className="text-lg text-foreground font-light">85% Usability Score</span>
               <span className="text-[0.75rem] font-mono text-metadata">DigiMantra</span>
             </li>
             <li className="flex flex-col gap-1">
-              <span className="text-lg text-foreground font-bold">Dream Team Award</span>
+              <span className="text-lg text-foreground font-light">Dream Team Award</span>
               <span className="text-[0.75rem] font-mono text-metadata">Tier5</span>
             </li>
             <li className="flex flex-col gap-1">
-              <span className="text-lg text-foreground font-bold">Best Employee Performer</span>
+              <span className="text-lg text-foreground font-light">Best Employee Performer</span>
               <span className="text-[0.75rem] font-mono text-metadata">Tutelage (2020 & 2021)</span>
             </li>
           </ul>
@@ -77,7 +79,7 @@ export default function Experience() {
             
             {/* Design */}
             <div className="p-6 md:p-8 border-b sm:border-b-0 sm:border-r border-metadata">
-              <h3 className="text-lg text-foreground font-bold mb-4">Design</h3>
+              <h3 className="text-lg text-foreground font-light tracking-tight mb-4">Design</h3>
               <ul className="space-y-2 text-metadata leading-relaxed">
                 <li>Product Design</li>
                 <li>UX Research</li>
@@ -90,7 +92,7 @@ export default function Experience() {
 
             {/* AI & Process */}
             <div className="p-6 md:p-8 border-b sm:border-b-0 lg:border-r border-metadata">
-              <h3 className="text-lg text-foreground font-bold mb-4">AI & Process</h3>
+              <h3 className="text-lg text-foreground font-light tracking-tight mb-4">AI & Process</h3>
               <ul className="space-y-2 text-metadata leading-relaxed">
                 <li>AI-Assisted Prototyping</li>
                 <li>Problem Framing</li>
@@ -102,7 +104,7 @@ export default function Experience() {
 
             {/* Tools */}
             <div className="p-6 md:p-8">
-              <h3 className="text-lg text-foreground font-bold mb-4">Tools</h3>
+              <h3 className="text-lg text-foreground font-light tracking-tight mb-4">Tools</h3>
               <ul className="space-y-2 text-metadata leading-relaxed">
                 <li>Figma, Figma Make</li>
                 <li>Lovable, Antigravity</li>

@@ -28,7 +28,7 @@ export default function Navigation() {
   }, [lastScrollY]);
 
   const navLinks = [
-    { name: "Works", href: "/#works" },
+    { name: "Works", href: "/works" },
     { name: "Experience", href: "/experience" },
     { name: "About", href: "/about" },
   ];
@@ -43,7 +43,7 @@ export default function Navigation() {
         <nav className="max-w-7xl mx-auto flex items-center justify-between">
           <Link 
             href="/" 
-            className="text-foreground font-bold tracking-tight interactive hover:text-accent"
+            className="text-foreground font-light tracking-tight interactive hover:text-accent"
           >
             SB
           </Link>

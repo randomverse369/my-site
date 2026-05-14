@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export default function ShoonyaCaseStudy() {
       {/* Back Navigation */}
       <div className="pt-8 mb-16 reveal-up in-view">
         <Link 
-          href="/#works" 
+          href="/works" 
           className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata interactive hover:text-accent flex items-center gap-2"
         >
           <span className="text-accent">←</span> Back to Works
@@ -26,10 +27,10 @@ export default function ShoonyaCaseStudy() {
           <p className="text-[0.75rem] uppercase tracking-wider font-mono text-metadata mb-8">
             PRODUCT REDESIGN · FINTECH
           </p>
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.9] text-foreground mb-12">
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-light tracking-tight leading-[0.9] text-foreground mb-12">
             Shoonya
           </h1>
-          <p className="text-2xl md:text-3xl text-foreground font-bold tracking-tight leading-snug mb-16">
+          <p className="text-2xl md:text-3xl text-foreground font-light tracking-tight leading-snug mb-16">
             A complete redesign of a B2C trading platform — web and mobile. Complexity made navigable.
           </p>
 
@@ -37,15 +38,15 @@ export default function ShoonyaCaseStudy() {
           <div className="flex flex-col md:flex-row gap-8 md:gap-16 border-t border-metadata/20 pt-8">
             <div className="flex flex-col gap-2">
               <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">Role</span>
-              <span className="text-foreground font-bold">Senior Product Designer</span>
+              <span className="text-foreground font-light">Senior Product Designer</span>
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">Platform</span>
-              <span className="text-foreground font-bold">Web + Mobile</span>
+              <span className="text-foreground font-light">Web + Mobile</span>
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">Company</span>
-              <span className="text-foreground font-bold">Finvasia</span>
+              <span className="text-foreground font-light">Finvasia</span>
             </div>
           </div>
         </div>
@@ -59,7 +60,7 @@ export default function ShoonyaCaseStudy() {
           </h2>
         </div>
         <div className="col-span-12 md:col-span-8 lg:col-span-7 border-l-0 md:border-l border-metadata/20 pl-0 md:pl-8">
-          <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-8">
+          <h3 className="text-3xl md:text-4xl font-light tracking-tight text-foreground mb-8">
             Shoonya had everything a trader needed. That was exactly the problem.
           </h3>
           <p className="text-lg text-metadata leading-relaxed mb-8">
@@ -68,18 +69,23 @@ export default function ShoonyaCaseStudy() {
           <p className="text-lg text-metadata leading-relaxed mb-8">
             Real users were getting lost. They couldn't tell at a glance how their portfolio was performing. Basic actions required too many steps. The platform felt like it was built for the product team, not the trader.
           </p>
-          <p className="text-lg text-foreground font-bold leading-relaxed border-l-2 border-accent pl-6">
+          <p className="text-lg text-foreground font-light leading-relaxed border-l-2 border-accent pl-6">
             The brief was a redesign. The real job was to give users clarity — especially at the moment that matters most: understanding how their money is performing, right now, without hunting for it.
           </p>
         </div>
       </div>
 
-      {/* Full-bleed Staging Area */}
+      {/* Full-bleed Image */}
       <div className="grid grid-cols-12 gap-6 my-32 reveal-up in-view">
-        <div className="col-span-12 aspect-video border border-metadata flex items-center justify-center">
-          <span className="font-mono text-[0.65rem] uppercase tracking-widest text-metadata">
-            [ MOCKUP STAGING: 1920x1080 ]
-          </span>
+        <div className="col-span-12">
+          <Image
+            src="/s1.svg"
+            alt="Shoonya trading platform redesign overview"
+            width={1920}
+            height={1080}
+            className="w-full h-auto"
+            priority
+          />
         </div>
       </div>
 
@@ -91,31 +97,35 @@ export default function ShoonyaCaseStudy() {
           </h2>
         </div>
         <div className="col-span-12 md:col-span-8 lg:col-span-7 border-l-0 md:border-l border-metadata/20 pl-0 md:pl-8">
-          <h3 className="text-2xl font-bold text-foreground mb-6">
+          <h3 className="text-2xl font-light tracking-tight text-foreground mb-6">
             Two platforms. One design language.
           </h3>
           <p className="text-lg text-metadata leading-relaxed mb-6">
-            <span className="font-bold text-foreground">Mobile was tackled first</span> — with the team. Mobile forced the hard decisions early: what information is truly essential, and what is just noise? When screen real estate is limited, every element has to earn its place.
+            <span className="font-light text-foreground">Mobile was tackled first</span> — with the team. Mobile forced the hard decisions early: what information is truly essential, and what is just noise? When screen real estate is limited, every element has to earn its place.
           </p>
           <p className="text-lg text-metadata leading-relaxed">
-            <span className="font-bold text-foreground">Web followed</span> — and the decisions made on mobile became the foundation. The same clarity principles, expanded for a larger canvas.
+            <span className="font-light text-foreground">Web followed</span> — and the decisions made on mobile became the foundation. The same clarity principles, expanded for a larger canvas.
           </p>
         </div>
       </div>
 
-      {/* Inset Staging Area - Right Aligned */}
+      {/* Full-bleed Image */}
       <div className="grid grid-cols-12 gap-6 my-32 reveal-up in-view">
-        <div className="col-span-12 md:col-span-8 md:col-start-5 aspect-[4/3] border border-metadata flex items-center justify-center">
-          <span className="font-mono text-[0.65rem] uppercase tracking-widest text-metadata">
-            [ ASSET_RENDER_PENDING: MOBILE_FIRST_COMPONENTS ]
-          </span>
+        <div className="col-span-12">
+          <Image
+            src="/s2.svg"
+            alt="Shoonya mobile-first component design"
+            width={1280}
+            height={960}
+            className="w-full h-auto"
+          />
         </div>
       </div>
 
       {/* Oversized Pull Quote */}
       <div className="grid grid-cols-12 gap-6 my-48 reveal-up in-view">
         <div className="col-span-12 md:col-span-10 md:col-start-2 lg:col-span-8 lg:col-start-3">
-          <blockquote className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tighter leading-[1.1] text-foreground text-center">
+          <blockquote className="text-4xl md:text-5xl lg:text-7xl font-light tracking-tight leading-[1.1] text-foreground text-center">
             "Clarity isn't a visual style. It's a series of hard decisions."
           </blockquote>
         </div>
@@ -129,7 +139,7 @@ export default function ShoonyaCaseStudy() {
           </h2>
         </div>
         <div className="col-span-12 md:col-span-8 lg:col-span-7 border-l-0 md:border-l border-metadata/20 pl-0 md:pl-8">
-          <p className="text-xl text-foreground font-bold leading-relaxed mb-8">
+          <p className="text-xl text-foreground font-light leading-relaxed mb-8">
             The dashboard was the highest-leverage problem on the entire platform.
           </p>
           <p className="text-lg text-metadata leading-relaxed mb-6">
@@ -162,37 +172,37 @@ export default function ShoonyaCaseStudy() {
         </div>
         <div className="col-span-12 md:col-span-8 lg:col-span-7 border-l-0 md:border-l border-metadata/20 pl-0 md:pl-8">
           
-          <h3 className="text-xl font-bold text-foreground mb-6">What Changed</h3>
+          <h3 className="text-xl font-light tracking-tight text-foreground mb-6">What Changed</h3>
           <ul className="space-y-6 mb-16">
             <li className="flex flex-col">
-              <span className="text-foreground font-bold">Navigation</span>
+              <span className="text-foreground font-light">Navigation</span>
               <span className="text-metadata">Rebuilt from scratch — users always know where they are.</span>
             </li>
             <li className="flex flex-col">
-              <span className="text-foreground font-bold">Dashboard</span>
+              <span className="text-foreground font-light">Dashboard</span>
               <span className="text-metadata">Portfolio performance visible at a glance. No hunting required.</span>
             </li>
             <li className="flex flex-col">
-              <span className="text-foreground font-bold">Visual Hierarchy</span>
+              <span className="text-foreground font-light">Visual Hierarchy</span>
               <span className="text-metadata">Old design treated everything as equally important. New design doesn't.</span>
             </li>
           </ul>
 
-          <h3 className="text-xl font-bold text-foreground mb-6">The Result</h3>
+          <h3 className="text-xl font-light tracking-tight text-foreground mb-6">The Result</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-12">
             <div className="flex flex-col gap-2">
               <span className="text-accent text-3xl font-bold">—</span>
-              <span className="text-foreground font-bold text-xl">2 Platforms</span>
+              <span className="text-foreground font-light text-xl">2 Platforms</span>
               <span className="text-metadata text-sm">One unified design language.</span>
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-accent text-3xl font-bold">—</span>
-              <span className="text-foreground font-bold text-xl">At a Glance</span>
+              <span className="text-foreground font-light text-xl">At a Glance</span>
               <span className="text-metadata text-sm">Portfolio clarity without a single extra tap.</span>
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-accent text-3xl font-bold">—</span>
-              <span className="text-foreground font-bold text-xl">Retention</span>
+              <span className="text-foreground font-light text-xl">Retention</span>
               <span className="text-metadata text-sm">Measurable improvement post-redesign.</span>
             </div>
           </div>
@@ -210,7 +220,7 @@ export default function ShoonyaCaseStudy() {
           <h2 className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata mb-12">
             What I Learned
           </h2>
-          <p className="text-2xl md:text-3xl text-foreground font-bold tracking-tight leading-snug mb-8">
+          <p className="text-2xl md:text-3xl text-foreground font-light tracking-tight leading-snug mb-8">
             Redesigns are harder than 0 to 1 builds.
           </p>
           <p className="text-xl text-metadata leading-relaxed mb-6">

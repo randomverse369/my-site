@@ -21,10 +21,10 @@ export default function About() {
           <p className="text-[0.75rem] uppercase tracking-wider font-mono text-metadata mb-8">
             Designer. Builder. AI Enthusiast.
           </p>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter leading-[1.1] text-foreground mb-12">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.1] text-foreground mb-12">
             I didn&apos;t plan to end up at the intersection of design and AI. I just kept following the most interesting problem in the room.
           </h1>
-          <div className="text-xl md:text-2xl text-metadata leading-relaxed space-y-6">
+          <div className="text-xl md:text-2xl font-light text-metadata leading-relaxed space-y-6">
             <p>
               I started as a graphic designer at a small edtech startup — just me, a CEO who thought in business terms, and a thousand things that needed to look good and work well. That gap between looking good and working well is what pulled me into UX.
             </p>
@@ -46,28 +46,28 @@ export default function About() {
           
           <div className="flex flex-col">
             <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata mb-2">2019–2022 · Tutelage</span>
-            <p className="text-lg md:text-xl text-foreground leading-relaxed">
+            <p className="text-lg md:text-xl font-light text-foreground leading-relaxed">
               Started as the only designer in the building. Learned that design without business context is decoration.
             </p>
           </div>
 
           <div className="flex flex-col">
             <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata mb-2">2022–2024 · Tier5</span>
-            <p className="text-lg md:text-xl text-foreground leading-relaxed">
+            <p className="text-lg md:text-xl font-light text-foreground leading-relaxed">
               Built systems that made teams faster. Discovered that the best design work happens before the screen.
             </p>
           </div>
 
           <div className="flex flex-col">
             <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata mb-2">2024–2025 · DigiMantra</span>
-            <p className="text-lg md:text-xl text-foreground leading-relaxed">
+            <p className="text-lg md:text-xl font-light text-foreground leading-relaxed">
               Worked on enterprise platforms where ambiguity was the default. Turned unclear briefs into clear problems.
             </p>
           </div>
 
           <div className="flex flex-col">
             <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata mb-2">2025–Present · Finvasia</span>
-            <p className="text-lg md:text-xl text-foreground leading-relaxed">
+            <p className="text-lg md:text-xl font-light text-foreground leading-relaxed">
               First designer in the building — again. This time building AI products that reduce complexity for real users making real decisions.
             </p>
           </div>
@@ -85,20 +85,20 @@ export default function About() {
           </h2>
           <div className="space-y-12">
             <div>
-              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-4">AI is a thinking partner</h3>
-              <p className="text-lg text-metadata leading-relaxed">
+              <h3 className="text-xl md:text-2xl font-light tracking-tight text-foreground mb-4">AI is a thinking partner</h3>
+              <p className="text-lg font-light text-metadata leading-relaxed">
                 Not a shortcut. The best use of AI in design is to question harder, not just move faster.
               </p>
             </div>
             <div>
-              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-4">Clarity is the job</h3>
-              <p className="text-lg text-metadata leading-relaxed">
+              <h3 className="text-xl md:text-2xl font-light tracking-tight text-foreground mb-4">Clarity is the job</h3>
+              <p className="text-lg font-light text-metadata leading-relaxed">
                 Before any screen gets designed, the problem needs to be clear. Most design failures happen upstream.
               </p>
             </div>
             <div>
-              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-4">Build to learn</h3>
-              <p className="text-lg text-metadata leading-relaxed">
+              <h3 className="text-xl md:text-2xl font-light tracking-tight text-foreground mb-4">Build to learn</h3>
+              <p className="text-lg font-light text-metadata leading-relaxed">
                 UXMantra exists because the best way to understand AI products is to build one.
               </p>
             </div>
@@ -113,19 +113,19 @@ export default function About() {
           <ul className="space-y-8 text-lg">
             <li className="flex flex-col lg:flex-row lg:items-start gap-2 lg:gap-4">
               <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata w-32 shrink-0 pt-1">Working At:</span>
-              <span className="text-foreground leading-relaxed">Finvasia — Senior Product Designer. Building sensAI and Jumpp.</span>
+              <span className="text-foreground font-light leading-relaxed">Finvasia — Senior Product Designer. Building sensAI and Jumpp.</span>
             </li>
             <li className="flex flex-col lg:flex-row lg:items-start gap-2 lg:gap-4">
               <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata w-32 shrink-0 pt-1">Building:</span>
-              <span className="text-foreground leading-relaxed">UXMantra. AI-powered UX research assistant. In development.</span>
+              <span className="text-foreground font-light leading-relaxed">UXMantra. AI-powered UX research assistant. In development.</span>
             </li>
             <li className="flex flex-col lg:flex-row lg:items-start gap-2 lg:gap-4">
               <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata w-32 shrink-0 pt-1">Interested In:</span>
-              <span className="text-foreground leading-relaxed">AI Behaviour Design, System Prompt Design, Conversation Design, AI Red Teaming.</span>
+              <span className="text-foreground font-light leading-relaxed">AI Behaviour Design, System Prompt Design, Conversation Design, AI Red Teaming.</span>
             </li>
             <li className="flex flex-col lg:flex-row lg:items-start gap-2 lg:gap-4">
               <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata w-32 shrink-0 pt-1">Open To:</span>
-              <span className="text-foreground leading-relaxed">Senior design roles at AI-focused companies and labs.</span>
+              <span className="text-foreground font-light leading-relaxed">Senior design roles at AI-focused companies and labs.</span>
             </li>
           </ul>
         </div>
@@ -138,7 +138,7 @@ export default function About() {
             Beyond the work
           </h2>
         </div>
-        <div className="col-span-12 md:col-span-8 lg:col-span-6 text-xl text-metadata leading-relaxed space-y-6">
+        <div className="col-span-12 md:col-span-8 lg:col-span-6 text-xl font-light text-metadata leading-relaxed space-y-6">
           <p>
             I think seriously about how AI should behave — not just how it should look. That&apos;s pulled me toward AI behaviour design, system prompt design, and the question of what good AI interaction actually feels like. 
           </p>

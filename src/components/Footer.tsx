@@ -7,10 +7,10 @@ export default function Footer() {
         
         {/* Massive Call to Action */}
         <div className="col-span-12 md:col-span-9 mb-16">
-          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.1] text-foreground mb-6">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight leading-[1.1] text-foreground mb-6">
             Let's build something worth using.
           </h2>
-          <p className="text-lg md:text-xl text-metadata max-w-2xl">
+          <p className="text-lg md:text-xl font-light text-metadata max-w-2xl">
             Open to senior design roles at AI-focused companies.
           </p>
         </div>

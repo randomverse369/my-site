@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export default function SensAICaseStudy() {
       {/* Back Navigation */}
       <div className="pt-8 mb-16 reveal-up in-view">
         <Link 
-          href="/#works" 
+          href="/works" 
           className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata interactive hover:text-accent flex items-center gap-2"
         >
           <span className="text-accent">←</span> Back to Works
@@ -23,10 +24,10 @@ export default function SensAICaseStudy() {
       {/* Case Study Header */}
       <div className="grid grid-cols-12 gap-6 mb-32 reveal-up in-view">
         <div className="col-span-12 md:col-span-10 lg:col-span-9">
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.9] text-foreground mb-12">
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-light tracking-tight leading-[0.9] text-foreground mb-12">
             sensAI
           </h1>
-          <p className="text-2xl md:text-3xl text-foreground font-bold tracking-tight leading-snug mb-16">
+          <p className="text-2xl md:text-3xl text-foreground font-light tracking-tight leading-snug mb-16">
             First AI multi-agent trading intelligence platform in the Indian trading space.
           </p>
 
@@ -34,15 +35,15 @@ export default function SensAICaseStudy() {
           <div className="flex flex-col md:flex-row gap-8 md:gap-16 border-t border-metadata/20 pt-8">
             <div className="flex flex-col gap-2">
               <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">Role</span>
-              <span className="text-foreground font-bold">Senior Product Designer</span>
+              <span className="text-foreground font-light">Senior Product Designer</span>
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">Timeline</span>
-              <span className="text-foreground font-bold">3 Months</span>
+              <span className="text-foreground font-light">3 Months</span>
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">Company</span>
-              <span className="text-foreground font-bold">Finvasia · Shoonya</span>
+              <span className="text-foreground font-light">Finvasia · Shoonya</span>
             </div>
           </div>
         </div>
@@ -72,12 +73,17 @@ export default function SensAICaseStudy() {
         </div>
       </div>
 
-      {/* Full-bleed Staging Area */}
+      {/* Full-bleed Hero Image */}
       <div className="grid grid-cols-12 gap-6 my-32 reveal-up in-view">
-        <div className="col-span-12 aspect-video border border-metadata flex items-center justify-center">
-          <span className="font-mono text-[0.65rem] uppercase tracking-widest text-metadata">
-            [ MOCKUP STAGING: 1920x1080 ]
-          </span>
+        <div className="col-span-12 overflow-hidden">
+          <Image
+            src="/main.svg"
+            alt="sensAI — AI multi-agent trading intelligence platform"
+            width={1920}
+            height={1080}
+            className="w-full h-auto"
+            priority
+          />
         </div>
       </div>
 
@@ -89,7 +95,7 @@ export default function SensAICaseStudy() {
           </h2>
         </div>
         <div className="col-span-12 md:col-span-8 lg:col-span-7 border-l-0 md:border-l border-metadata/20 pl-0 md:pl-8">
-          <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-8">
+          <h3 className="text-3xl md:text-4xl font-light tracking-tight text-foreground mb-8">
             "Two agents. Two jobs. One experience."
           </h3>
           <p className="text-lg text-metadata leading-relaxed mb-8">
@@ -97,11 +103,11 @@ export default function SensAICaseStudy() {
           </p>
           <ul className="space-y-6 mb-12 border-l border-accent/30 pl-6">
             <li>
-              <span className="block text-foreground font-bold mb-1">1. Stock Screening Agent:</span>
+              <span className="block text-foreground font-light mb-1">1. Stock Screening Agent:</span>
               <span className="text-metadata">Let users search in plain English instead of technical filters.</span>
             </li>
             <li>
-              <span className="block text-foreground font-bold mb-1">2. Financial Chat Agent:</span>
+              <span className="block text-foreground font-light mb-1">2. Financial Chat Agent:</span>
               <span className="text-metadata">Answered market questions in real time.</span>
             </li>
           </ul>
@@ -111,19 +117,23 @@ export default function SensAICaseStudy() {
         </div>
       </div>
 
-      {/* Inset Staging Area - Right Aligned */}
+      {/* Full-bleed Image */}
       <div className="grid grid-cols-12 gap-6 my-32 reveal-up in-view">
-        <div className="col-span-12 md:col-span-8 md:col-start-5 aspect-[4/3] border border-metadata flex items-center justify-center">
-          <span className="font-mono text-[0.65rem] uppercase tracking-widest text-metadata">
-            [ ASSET_RENDER_PENDING: AGENT_INTERFACE ]
-          </span>
+        <div className="col-span-12 overflow-hidden">
+          <Image
+            src="/main2.svg"
+            alt="sensAI — Agent interface design"
+            width={1280}
+            height={960}
+            className="w-full h-auto"
+          />
         </div>
       </div>
 
       {/* Oversized Pull Quote */}
       <div className="grid grid-cols-12 gap-6 my-48 reveal-up in-view">
         <div className="col-span-12 md:col-span-10 md:col-start-2 lg:col-span-8 lg:col-start-3">
-          <blockquote className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter leading-[1.1] text-foreground border-l-4 border-accent pl-8 md:pl-12">
+          <blockquote className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.1] text-foreground border-l-4 border-accent pl-8 md:pl-12">
             "Multi-agent systems have a handoff problem. The moment a user crosses from one agent to another, the experience can fracture."
           </blockquote>
         </div>
@@ -146,12 +156,16 @@ export default function SensAICaseStudy() {
         </div>
       </div>
 
-      {/* Inset Staging Area - Left Aligned */}
+      {/* Full-bleed Image */}
       <div className="grid grid-cols-12 gap-6 my-32 reveal-up in-view">
-        <div className="col-span-12 md:col-span-8 aspect-[4/3] border border-metadata flex items-center justify-center">
-          <span className="font-mono text-[0.65rem] uppercase tracking-widest text-metadata">
-            [ MOCKUP STAGING: SINGLE_ENTRY_POINT ]
-          </span>
+        <div className="col-span-12 overflow-hidden">
+          <Image
+            src="/main3.svg"
+            alt="sensAI — Single entry point interface"
+            width={1280}
+            height={960}
+            className="w-full h-auto"
+          />
         </div>
       </div>
 
@@ -166,17 +180,17 @@ export default function SensAICaseStudy() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-16">
             <div className="flex flex-col gap-2">
               <span className="text-accent text-3xl font-bold">—</span>
-              <span className="text-foreground font-bold text-xl">First of its kind</span>
+              <span className="text-foreground font-light text-xl">First of its kind</span>
               <span className="text-metadata text-sm">In the Indian trading space.</span>
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-accent text-3xl font-bold">—</span>
-              <span className="text-foreground font-bold text-xl">2 Agents</span>
+              <span className="text-foreground font-light text-xl">2 Agents</span>
               <span className="text-metadata text-sm">1 seamless experience.</span>
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-accent text-3xl font-bold">—</span>
-              <span className="text-foreground font-bold text-xl">Plain English</span>
+              <span className="text-foreground font-light text-xl">Plain English</span>
               <span className="text-metadata text-sm">Stock screening for every trader.</span>
             </div>
           </div>
@@ -192,7 +206,7 @@ export default function SensAICaseStudy() {
           <h2 className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata mb-12">
             What I Learned
           </h2>
-          <p className="text-2xl md:text-3xl text-foreground font-bold tracking-tight leading-snug mb-8">
+          <p className="text-2xl md:text-3xl text-foreground font-light tracking-tight leading-snug mb-8">
             Designing for AI isn't about making the AI look impressive. It's about making the user feel capable. 
           </p>
           <p className="text-xl text-metadata leading-relaxed">

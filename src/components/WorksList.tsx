@@ -1,119 +1,199 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-type Work = {
+type Project = {
   id: string;
-  category: string;
   title: string;
+  imageLabel: string;
+  image?: string;
   description: string;
-  href: string;
+  tags: string[];
+  aspectRatioClass: string;
+  href?: string;
 };
 
-const works: Work[] = [
+const projects: Project[] = [
   {
     id: "sensai",
-    category: "AI PRODUCT · FINTECH",
     title: "sensAI",
-    description: "First AI multi-agent trading intelligence platform in the Indian trading space. Two agents, one seamless experience.",
+    imageLabel: "sensAI — Product Overview",
+    image: "/work1.svg",
+    description: "First AI multi-agent trading intelligence in the Indian trading space.",
+    tags: ["AI Product", "Fintech"],
+    aspectRatioClass: "aspect-[16/9]",
     href: "/works/sensai",
   },
   {
     id: "shoonya",
-    category: "PRODUCT REDESIGN · FINTECH",
     title: "Shoonya",
-    description: "Full redesign of a B2C trading platform across web and mobile. Complexity made navigable.",
+    imageLabel: "Shoonya — Dashboard Redesign",
+    image: "/work2.svg",
+    description: "Complete redesign of a B2C trading platform. Complexity made navigable.",
+    tags: ["Product Redesign", "Fintech"],
+    aspectRatioClass: "aspect-[4/3]",
     href: "/works/shoonya",
   },
   {
+    id: "jumpp",
+    title: "Jumpp",
+    imageLabel: "Jumpp — App Design",
+    description: "AI-powered neobanking app. Complex flows made simple.",
+    tags: ["AI Product", "Neobanking"],
+    aspectRatioClass: "aspect-[4/3]",
+    href: "/works/jumpp",
+  },
+  {
+    id: "friender",
+    title: "Friender",
+    imageLabel: "Friender — Platform Design",
+    image: "/work4.svg",
+    description: "SaaS platform turning Facebook connections into a lead generation pipeline.",
+    tags: ["SaaS", "Lead Generation"],
+    aspectRatioClass: "aspect-[16/9]",
+    href: "/works/friender",
+  },
+  {
     id: "uxmantra",
-    category: "PERSONAL PROJECT · COMING SOON",
     title: "UXMantra",
-    description: "An AI agent that thinks alongside designers — grounding decisions in research, not instinct.",
-    href: "/works/uxmantra",
+    imageLabel: "UXMantra — Coming Soon",
+    description: "An AI agent that thinks alongside designers.",
+    tags: ["Personal Project", "AI Tool"],
+    aspectRatioClass: "aspect-[16/9]",
   },
 ];
 
-export default function WorksList() {
-  const [hoveredWork, setHoveredWork] = useState<string | null>(null);
+const ProjectCard = ({ project }: { project: Project }) => {
+  const isComingSoon = project.id === "uxmantra";
+
+  const cardContent = (
+    <>
+      {/* Image Area */}
+      <div
+        className={`w-full rounded-[8px] bg-metadata/10 flex items-center justify-center overflow-hidden relative ${
+          project.aspectRatioClass
+        } ${isComingSoon ? "opacity-70" : ""}`}
+      >
+        {project.image ? (
+          <Image
+            src={project.image}
+            alt={project.imageLabel}
+            fill
+            className="object-cover"
+          />
+        ) : (
+          <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata text-center px-4">
+            {project.imageLabel}
+          </span>
+        )}
+        {isComingSoon && (
+          <div className="absolute top-4 right-4 bg-background px-3 py-1 rounded-full text-[0.65rem] font-mono uppercase tracking-wider text-metadata shadow-sm">
+            Coming Soon
+          </div>
+        )}
+      </div>
+
+      {/* Text Area */}
+      <div className="pt-6 relative">
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className="px-3 py-1 rounded-full bg-metadata/10 text-[0.7rem] font-mono uppercase tracking-wider text-foreground"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+        <h3 className="text-2xl md:text-3xl font-light tracking-tight text-foreground mb-2 pr-8">
+          {project.title}
+        </h3>
+        <p className="text-metadata text-base md:text-lg font-light truncate pr-8">
+          {project.description}
+        </p>
+
+        {/* Hover Arrow */}
+        {!isComingSoon && (
+          <div className="absolute bottom-2 right-2 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-accent text-xl">
+            &rarr;
+          </div>
+        )}
+      </div>
+    </>
+  );
+
+  if (isComingSoon) {
+    return (
+      <div className="group block w-full transition-transform duration-500 ease-out hover:scale-[1.01] relative">
+        {cardContent}
+      </div>
+    );
+  }
 
   return (
-    <div className="relative mt-32 mb-48">
-      {/* Editorial Header */}
-      <div className="grid grid-cols-12 gap-6 mb-16">
-        <div className="col-span-12 md:col-span-4 md:col-start-1">
-          <h2 className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">
-            Selected Works (2022—2026)
-          </h2>
-        </div>
-      </div>
+    <Link
+      href={project.href as string}
+      className="group block w-full transition-transform duration-500 ease-out hover:scale-[1.01] cursor-pointer relative"
+    >
+      {cardContent}
+    </Link>
+  );
+};
 
-      {/* Uninterrupted Editorial Layout List */}
-      <div className="flex flex-col border-t border-metadata/20">
-        {works.map((work) => (
-          <div
-            key={work.id}
-            className="group border-b border-metadata/20 transition-colors duration-500 hover:border-foreground"
-            onMouseEnter={() => setHoveredWork(work.id)}
-            onMouseLeave={() => setHoveredWork(null)}
-          >
-            <Link href={work.href} className="block py-12 md:py-16">
-              <div 
-                className={`grid grid-cols-12 gap-6 transition-opacity duration-500 ${
-                  hoveredWork && hoveredWork !== work.id ? "opacity-30" : "opacity-100"
-                }`}
-              >
-                {/* Meta / Category */}
-                <div className="col-span-12 md:col-span-4 flex flex-col justify-start">
-                  <p className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata mb-4 md:mb-0 group-hover:text-accent transition-colors duration-400">
-                    {work.category}
-                  </p>
-                </div>
-                
-                {/* Title & Description */}
-                <div className="col-span-12 md:col-span-8">
-                  <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-foreground mb-6 group-hover:translate-x-2 transition-transform duration-500 ease-out">
-                    {work.title}
-                  </h3>
-                  <p className="text-lg md:text-xl text-metadata max-w-2xl leading-relaxed">
-                    {work.description}
-                  </p>
-                </div>
-              </div>
+export default function WorksList() {
+  const leftColumnProjects = [projects[0], projects[2], projects[4]]; // sensAI, Jumpp, UXMantra
+  const rightColumnProjects = [projects[1], projects[3]]; // Shoonya, Friender
+
+  return (
+    <div className="w-full relative mt-32 mb-48">
+      {/* Section Container */}
+      <div className="px-4 sm:px-8 md:px-16 lg:px-32 max-w-7xl mx-auto w-full">
+        
+        {/* Editorial Header */}
+        <div className="mb-16">
+          <p className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata mb-4">
+            CASE STUDIES
+          </p>
+          <div className="flex items-end justify-between">
+            <h2 className="text-4xl md:text-5xl font-light tracking-tight text-foreground">
+              Selected Work
+            </h2>
+            <Link
+              href="/works"
+              className="group flex items-center gap-2 text-accent font-light hover:underline underline-offset-4 pb-1"
+            >
+              See all work{" "}
+              <span className="transition-transform group-hover:translate-x-1">
+                &rarr;
+              </span>
             </Link>
           </div>
-        ))}
-      </div>
-
-      {/* Floating Center Image (Placeholder) */}
-      {/* Note: The design requires a high-contrast grayscale to color transition with drifting motion */}
-      <div 
-        className={`pointer-events-none fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] md:w-[40vw] h-[40vh] md:h-[50vh] z-40 transition-all duration-700 ease-out ${
-          hoveredWork ? "opacity-100 scale-100" : "opacity-0 scale-95"
-        }`}
-      >
-        <div className="w-full h-full relative overflow-hidden bg-background border border-metadata/20 shadow-2xl rounded-[8px]">
-           {/* Drifting Image Container */}
-           <div className={`absolute inset-[-10%] w-[120%] h-[120%] transition-transform duration-[10s] ease-linear ${hoveredWork ? "translate-y-[-5%] translate-x-[-2%]" : "translate-y-[0%] translate-x-[0%]"}`}>
-              <div 
-                className={`w-full h-full bg-metadata/30 bg-cover bg-center transition-all duration-1000 ease-in-out ${
-                  hoveredWork ? "grayscale-0" : "grayscale"
-                }`}
-                style={{ 
-                  backgroundImage: hoveredWork ? `url('/placeholder-${hoveredWork}.jpg')` : 'none',
-                  // Simulating high contrast grayscale filter using CSS
-                  filter: hoveredWork ? 'grayscale(0%) contrast(100%)' : 'grayscale(100%) contrast(120%)'
-                }}
-              >
-                {/* Fallback pattern if no image */}
-                <div className="w-full h-full flex items-center justify-center text-metadata font-mono text-[0.75rem] uppercase opacity-50">
-                  Image: {hoveredWork}
-                </div>
-              </div>
-           </div>
         </div>
+
+        {/* Desktop Grid Layout (Asymmetric Two-Column Masonry) */}
+        <div className="hidden md:flex gap-8 lg:gap-16">
+          {/* Left Column */}
+          <div className="flex-1 min-w-0 flex flex-col gap-24 lg:gap-32">
+            {leftColumnProjects.map((project) => (
+              <ProjectCard key={`desktop-${project.id}`} project={project} />
+            ))}
+          </div>
+          {/* Right Column */}
+          <div className="flex-1 min-w-0 flex flex-col gap-24 lg:gap-32 mt-24 lg:mt-32">
+            {rightColumnProjects.map((project) => (
+              <ProjectCard key={`desktop-${project.id}`} project={project} />
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile Layout (Single Column) */}
+        <div className="flex md:hidden flex-col gap-20">
+          {projects.map((project) => (
+            <ProjectCard key={`mobile-${project.id}`} project={project} />
+          ))}
+        </div>
+
       </div>
     </div>
   );
