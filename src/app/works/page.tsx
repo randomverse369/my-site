@@ -1,355 +1,255 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { projects, type Project } from "@/lib/projects";
+import WorksIndex, { type WorksIndexItem } from "@/components/WorksIndex";
 
 export const metadata: Metadata = {
-  title: "Works - Sachin Barnwal",
-  description: "Things I've built that are worth your time.",
+  title: "Works",
+  description:
+    "Eight product design projects from Finvasia, DigiMantra and Tier5. Five carry a written case study.",
 };
+
+type NumberedProject = Project & { number: string };
+
+/**
+ * The number is the position in the one source list, so the rail, the entries
+ * and the anchors all count the same way even as projects are added.
+ */
+const numbered: NumberedProject[] = projects.map((project, index) => ({
+  ...project,
+  number: String(index + 1).padStart(2, "0"),
+}));
+
+const caseStudies = numbered.filter((project) => project.caseStudy === "published");
+const drafts = numbered.filter((project) => project.caseStudy === "coming-soon");
+
+const indexItems: WorksIndexItem[] = numbered.map((project) => ({
+  id: project.id,
+  number: project.number,
+  title: project.title,
+  draft: project.caseStudy === "coming-soon",
+}));
+
+/** The two values a reader scans for. The rest belongs on the case study. */
+const leadMeta = (project: Project) =>
+  project.meta
+    .slice(0, 2)
+    .map((item) => item.value)
+    .join(" · ");
+
+/* --accent-blue clears 3:1 as a mark and nothing else, so it draws the arrow
+   and its ring while the words next to it stay in --foreground. */
+const OpenMark = () => (
+  <span
+    aria-hidden="true"
+    className="flex size-9 shrink-0 items-center justify-center rounded-full border border-accent-blue text-accent-blue transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="size-4"
+    >
+      <path d="M7 17 17 7" />
+      <path d="M8 7h9v9" />
+    </svg>
+  </span>
+);
+
+const Kicker = ({ project }: { project: NumberedProject }) => (
+  <p className="label flex items-center gap-4 text-metadata">
+    <span className="text-foreground">{project.number}</span>
+    <span aria-hidden="true" className="h-px w-8 bg-rule-strong" />
+    <span>{project.category}</span>
+  </p>
+);
+
+function CaseStudyEntry({ project }: { project: NumberedProject }) {
+  const hasShot = Boolean(project.image);
+
+  return (
+    <article
+      id={project.id}
+      className="group relative scroll-mt-32 border-t border-rule pt-8"
+    >
+      <Kicker project={project} />
+
+      {/* Two weights of the same entry. A project with screens gets the full
+          width well; one without gets a square plate carrying its number, which
+          keeps the rhythm without dressing an empty box as a screenshot. */}
+      <div className="mt-8 grid grid-cols-12 gap-6 md:gap-10">
+        <div className={hasShot ? "col-span-12" : "col-span-6 md:col-span-4"}>
+          <div
+            className={`relative overflow-hidden rounded-md bg-forest ${
+              hasShot ? "aspect-[1016/480]" : "flex aspect-square items-center justify-center"
+            }`}
+          >
+            {project.image ? (
+              <Image
+                src={project.image}
+                alt={project.imageLabel}
+                fill
+                sizes="(min-width: 1024px) 800px, 92vw"
+                className="object-cover"
+              />
+            ) : (
+              <span
+                aria-hidden="true"
+                className="display text-d2 font-bold leading-none text-on-forest/20"
+              >
+                {project.number}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className={hasShot ? "col-span-12 lg:col-span-10" : "col-span-12 md:col-span-8"}>
+          <h3 className="display text-title font-bold text-foreground">
+            <Link
+              href={project.href}
+              className="interactive rounded-sm decoration-rule-strong underline-offset-8 after:absolute after:inset-0 group-hover:underline"
+            >
+              {project.title}
+            </Link>
+          </h3>
+
+          {project.body.map((paragraph) => (
+            <p key={paragraph} className="mt-4 text-body-lg text-steel">
+              {paragraph}
+            </p>
+          ))}
+
+          <ul className="mt-6 flex flex-wrap gap-2">
+            {project.tags.map((tag) => (
+              <li
+                key={tag}
+                className="label rounded-full bg-chip px-3 py-1 font-mono text-metadata"
+              >
+                {tag}
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+            <p className="label text-metadata">{leadMeta(project)}</p>
+            <p className="label flex items-center gap-3 text-foreground">
+              Read the case study
+              <OpenMark />
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function DraftEntry({ project }: { project: NumberedProject }) {
+  return (
+    <article
+      id={project.id}
+      className="group relative flex scroll-mt-32 flex-col gap-4 border-t border-rule py-8 md:flex-row md:items-start md:gap-8"
+    >
+      <p className="label text-metadata md:w-12 md:shrink-0 md:pt-2">{project.number}</p>
+
+      <div className="min-w-0 flex-1">
+        <h3 className="display text-lead font-bold text-foreground">
+          {/* The pseudo-element makes the whole row the target while the link
+              itself announces only the project name. */}
+          <Link
+            href={project.href}
+            className="interactive rounded-sm decoration-rule-strong underline-offset-8 after:absolute after:inset-0 group-hover:underline"
+          >
+            {project.title}
+          </Link>
+        </h3>
+
+        {project.body.map((paragraph) => (
+          <p key={paragraph} className="mt-3 text-body-lg text-steel">
+            {paragraph}
+          </p>
+        ))}
+
+        <p className="label mt-4 text-metadata">{leadMeta(project)}</p>
+      </div>
+
+      <p className="label shrink-0 rounded-full bg-chip px-3 py-1 text-metadata md:mt-2">
+        In draft
+      </p>
+    </article>
+  );
+}
 
 export default function Works() {
   return (
-    <div className="px-4 sm:px-8 md:px-16 lg:px-32 max-w-7xl mx-auto mb-32 relative">
-      
-      {/* SECTION 1 — HERO */}
-      <div className="grid grid-cols-12 gap-6 pt-12 md:pt-24 mb-32 reveal-up in-view relative z-10">
-        <div className="col-span-12 md:col-span-10 lg:col-span-8">
-          <p className="text-[0.75rem] uppercase tracking-wider font-mono text-metadata mb-8">
-            Works
-          </p>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[0.9] text-foreground mb-12">
-            Things I&apos;ve built<br />that are worth your time.
+    <div className="container-page mb-32 md:mb-40">
+      <header className="grid grid-cols-12 gap-6 pt-4 md:pt-12">
+        <div className="col-span-12 lg:col-span-10">
+          <p className="label text-metadata">Works</p>
+          {/* The two counts are the counts below. Change the list in
+              src/lib/projects.ts and this line has to move with it. */}
+          <h1 className="display mt-6 text-d2 text-foreground">
+            Eight projects. Five written up.
           </h1>
-          <p className="text-xl md:text-2xl font-light text-metadata max-w-3xl leading-relaxed">
-            Product design, AI systems, and everything in between.
+          <p className="mt-10 max-w-3xl text-lead text-steel">
+            I did this work at Finvasia, DigiMantra and Tier5, most of it on trading
+            platforms and the AI layered onto them. Three of the case studies are still in
+            draft, and each one says so.
           </p>
         </div>
-      </div>
+      </header>
 
-      {/* SECTION 2 — FEATURED WORK */}
-      <div className="mb-32 reveal-up in-view" style={{ transitionDelay: '0.1s' }}>
-        <h2 className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata mb-16">
-          Selected Projects
-        </h2>
-
-        <div className="flex flex-col space-y-32">
-          {/* CARD 1 — sensAI */}
-          <div className="grid grid-cols-12 gap-6 md:gap-12 border-b border-metadata/20 pb-32">
-            <div className="col-span-12 lg:col-span-5 flex flex-col justify-center">
-              <p className="text-[0.75rem] uppercase tracking-wider font-mono text-metadata mb-4">
-                AI Product · Fintech
-              </p>
-              <div className="relative mb-6">
-                <span className="absolute -left-8 md:-left-12 -top-4 md:-top-6 text-6xl md:text-8xl font-bold text-metadata/10 select-none">
-                  01
-                </span>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground relative z-10">
-                  sensAI
-                </h2>
-              </div>
-              <div className="space-y-6 text-lg font-light text-metadata leading-relaxed mb-12">
-                <p>
-                  The Indian trading space had an information overload problem. sensAI solved it with two agents — a plain English stock screener and a real-time financial chat assistant — wrapped in one seamless interface.
-                </p>
-                <p className="text-foreground font-light border-l-2 border-accent pl-4">
-                  First of its kind in the Indian trading space.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-8 border-t border-metadata/20 pt-6 mb-12">
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Role</span>
-                  <span className="font-bold text-foreground">Senior Product Designer</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Company</span>
-                  <span className="font-bold text-foreground">Finvasia · Shoonya</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Type</span>
-                  <span className="font-bold text-foreground">0 to 1 AI Product</span>
-                </div>
-              </div>
-              <Link href="/works/sensai" className="text-accent font-bold interactive hover:translate-x-2 w-fit flex items-center gap-2">
-                View Case Study <span>→</span>
-              </Link>
-            </div>
-            <div className="col-span-12 lg:col-span-7 order-first lg:order-last">
-              <div className="w-full aspect-[4/3] flex items-center justify-center border border-metadata rounded-[4px] overflow-hidden relative">
-                <span className="font-mono text-[0.65rem] uppercase tracking-widest text-metadata">
-                  [ MOCKUP STAGING: sensAI — Product Overview ]
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* CARD 2 — Shoonya */}
-          <div className="grid grid-cols-12 gap-6 md:gap-12 border-b border-metadata/20 pb-32">
-            <div className="col-span-12 lg:col-span-5 flex flex-col justify-center">
-              <p className="text-[0.75rem] uppercase tracking-wider font-mono text-metadata mb-4">
-                Product Redesign · Fintech
-              </p>
-              <div className="relative mb-6">
-                <span className="absolute -left-8 md:-left-12 -top-4 md:-top-6 text-6xl md:text-8xl font-bold text-metadata/10 select-none">
-                  02
-                </span>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground relative z-10">
-                  Shoonya
-                </h2>
-              </div>
-              <div className="space-y-6 text-lg font-light text-metadata leading-relaxed mb-12">
-                <p>
-                  A complete redesign of a B2C trading platform across web and mobile. The old interface had everything a trader needed — and made it impossible to find.
-                </p>
-                <p className="text-foreground font-light border-l-2 border-accent pl-4">
-                  The redesign made one thing the anchor: at-a-glance portfolio clarity, without a single extra tap.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-8 border-t border-metadata/20 pt-6 mb-12">
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Role</span>
-                  <span className="font-bold text-foreground">Senior Product Designer</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Company</span>
-                  <span className="font-bold text-foreground">Finvasia</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Type</span>
-                  <span className="font-bold text-foreground">Platform Redesign</span>
-                </div>
-              </div>
-              <Link href="/works/shoonya" className="text-accent font-bold interactive hover:translate-x-2 w-fit flex items-center gap-2">
-                View Case Study <span>→</span>
-              </Link>
-            </div>
-            <div className="col-span-12 lg:col-span-7 order-first lg:order-last">
-              <div className="w-full aspect-[4/3] flex items-center justify-center border border-metadata rounded-[4px] overflow-hidden relative">
-                <span className="font-mono text-[0.65rem] uppercase tracking-widest text-metadata text-center px-4">
-                  [ MOCKUP STAGING: Shoonya — Dashboard Redesign ]
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* CARD 3 — Jumpp */}
-          <div className="grid grid-cols-12 gap-6 md:gap-12 border-b border-metadata/20 pb-32">
-            <div className="col-span-12 lg:col-span-5 flex flex-col justify-center">
-              <p className="text-[0.75rem] uppercase tracking-wider font-mono text-metadata mb-4">
-                AI Product · Neobanking
-              </p>
-              <div className="relative mb-6">
-                <span className="absolute -left-8 md:-left-12 -top-4 md:-top-6 text-6xl md:text-8xl font-bold text-metadata/10 select-none">
-                  03
-                </span>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground relative z-10">
-                  Jumpp
-                </h2>
-              </div>
-              <div className="space-y-6 text-lg font-light text-metadata leading-relaxed mb-12">
-                <p>
-                  Banking apps have an onboarding problem. Too many steps, too much friction, too many users dropping off before they ever see the product.
-                </p>
-                <p className="text-foreground font-light border-l-2 border-accent pl-4">
-                  Jumpp is an AI-powered neobanking app designed from the ground up for simplicity — complex financial flows made approachable, onboarding rebuilt to get users to value faster.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-8 border-t border-metadata/20 pt-6 mb-12">
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Role</span>
-                  <span className="font-bold text-foreground">Senior Product Designer</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Company</span>
-                  <span className="font-bold text-foreground">Finvasia</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Type</span>
-                  <span className="font-bold text-foreground">AI-Powered Mobile App · 0 to 1</span>
-                </div>
-              </div>
-              <Link href="/works/jumpp" className="text-accent font-bold interactive hover:translate-x-2 w-fit flex items-center gap-2">
-                View Case Study <span>→</span>
-              </Link>
-            </div>
-            <div className="col-span-12 lg:col-span-7 order-first lg:order-last">
-              <div className="w-full aspect-[4/3] flex items-center justify-center border border-metadata rounded-[4px] overflow-hidden relative">
-                <span className="font-mono text-[0.65rem] uppercase tracking-widest text-metadata text-center px-4">
-                  [ MOCKUP STAGING: Jumpp — App Design ]
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* CARD 4 — Friender */}
-          <div className="grid grid-cols-12 gap-6 md:gap-12 border-b border-metadata/20 pb-32">
-            <div className="col-span-12 lg:col-span-5 flex flex-col justify-center">
-              <p className="text-[0.75rem] uppercase tracking-wider font-mono text-metadata mb-4">
-                SaaS Product · Lead Generation
-              </p>
-              <div className="relative mb-6">
-                <span className="absolute -left-8 md:-left-12 -top-4 md:-top-6 text-6xl md:text-8xl font-bold text-metadata/10 select-none">
-                  04
-                </span>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground relative z-10">
-                  Friender
-                </h2>
-              </div>
-              <div className="space-y-6 text-lg font-light text-metadata leading-relaxed mb-12">
-                <p>
-                  Most businesses ignore their existing network. Friender was built to fix that — a SaaS platform that turns Facebook connections into a structured lead generation pipeline.
-                </p>
-                <p className="text-foreground font-light border-l-2 border-accent pl-4">
-                  Built the design system from scratch. The result: 3x faster feature shipping, cleaner handoffs, and a product that felt like a single coherent tool instead of a collection of features.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-8 border-t border-metadata/20 pt-6 mb-12">
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Role</span>
-                  <span className="font-bold text-foreground">Product Designer</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Company</span>
-                  <span className="font-bold text-foreground">Tier5</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Type</span>
-                  <span className="font-bold text-foreground">SaaS Platform · Design System</span>
-                </div>
-              </div>
-              <Link href="/works/friender" className="text-accent font-bold interactive hover:translate-x-2 w-fit flex items-center gap-2">
-                View Case Study <span>→</span>
-              </Link>
-            </div>
-            <div className="col-span-12 lg:col-span-7 order-first lg:order-last">
-              <div className="w-full aspect-[4/3] flex items-center justify-center border border-metadata rounded-[4px] overflow-hidden relative">
-                <span className="font-mono text-[0.65rem] uppercase tracking-widest text-metadata text-center px-4">
-                  [ MOCKUP STAGING: Friender — Platform Design ]
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* CARD 5 — UXMantra */}
-          <div className="grid grid-cols-12 gap-6 md:gap-12 opacity-90 pb-16">
-            <div className="col-span-12 lg:col-span-5 flex flex-col justify-center">
-              <p className="text-[0.75rem] uppercase tracking-wider font-mono text-metadata mb-4">
-                Personal Project · AI Tool
-              </p>
-              <div className="relative mb-6">
-                <span className="absolute -left-8 md:-left-12 -top-4 md:-top-6 text-6xl md:text-8xl font-bold text-metadata/10 select-none">
-                  05
-                </span>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground relative z-10">
-                  UXMantra
-                </h2>
-              </div>
-              <div className="space-y-6 text-lg font-light text-metadata leading-relaxed mb-12">
-                <p>
-                  Most UX decisions get made on instinct and defended with opinion.
-                </p>
-                <p>
-                  UXMantra is an AI agent built to fix that — thinking alongside designers and grounding decisions in real research at the moment they&apos;re being made.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-8 border-t border-metadata/20 pt-6 mb-12">
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Role</span>
-                  <span className="font-bold text-foreground">Solo Builder</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Built with</span>
-                  <span className="font-bold text-foreground">Gemini API · Vercel</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <span className="text-[0.65rem] font-mono uppercase tracking-wider text-metadata">Type</span>
-                  <span className="font-bold text-foreground">AI Product</span>
-                </div>
-              </div>
-              <div className="inline-flex items-center justify-center px-4 py-2 border border-accent text-accent text-[0.75rem] font-mono uppercase tracking-wider font-bold rounded-[4px] w-fit">
-                Coming Soon
-              </div>
-            </div>
-            <div className="col-span-12 lg:col-span-7 order-first lg:order-last">
-              <div className="w-full aspect-[4/3] flex items-center justify-center border border-metadata/50 rounded-[4px] overflow-hidden relative opacity-70">
-                <span className="font-mono text-[0.65rem] uppercase tracking-widest text-metadata text-center px-4">
-                  [ MOCKUP STAGING: UXMantra — Coming Soon ]
-                </span>
-              </div>
-            </div>
-          </div>
-
+      <div className="mt-20 grid grid-cols-12 gap-x-6 gap-y-16 md:mt-28 lg:gap-x-10">
+        {/* The rail takes a wider share at lg: at 1024px three columns leaves
+            166px, which wraps half the project names onto a second line. */}
+        <div className="col-span-12 lg:col-span-4 xl:col-span-3">
+          <WorksIndex items={indexItems} />
         </div>
-      </div>
 
-      {/* SECTION 3 — PERSONAL PROJECT CALLOUT */}
-      <div className="grid grid-cols-12 gap-6 border-t border-metadata/20 pt-24 mb-32 reveal-up in-view" style={{ transitionDelay: '0.2s' }}>
-        <div className="col-span-12 md:col-span-4 mb-12 md:mb-0">
-          <h2 className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata sticky top-32">
-            Beyond Client Work
-          </h2>
-        </div>
-        <div className="col-span-12 md:col-span-8 border-l-0 md:border-l border-metadata/20 pl-0 md:pl-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-12">
-            <div>
-              <h3 className="text-3xl md:text-4xl font-light tracking-tight text-foreground mb-8">
-                Building in public.
-              </h3>
-              <div className="space-y-6 text-lg font-light text-metadata leading-relaxed">
-                <p>
-                  UXMantra started as a question — why do designers make decisions without research backing them?
-                </p>
-                <p>
-                  It became a product. Built independently using Gemini API, prototyped in Google AI Studio, deployed on Vercel.
-                </p>
-                <p className="font-bold text-foreground">
-                  Currently in active development.
-                </p>
-              </div>
+        <div className="col-span-12 lg:col-span-8 xl:col-span-9">
+          <section aria-labelledby="case-studies">
+            <div className="flex items-baseline justify-between gap-6">
+              <h2 id="case-studies" className="label text-metadata">
+                Case studies
+              </h2>
+              <p className="label text-metadata">{caseStudies.length} written</p>
             </div>
-            <div className="flex flex-col gap-12 justify-center">
-              <div>
-                <p className="text-2xl font-light text-foreground mb-2">Gemini API</p>
-                <p className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">Powering UXMantra&apos;s research engine</p>
-              </div>
-              <div>
-                <p className="text-2xl font-light text-foreground mb-2">Vercel</p>
-                <p className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">Deployed and live in development</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      {/* SECTION 4 — CTA */}
-      {/* We skip a heavy CTA block here because the global Footer already handles the main CTA */}
-      <div className="grid grid-cols-12 gap-6 border-t border-metadata/20 pt-24 mb-16 reveal-up in-view text-center md:text-left" style={{ transitionDelay: '0.3s' }}>
-        <div className="col-span-12 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-light tracking-tight text-foreground mb-2">
-              Have a project in mind?
-            </h2>
-            <p className="text-lg font-light text-metadata">
-              Currently open to senior design roles at AI-focused companies and labs.
+            <ol className="mt-10 flex flex-col gap-24 md:gap-32">
+              {caseStudies.map((project) => (
+                <li key={project.id}>
+                  <CaseStudyEntry project={project} />
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          <section className="mt-32 md:mt-40" aria-labelledby="drafts">
+            <div className="flex items-baseline justify-between gap-6">
+              <h2 id="drafts" className="label text-metadata">
+                Still writing
+              </h2>
+              <p className="label text-metadata">{drafts.length} projects</p>
+            </div>
+
+            <p className="mt-6 max-w-2xl text-body-lg text-steel">
+              Three projects I have not written up yet. The pages behind them carry the
+              summary and little else.
             </p>
-          </div>
-          <div className="flex flex-wrap gap-6 justify-center md:justify-end">
-            <a 
-              href="/resume.pdf" 
-              target="_blank" 
-              className="inline-flex items-center justify-center px-6 py-3 border border-metadata text-[0.75rem] font-mono uppercase tracking-wider text-foreground interactive hover:border-accent hover:text-accent rounded-[4px] gap-2"
-            >
-              Download Resume <span>↗</span>
-            </a>
-            <a 
-              href="mailto:hello@example.com" 
-              className="inline-flex items-center justify-center px-6 py-3 bg-foreground text-background text-[0.75rem] font-mono uppercase tracking-wider interactive hover:bg-accent rounded-[4px] gap-2"
-            >
-              Get in touch <span>↗</span>
-            </a>
-          </div>
+
+            <ol className="mt-10 flex flex-col">
+              {drafts.map((project) => (
+                <li key={project.id}>
+                  <DraftEntry project={project} />
+                </li>
+              ))}
+            </ol>
+          </section>
         </div>
       </div>
-
     </div>
   );
 }

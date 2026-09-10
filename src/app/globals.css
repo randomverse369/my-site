@@ -1,24 +1,195 @@
 @import "tailwindcss";
 
+/*
+ * Tokens. Values come from the Figma source of truth (file Ms2OgTXngvHyyQ7rDlrvHb,
+ * node 11:6); see design-system/MASTER.md for the rationale and the measured
+ * contrast ratios. Raw hex in components is a bug — use these.
+ */
 :root {
-  /* Light Mode */
-  --background: #F7F5F2; /* Warm Limestone */
-  --foreground: #1A1C1E; /* Deep Ink */
-  --metadata: #5A6066; /* Darkened Slate */
-  --accent: #B8422E; /* Boston Clay */
+  /* Surfaces */
+  --background: #F5F7FA; /* cool paper, the page ground */
+  --surface: #FFFFFF;    /* raised planes: nav pill, project cards, footer */
+  --forest: #082F25;     /* the ground inside a project card's image well */
+
+  /* Text — two greys, no more. Both clear 4.5:1 on ground and on surface. */
+  --foreground: #1A1C1E; /* 15.24:1 on surface — display, primary UI */
+  --metadata: #5A6066;   /*  6.41:1 on surface — nav, standfirsts, micro-labels */
+  --steel: #424242;      /*  9.73:1 on surface — card and section descriptions */
+  /* Kept as an alias of --metadata: ~38 call sites on the inner pages still
+     ask for `subtle`, and the new palette has no third grey to give them. */
+  --subtle: #5A6066;
+
+  /* Lines. Derived from --metadata so a hairline is always the same hue as the
+     text it separates. --rule is decorative: it may not delimit a control. */
+  --rule: rgba(90, 96, 102, 0.2);
+  --rule-strong: rgba(90, 96, 102, 0.3); /* control borders */
+  --chip: rgba(90, 96, 102, 0.1);        /* tag pill ground */
+
+  /* Accents. Blue carries the "open this case study" affordance; clay carries
+     the outbound arrows in the footer. Both are used on ≥3:1 non-text marks. */
+  --accent: #B8422E;
+  --accent-blue: #0088FF;
+  --on-accent: #FFFFFF;
+  --on-foreground: #FFFFFF;
+  --on-forest: #FCFCFC;
+
+  /* The nav pill's glass. Was `bg-white/10 border-white/40` inline — literal
+     white cannot follow the theme, so it is a token like everything else. */
+  --glass: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.4);
+
+  /* Tells the UA to paint form controls, scrollbars and the canvas light. */
+  color-scheme: light;
+
+  /* Nav bar height fallback; Navigation publishes the measured value. */
+  --nav-height: 4.75rem;
 }
 
+/*
+ * Dark theme. Not a filter over the light palette — the same eight roles
+ * re-measured against a dark ground, so every ratio in MASTER.md §1 still
+ * holds. Surface stays one step *above* the page ground (1.08:1), mirroring
+ * the 1.06:1 the light theme puts between #FFFFFF and #F5F7FA.
+ *
+ * Applied two ways on purpose:
+ *   - [data-theme="dark"]  — the explicit choice, written by the toggle.
+ *   - prefers-color-scheme — the no-JS / pre-choice default, disarmed by an
+ *     explicit `light` so the toggle can always win.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    /* Surfaces */
+    --background: #0D1013; /* the page ground */
+    --surface: #15191D;    /* raised planes: nav pill, project cards, footer */
+    --forest: #0A2C22;     /* the image well — held, it reads in both themes */
 
+    /* Text. Same three roles, same order of contrast as the light theme:
+       16.03 / 11.48 / 6.84 on --surface (light: 15.24 / 9.73 / 6.41). */
+    --foreground: #F2F4F7; /* 16.03:1 on surface */
+    --metadata: #9AA2AB;   /*  6.84:1 on surface */
+    --steel: #CBD1D8;      /* 11.48:1 on surface */
+    --subtle: #9AA2AB;
+
+    /* Lines, still derived from --metadata so a hairline shares its hue.
+       Nudged up from .2/.3/.1 — a light line on dark reads thinner than a
+       dark line on light at the same alpha. */
+    --rule: rgba(154, 162, 171, 0.22);
+    --rule-strong: rgba(154, 162, 171, 0.36);
+    --chip: rgba(154, 162, 171, 0.14);
+
+    /* Accents, lightened until they clear 4.5:1 as text on --surface. The light
+       theme's #B8422E and #0088FF sit at 1.9:1 and 2.7:1 here and cannot be
+       reused. Hue is preserved: clay stays clay, blue stays blue. */
+    --accent: #E8836B;      /* 6.64:1 on surface */
+    --accent-blue: #4DA6FF; /* 6.91:1 on surface */
+    --on-accent: #241009;   /* 6.84:1 on --accent */
+    --on-foreground: #0D1013;
+    --on-forest: #FCFCFC;
+
+    --glass: rgba(21, 25, 29, 0.55);
+    --glass-border: rgba(154, 162, 171, 0.18);
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  /* Surfaces */
+  --background: #0D1013; /* the page ground */
+  --surface: #15191D;    /* raised planes: nav pill, project cards, footer */
+  --forest: #0A2C22;     /* the image well — held, it reads in both themes */
+
+  /* Text. Same three roles, same order of contrast as the light theme:
+     16.03 / 11.48 / 6.84 on --surface (light: 15.24 / 9.73 / 6.41). */
+  --foreground: #F2F4F7; /* 16.03:1 on surface */
+  --metadata: #9AA2AB;   /*  6.84:1 on surface */
+  --steel: #CBD1D8;      /* 11.48:1 on surface */
+  --subtle: #9AA2AB;
+
+  /* Lines, still derived from --metadata so a hairline shares its hue.
+     Nudged up from .2/.3/.1 — a light line on dark reads thinner than a
+     dark line on light at the same alpha. */
+  --rule: rgba(154, 162, 171, 0.22);
+  --rule-strong: rgba(154, 162, 171, 0.36);
+  --chip: rgba(154, 162, 171, 0.14);
+
+  /* Accents, lightened until they clear 4.5:1 as text on --surface. The light
+     theme's #B8422E and #0088FF sit at 1.9:1 and 2.7:1 here and cannot be
+     reused. Hue is preserved: clay stays clay, blue stays blue. */
+  --accent: #E8836B;      /* 6.64:1 on surface */
+  --accent-blue: #4DA6FF; /* 6.91:1 on surface */
+  --on-accent: #241009;   /* 6.84:1 on --accent */
+  --on-foreground: #0D1013;
+  --on-forest: #FCFCFC;
+
+  --glass: rgba(21, 25, 29, 0.55);
+  --glass-border: rgba(154, 162, 171, 0.18);
+
+  color-scheme: dark;
+}
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-forest: var(--forest);
   --color-foreground: var(--foreground);
   --color-metadata: var(--metadata);
+  --color-steel: var(--steel);
+  --color-subtle: var(--subtle);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-chip: var(--chip);
   --color-accent: var(--accent);
+  --color-accent-blue: var(--accent-blue);
+  --color-on-accent: var(--on-accent);
+  --color-on-foreground: var(--on-foreground);
+  --color-on-forest: var(--on-forest);
+  --color-glass: var(--glass);
+  --color-glass-border: var(--glass-border);
+
   --font-sans: var(--font-inter);
   --font-mono: var(--font-space-grotesk);
   --font-inter: var(--font-inter);
   --font-space-grotesk: var(--font-space-grotesk);
+}
+
+@theme {
+  /* Display scale. Fluid, anchored to the 1440px Figma frame: each clamp's
+     upper bound is the design value, so at ≥1440px the page measures 1:1. */
+  --text-d1: clamp(2.375rem, 4.2vw, 3.75rem); /* 60px — hero */
+  --text-d1--line-height: 1.1;
+  --text-d1--letter-spacing: -0.025em;
+
+  --text-d2: clamp(3rem, 6.7vw, 6rem); /* 96px — "Building products from 0 to 1" */
+  --text-d2--line-height: 1.05;
+  --text-d2--letter-spacing: -0.016em;
+
+  --text-d3: clamp(2rem, 3.4vw, 3rem); /* 48px — section headings */
+  --text-d3--line-height: 1.15;
+  --text-d3--letter-spacing: -0.025em;
+
+  --text-title: clamp(1.75rem, 2.5vw, 2.25rem); /* 36px — project card title */
+  --text-title--line-height: 1.1;
+
+  --text-lead: clamp(1.375rem, 2.1vw, 1.875rem); /* 30px — hero standfirst */
+  --text-lead--line-height: 1.4;
+
+  --text-body-lg: clamp(1.0625rem, 1.7vw, 1.5rem); /* 24px — descriptions */
+  --text-body-lg--line-height: 1.5;
+
+  /* The only micro size, plus the slightly tighter tag variant. */
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.5;
+  --text-label--letter-spacing: 0.05em;
+
+  --text-tag: 0.7rem;
+  --text-tag--line-height: 1.5;
+  --text-tag--letter-spacing: 0.05em;
+
+  /* Borders carry structure in this system; shadows do not exist. */
+  --radius-sm: 4px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
 }
 
 body {
@@ -41,21 +212,170 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* Global anti-gravity scroll animation classes */
-.reveal-up {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+/* The same grain is a dark speckle on paper and a light speckle on ink. On the
+   dark ground it lands nearer the page colour, so it needs a little more of
+   itself to stay perceptible — still under the 3% ceiling in every theme. */
+:root[data-theme="dark"] .grain-overlay { opacity: 0.04; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .grain-overlay { opacity: 0.04; }
 }
 
-.reveal-up.in-view {
-  opacity: 1;
-  transform: translateY(0);
+/* The page gutter + measure, defined once. Was copy-pasted into 15 files.
+   At ≥1440px this resolves to the Figma's 180px gutter / 1080px column. */
+.container-page {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
 }
 
-/* Base styles for ease-in micro-interactions */
-a, button, .interactive {
-  transition: all 0.4s ease-in;
+@media (min-width: 40rem) { .container-page { padding-inline: 2rem; } }
+@media (min-width: 48rem) { .container-page { padding-inline: 4rem; } }
+@media (min-width: 64rem) { .container-page { padding-inline: 7.5rem; } }
+@media (min-width: 90rem) { .container-page { padding-inline: 11.25rem; } }
+
+/* A label is a role, not a size — it always travels with its font and tracking. */
+.label {
+  font-family: var(--font-space-grotesk), monospace;
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
+}
+
+/* Display type is Space Grotesk in this system; body copy stays Inter. */
+.display {
+  font-family: var(--font-space-grotesk), sans-serif;
+}
+
+/* ThemeToggle's two glyphs. Swapped here rather than in React so the correct
+   one is in the first paint — the server cannot know which theme a visitor
+   resolves to, and a state-driven swap would flash the wrong icon. */
+.theme-icon--moon { display: none; }
+
+:root[data-theme="dark"] .theme-icon--sun { display: none; }
+:root[data-theme="dark"] .theme-icon--moon { display: block; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-icon--sun { display: none; }
+  :root:not([data-theme="light"]) .theme-icon--moon { display: block; }
+}
+
+/* Keyboard focus. --accent clears 3:1 against every surface in the system.
+   :focus-visible keeps it off mouse clicks. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Named properties, not `all`: transitioning `all` animates layout
+   properties too. ease-out rather than ease-in, which reads sluggish. */
+a,
+button,
+.interactive {
+  transition-property: color, background-color, border-color, opacity, transform;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a,
+  button,
+  .interactive {
+    transition-duration: 1ms;
+  }
+}
+
+/* The hero's iridescent plate. `color` blending takes hue and saturation from
+   the artwork and luminosity from the page ground, which is what turns a hard
+   chrome render into the pastel wash in the design. It needs a light, opaque
+   backdrop to composite against — over anything dark it disappears. */
+.iridescence {
+  mix-blend-mode: color;
+  pointer-events: none;
+}
+
+/*
+ * The dark plate. `color` blending takes luminosity from the backdrop, so over
+ * the dark ground it composites to nothing — the same failure it has over pure
+ * white in the light theme, from the other direction. `screen` is the
+ * dark-ground equivalent: it keeps the artwork's hue and lifts it off the ink
+ * instead of borrowing lightness that isn't there.
+ *
+ * The filter is doing two jobs. `blur(40px)` dissolves the chrome silhouette —
+ * unblurred, `screen` renders the render's hard edge as an object sitting on
+ * top of the headline, because black in the source drops out while the shape
+ * does not. `saturate(10)` puts back the chroma the blur averages away.
+ *
+ * And the opacity is a contrast budget, not a taste call. Unlike `color`,
+ * `screen` raises the ground's luminance, which eats into the text sitting on
+ * it. Measured against the brightest pixel under each hero element, 0.22 is
+ * the last stop where all three still clear 4.5:1 with room to spare:
+ *   headline (--foreground) 11.49:1 · standfirst (--metadata) 4.90:1 ·
+ *   Download Resume (--metadata) 5.52:1.
+ * At 0.30 the standfirst is 4.04:1 and at 0.55 it is 2.18:1. Do not raise it.
+ *
+ * `filter` here deliberately restates saturation: the element carries a
+ * `saturate-[2.75]` utility, and a filter is one property, so the blur cannot
+ * be added without also re-declaring it.
+ */
+:root[data-theme="dark"] .iridescence {
+  mix-blend-mode: screen;
+  opacity: 0.22;
+  filter: saturate(10) blur(40px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .iridescence {
+    mix-blend-mode: screen;
+    opacity: 0.22;
+    filter: saturate(10) blur(40px);
+  }
+}
+
+/* The capability strip scrolls itself; the track is duplicated so the loop has
+   no seam. Paused for anyone who asked for less motion. */
+@keyframes marquee-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+.marquee-track {
+  animation: marquee-drift 32s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* Switching theme repaints every surface at once, which reads as a hard cut.
+   ThemeToggle stamps [data-theme-transition] on <html> for the length of the
+   crossfade and takes it off again — so this costs nothing while scrolling,
+   and never fights the entrance animations. `all` is deliberate and safe here
+   precisely because it is momentary; the standing rule against it in §4 is
+   about permanent transitions on interactive elements. */
+:root[data-theme-transition],
+:root[data-theme-transition] *,
+:root[data-theme-transition] *::before,
+:root[data-theme-transition] *::after {
+  transition:
+    background-color 260ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 260ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 260ms cubic-bezier(0.16, 1, 0.3, 1),
+    fill 260ms cubic-bezier(0.16, 1, 0.3, 1),
+    stroke 260ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition-delay: 0ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme-transition],
+  :root[data-theme-transition] *,
+  :root[data-theme-transition] *::before,
+  :root[data-theme-transition] *::after {
+    transition-duration: 1ms !important;
+  }
 }
 
 /* Lenis base styles */
@@ -79,34 +399,7 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
-/* Live Indicator Pulse */
-.live-indicator {
-  position: relative;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: var(--accent);
-}
-
-.live-indicator::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background-color: var(--accent);
-  animation: pulse-ring 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
-}
-
-@keyframes pulse-ring {
-  0% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-  100% {
-    transform: scale(3);
-    opacity: 0;
-  }
+/* GSAP text splitting */
+.char {
+  display: inline-block;
 }

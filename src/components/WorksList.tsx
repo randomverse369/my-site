@@ -1,200 +1,154 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { featuredProjects, type Project } from "@/lib/projects";
 
-type Project = {
-  id: string;
-  title: string;
-  imageLabel: string;
-  image?: string;
-  description: string;
-  tags: string[];
-  aspectRatioClass: string;
-  href?: string;
-};
-
-const projects: Project[] = [
-  {
-    id: "sensai",
-    title: "sensAI",
-    imageLabel: "sensAI — Product Overview",
-    image: "/work1.svg",
-    description: "First AI multi-agent trading intelligence in the Indian trading space.",
-    tags: ["AI Product", "Fintech"],
-    aspectRatioClass: "aspect-[16/9]",
-    href: "/works/sensai",
-  },
-  {
-    id: "shoonya",
-    title: "Shoonya",
-    imageLabel: "Shoonya — Dashboard Redesign",
-    image: "/work2.svg",
-    description: "Complete redesign of a B2C trading platform. Complexity made navigable.",
-    tags: ["Product Redesign", "Fintech"],
-    aspectRatioClass: "aspect-[4/3]",
-    href: "/works/shoonya",
-  },
-  {
-    id: "jumpp",
-    title: "Jumpp",
-    imageLabel: "Jumpp — App Design",
-    description: "AI-powered neobanking app. Complex flows made simple.",
-    tags: ["AI Product", "Neobanking"],
-    aspectRatioClass: "aspect-[4/3]",
-    href: "/works/jumpp",
-  },
-  {
-    id: "friender",
-    title: "Friender",
-    imageLabel: "Friender — Platform Design",
-    image: "/work4.svg",
-    description: "SaaS platform turning Facebook connections into a lead generation pipeline.",
-    tags: ["SaaS", "Lead Generation"],
-    aspectRatioClass: "aspect-[16/9]",
-    href: "/works/friender",
-  },
-  {
-    id: "uxmantra",
-    title: "UXMantra",
-    imageLabel: "UXMantra — Coming Soon",
-    description: "An AI agent that thinks alongside designers.",
-    tags: ["Personal Project", "AI Tool"],
-    aspectRatioClass: "aspect-[16/9]",
-  },
-];
+gsap.registerPlugin(ScrollTrigger);
 
 const ProjectCard = ({ project }: { project: Project }) => {
-  const isComingSoon = project.id === "uxmantra";
+  const cardRef = useRef<HTMLElement>(null);
 
-  const cardContent = (
-    <>
-      {/* Image Area */}
-      <div
-        className={`w-full rounded-[8px] bg-metadata/10 flex items-center justify-center overflow-hidden relative ${
-          project.aspectRatioClass
-        } ${isComingSoon ? "opacity-70" : ""}`}
-      >
+  useGSAP(() => {
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+      // toggleActions used to end in "reverse", which faded a card back out the
+      // moment it left the trigger zone. Reveal once, then leave it alone.
+      gsap.fromTo(
+        cardRef.current,
+        { y: 64, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: cardRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        },
+      );
+    });
+  }, []);
+
+  return (
+    <article
+      ref={cardRef}
+      className="group rounded-lg bg-surface px-5 py-4 sm:px-8 sm:py-6"
+    >
+      <div className="relative overflow-hidden rounded-md bg-forest aspect-[16/10] lg:aspect-[1016/480]">
         {project.image ? (
           <Image
             src={project.image}
             alt={project.imageLabel}
             fill
+            sizes="(min-width: 1440px) 1016px, 90vw"
             className="object-cover"
           />
         ) : (
-          <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata text-center px-4">
+          <span className="absolute inset-0 flex items-center justify-center px-4 text-center label text-on-forest/60">
             {project.imageLabel}
           </span>
         )}
-        {isComingSoon && (
-          <div className="absolute top-4 right-4 bg-background px-3 py-1 rounded-full text-[0.65rem] font-mono uppercase tracking-wider text-metadata shadow-sm">
-            Coming Soon
-          </div>
-        )}
       </div>
 
-      {/* Text Area */}
-      <div className="pt-6 relative">
-        <div className="flex flex-wrap gap-2 mb-4">
-          {project.tags.map((tag) => (
-            <span
-              key={tag}
-              className="px-3 py-1 rounded-full bg-metadata/10 text-[0.7rem] font-mono uppercase tracking-wider text-foreground"
-            >
-              {tag}
-            </span>
-          ))}
+      <div className="mt-6 flex items-start justify-between gap-6 sm:mt-8">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+            <h3 className="display text-title font-bold text-foreground">
+              {project.title}
+            </h3>
+            <ul className="flex flex-wrap items-center gap-2">
+              {project.tags.map((tag) => (
+                <li
+                  key={tag}
+                  className="rounded-full bg-chip px-3 py-1 font-mono text-tag uppercase tracking-[0.05em] text-foreground"
+                >
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <p className="mt-3 text-body-lg text-steel">{project.summary}</p>
         </div>
-        <h3 className="text-2xl md:text-3xl font-light tracking-tight text-foreground mb-2 pr-8">
-          {project.title}
-        </h3>
-        <p className="text-metadata text-base md:text-lg font-light truncate pr-8">
-          {project.description}
-        </p>
 
-        {/* Hover Arrow */}
-        {!isComingSoon && (
-          <div className="absolute bottom-2 right-2 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-accent text-xl">
-            &rarr;
-          </div>
-        )}
+        {/* Decorative: the whole card is the link, so this must not be a second
+            tab stop announcing the same destination. */}
+        <span
+          aria-hidden="true"
+          className="hidden shrink-0 items-center justify-center rounded-full border border-accent-blue bg-surface text-accent-blue transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 sm:flex sm:size-16 lg:size-[88px]"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="size-6 lg:size-10"
+          >
+            <path d="M7 17 17 7" />
+            <path d="M8 7h9v9" />
+          </svg>
+        </span>
       </div>
-    </>
-  );
-
-  if (isComingSoon) {
-    return (
-      <div className="group block w-full transition-transform duration-500 ease-out hover:scale-[1.01] relative">
-        {cardContent}
-      </div>
-    );
-  }
-
-  return (
-    <Link
-      href={project.href as string}
-      className="group block w-full transition-transform duration-500 ease-out hover:scale-[1.01] cursor-pointer relative"
-    >
-      {cardContent}
-    </Link>
+    </article>
   );
 };
 
 export default function WorksList() {
-  const leftColumnProjects = [projects[0], projects[2], projects[4]]; // sensAI, Jumpp, UXMantra
-  const rightColumnProjects = [projects[1], projects[3]]; // Shoonya, Friender
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(
+          ".works-header",
+          { y: 32, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            ease: "power3.out",
+            scrollTrigger: { trigger: ".works-header", start: "top 85%" },
+          },
+        );
+      });
+    },
+    { scope: containerRef },
+  );
 
   return (
-    <div className="w-full relative mt-32 mb-48">
-      {/* Section Container */}
-      <div className="px-4 sm:px-8 md:px-16 lg:px-32 max-w-7xl mx-auto w-full">
-        
-        {/* Editorial Header */}
-        <div className="mb-16">
-          <p className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata mb-4">
-            CASE STUDIES
-          </p>
-          <div className="flex items-end justify-between">
-            <h2 className="text-4xl md:text-5xl font-light tracking-tight text-foreground">
-              Selected Work
-            </h2>
+    <section
+      ref={containerRef}
+      className="w-full relative"
+      id="works"
+      aria-labelledby="works-heading"
+    >
+      <div className="container-page w-full">
+        <h2
+          id="works-heading"
+          className="works-header display text-d3 font-medium text-foreground mb-10"
+        >
+          What I&apos;ve worked on
+        </h2>
+
+        <div className="flex flex-col gap-10 lg:gap-20">
+          {featuredProjects.map((project) => (
             <Link
-              href="/works"
-              className="group flex items-center gap-2 text-accent font-light hover:underline underline-offset-4 pb-1"
+              href={project.href}
+              key={project.id}
+              className="block interactive rounded-lg"
             >
-              See all work{" "}
-              <span className="transition-transform group-hover:translate-x-1">
-                &rarr;
-              </span>
+              <ProjectCard project={project} />
             </Link>
-          </div>
-        </div>
-
-        {/* Desktop Grid Layout (Asymmetric Two-Column Masonry) */}
-        <div className="hidden md:flex gap-8 lg:gap-16">
-          {/* Left Column */}
-          <div className="flex-1 min-w-0 flex flex-col gap-24 lg:gap-32">
-            {leftColumnProjects.map((project) => (
-              <ProjectCard key={`desktop-${project.id}`} project={project} />
-            ))}
-          </div>
-          {/* Right Column */}
-          <div className="flex-1 min-w-0 flex flex-col gap-24 lg:gap-32 mt-24 lg:mt-32">
-            {rightColumnProjects.map((project) => (
-              <ProjectCard key={`desktop-${project.id}`} project={project} />
-            ))}
-          </div>
-        </div>
-
-        {/* Mobile Layout (Single Column) */}
-        <div className="flex md:hidden flex-col gap-20">
-          {projects.map((project) => (
-            <ProjectCard key={`mobile-${project.id}`} project={project} />
           ))}
         </div>
-
       </div>
-    </div>
+    </section>
   );
 }

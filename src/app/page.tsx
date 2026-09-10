@@ -1,99 +1,116 @@
-import WorksList from "@/components/WorksList";
-import QuoteBlock from "@/components/QuoteBlock";
 import Image from "next/image";
+import WorksList from "@/components/WorksList";
+import HeroSection from "@/components/HeroSection";
+import ExperienceList from "@/components/ExperienceList";
+
+const capabilities = [
+  "Problem Solving",
+  "User Research",
+  "Competitor Analysis",
+  "Design Systems",
+  "AI Prototyping",
+];
+
+const Asterisk = () => (
+  <span aria-hidden="true" className="text-metadata/60">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" className="size-6">
+      <path d="M12 5v14M5.5 8.5l13 7M18.5 8.5l-13 7" />
+    </svg>
+  </span>
+);
 
 export default function Home() {
   return (
     <div className="w-full">
-      <div className="px-4 sm:px-8 md:px-16 lg:px-32 max-w-7xl mx-auto mb-32">
-        {/* Hero Section */}
-        <div className="grid grid-cols-12 gap-6 pt-12 md:pt-24 mb-32 reveal-up in-view items-center">
-          
-          {/* Left Column: Intro Text */}
-          <div className="col-span-12 md:col-span-6 lg:col-span-5 lg:col-start-2 mb-12 md:mb-0">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="live-indicator"></div>
-              <p className="text-[0.75rem] uppercase tracking-wider font-mono text-metadata">
-                SR. DESIGNER AND AI ENTHUSIAST
-              </p>
-            </div>
-            <h1 className="text-5xl md:text-[64px] font-light tracking-tight leading-[0.9] text-foreground mb-12">
-              Hi, I&apos;m Sachin Barnwal specialized in product design.
-            </h1>
-            <p className="text-lg md:text-xl font-light text-metadata max-w-2xl leading-relaxed">
-              7 years designing products end-to-end. The last few spent embedding AI into the process — not as a shortcut, but as a thinking partner.
-            </p>
-          </div>
-
-          {/* Right Column: Hero Visual */}
-          <div className="col-span-12 md:col-span-5 md:col-start-8 lg:col-span-4 lg:col-start-8 relative" style={{ transitionDelay: '0.1s' }}>
-            <div className="w-full aspect-square md:aspect-[4/5] flex items-center justify-center relative rounded-[24px] overflow-hidden">
-              <Image 
-                src="/hero.svg"
-                alt="Sachin Barnwal Hero Visual"
-                fill
-                className="object-cover md:object-contain rounded-[24px]"
-                priority
-              />
-            </div>
-          </div>
-
-        </div>
-
-        {/* Quick Stats - Bento Blueprint */}
-        <div className="grid grid-cols-1 md:grid-cols-3 mb-32 reveal-up in-view border border-metadata relative">
-          {/* Decorative corner accents */}
-          <div className="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-metadata bg-background z-10" />
-          <div className="absolute -top-1 -right-1 w-2 h-2 border-t border-r border-metadata bg-background z-10" />
-          <div className="absolute -bottom-1 -left-1 w-2 h-2 border-b border-l border-metadata bg-background z-10" />
-          <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-metadata bg-background z-10" />
-          
-          <div className="col-span-1 p-8 md:p-12 border-b md:border-b-0 md:border-r border-metadata relative">
-            <p className="text-4xl font-light tracking-tight text-foreground mb-2">7 Years</p>
-            <p className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">End-to-end product design</p>
-          </div>
-          <div className="col-span-1 p-8 md:p-12 border-b md:border-b-0 md:border-r border-metadata">
-            <p className="text-4xl font-light tracking-tight text-foreground mb-2">4 Industries</p>
-            <p className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">Fintech, SaaS, EdTech, Enterprise</p>
-          </div>
-          <div className="col-span-1 p-8 md:p-12">
-            <p className="text-4xl font-light tracking-tight text-foreground mb-2">2 AI Products</p>
-            <p className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">Built: sensAI + UXMantra</p>
-          </div>
-        </div>
+      {/* The hero band keeps the page ground rather than going white: the
+          iridescent plate blends in `color`, which takes its luminosity from
+          the backdrop, so over pure white it composites to nothing. */}
+      {/* Pulled up under <main>'s nav offset and given it back as padding, so
+          the white plane runs behind the floating nav pill as it does in the
+          design instead of leaving a strip of page ground above it. */}
+      <div className="relative -mt-[calc(var(--nav-height,4.75rem)+2rem)] overflow-hidden bg-background pb-24 pt-[calc(var(--nav-height,4.75rem)+5rem)] md:pb-32 md:pt-[calc(var(--nav-height,4.75rem)+7rem)]">
+        {/* The iridescent plate. `mix-blend-mode: color` takes hue and
+            saturation from the artwork and luminosity from what is behind it,
+            so it has to sit in the same stacking context as this white plane —
+            inside the z-10 content wrapper it had only transparency to blend
+            with and rendered as the raw chrome image. */}
+        <Image
+          src="/hero-iridescence.png"
+          alt=""
+          aria-hidden="true"
+          fill
+          priority
+          sizes="100vw"
+          className="iridescence scale-[1.6] object-cover saturate-[2.75]"
+        />
+        <HeroSection />
       </div>
 
-      {/* Works List Component */}
-      <WorksList />
+      <div className="pt-20 md:pt-28">
+        <WorksList />
+      </div>
 
-      <div className="px-4 sm:px-8 md:px-16 lg:px-32 max-w-7xl mx-auto mb-32 mt-32">
-        {/* Philosophy Quote */}
-        <QuoteBlock />
-
-        {/* Where I've worked */}
-        <div className="grid grid-cols-12 gap-6 mt-48 reveal-up in-view border-t border-metadata/20 pt-16">
-          <div className="col-span-12 md:col-span-4 mb-12 md:mb-0">
-            <h2 className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">
-              Where I&apos;ve worked
+      <div className="container-page mb-32 md:mb-40">
+        {/* Experience */}
+        <section
+          className="mt-24 grid grid-cols-12 gap-x-6 gap-y-10 border-t border-rule pt-16"
+          aria-labelledby="since-heading"
+        >
+          <div className="col-span-12 md:col-span-4">
+            <p className="label text-metadata">Where I&apos;ve worked</p>
+            <h2
+              id="since-heading"
+              className="display mt-2 text-d3 text-foreground"
+            >
+              Designing for humans since 2019
             </h2>
           </div>
-          <div className="col-span-12 md:col-span-8 flex flex-col">
-            <div className="flex justify-between items-center py-6 border-b border-metadata/20 group cursor-default">
-              <span className="text-xl md:text-2xl font-light text-foreground transition-transform duration-300 group-hover:translate-x-2">Finvasia</span>
-              <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">2025–Present</span>
-            </div>
-            <div className="flex justify-between items-center py-6 border-b border-metadata/20 group cursor-default">
-              <span className="text-xl md:text-2xl font-light text-foreground transition-transform duration-300 group-hover:translate-x-2">DigiMantra</span>
-              <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">2024–2025</span>
-            </div>
-            <div className="flex justify-between items-center py-6 border-b border-metadata/20 group cursor-default">
-              <span className="text-xl md:text-2xl font-light text-foreground transition-transform duration-300 group-hover:translate-x-2">Tier5</span>
-              <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">2022–2024</span>
-            </div>
-            <div className="flex justify-between items-center py-6 group cursor-default">
-              <span className="text-xl md:text-2xl font-light text-foreground transition-transform duration-300 group-hover:translate-x-2">Tutelage</span>
-              <span className="text-[0.75rem] font-mono uppercase tracking-wider text-metadata">2019–2022</span>
-            </div>
+
+          <div className="col-span-12 md:col-span-7 md:col-start-6">
+            <ExperienceList />
+          </div>
+        </section>
+
+        {/* 0 to 1 */}
+        <section className="mt-32 md:mt-40" aria-labelledby="zero-to-one-heading">
+          <h2
+            id="zero-to-one-heading"
+            className="display text-d2 text-foreground max-w-[820px]"
+          >
+            Building products from 0 to 1
+          </h2>
+
+          <div className="mt-16 flex items-center justify-end gap-10">
+            <span aria-hidden="true" className="hidden h-px flex-1 bg-rule md:block" />
+            <p className="text-body-lg text-steel md:max-w-[519px]">
+              I take unclear requirements and turn them into products people
+              actually use.
+            </p>
+          </div>
+        </section>
+      </div>
+
+      {/* Capabilities. The track is twice as wide as the strip and clipped to
+          it, so the loop reads as continuous inside the page column. */}
+      <div className="container-page mb-32 md:mb-40">
+        <div className="overflow-hidden border-y border-rule py-6">
+          <div className="marquee-track flex w-max items-center gap-4">
+            {[0, 1].map((copy) => (
+              <ul
+                key={copy}
+                aria-hidden={copy === 1}
+                className="flex items-center gap-4"
+              >
+                {capabilities.map((item) => (
+                  <li key={item} className="flex items-center gap-4">
+                    <span className="whitespace-nowrap px-4 py-2 text-body-lg font-medium text-metadata">
+                      {item}
+                    </span>
+                    <Asterisk />
+                  </li>
+                ))}
+              </ul>
+            ))}
           </div>
         </div>
       </div>

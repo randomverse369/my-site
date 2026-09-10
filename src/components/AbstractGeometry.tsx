@@ -42,7 +42,7 @@ export default function AbstractGeometry() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       // Get CSS variable for metadata color
-      const colorStr = getComputedStyle(document.documentElement).getPropertyValue("--metadata").trim() || "#A1A7AD";
+      const colorStr = getComputedStyle(document.documentElement).getPropertyValue("--metadata").trim() || "#55595E";
       
       // Update and draw nodes
       nodes.forEach((node) => {
