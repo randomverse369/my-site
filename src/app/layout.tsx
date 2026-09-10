@@ -2,8 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
 
 const inter = Inter({
@@ -80,12 +78,8 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className="flex flex-col min-h-screen" suppressHydrationWarning>
-        <div className="grain-overlay" />
-        <LenisProvider>
-          <Navigation />
-          <main className="flex-grow pt-[calc(var(--nav-height,4.75rem)+2rem)]">{children}</main>
-          <Footer />
-        </LenisProvider>
+        {/* Chrome lives in (site)/layout.tsx, so /lab can render without it. */}
+        <LenisProvider>{children}</LenisProvider>
       </body>
     </html>
   );
