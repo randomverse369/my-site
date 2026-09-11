@@ -25,10 +25,10 @@ export default function Hero() {
   const nameRef = useRef<HTMLHeadingElement>(null);
 
   useGSAP(
-    (_context, contextSafe) => {
+    () => {
       const wrap = nameWrapRef.current;
       const name = nameRef.current;
-      if (!wrap || !name || !contextSafe) return;
+      if (!wrap || !name) return;
 
       // Edge to edge: measure the name at 100px, then scale it to the column.
       const fit = () => {
@@ -52,19 +52,21 @@ export default function Hero() {
         fit(); // Split characters lose a little kerning; re-fit to the real width.
 
         // The name rises as the preloader lifts off it, or at once on a
-        // return visit.
+        // return visit. The tween is built paused inside this context, so a
+        // revert always owns it, and the intro only presses play. Wrapping the
+        // callback in contextSafe instead nested the two GSAP contexts inside
+        // each other whenever the intro was already over (the callback then
+        // runs synchronously, inside this matchMedia context), and reverting
+        // them on navigation recursed until the stack overflowed.
         gsap.set(split.chars, { yPercent: 115 });
-        const stop = onIntroDone(
-          contextSafe(() => {
-            gsap.to(split.chars, {
-              yPercent: 0,
-              duration: 1.4,
-              ease: "expo.out",
-              stagger: 0.04,
-              delay: 0.15,
-            });
-          }),
-        );
+        const rise = gsap.to(split.chars, {
+          yPercent: 0,
+          duration: 1.4,
+          ease: "expo.out",
+          stagger: 0.04,
+          paused: true,
+        });
+        const stop = onIntroDone(() => rise.play());
 
         // On the way out the name sinks behind the next section and the field dims.
         const exit = () => ({

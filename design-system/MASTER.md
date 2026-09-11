@@ -136,6 +136,23 @@ than plays so it can be scrolled back.
 Easing is `expo.out` / `--ease-out-expo` for arrivals and `none` for scrubs. Reveals run
 1.1 to 1.4s; hovers 300 to 500ms, on named properties only.
 
+## 5a. Case study kit
+
+Every case study is built from `src/components/case-study/`, never from page-local classes:
+
+- `CaseHero`: kicker (numbered from `projects.ts`), title, standfirst, facts bar, and the cover.
+  The cover shares its transition name (`cover-<id>`) with the project's home panel, so
+  navigating from one to the other morphs the cover. A sentence title (jAI, UX Process) sets at
+  display size, a project name at title size.
+- `CaseSection`: a numbered label that sticks while the section scrolls, and the argument
+  beside it. Inside: `.cs-lead` for the sentence the section turns on, `.cs-body` for the rest.
+- Blocks (`blocks.tsx`): `PullQuote`, `Decisions` (the claim as the heading, the reason under it),
+  `Note`, `FactGrid`, `Callout` (`signal` for the single statement a section rests on), `Cards`,
+  `Media`, `NextProject`, `DraftBody`.
+
+The content spine (product, problem, pull quote, decisions, coverage, outcome) is unchanged
+from the Amorphic reference. Words come from the page, unchanged; the kit is layout only.
+
 ## 6. Chrome
 
 - **Header**: SB mark, desktop links, Résumé; a Menu button opens a full-screen dark menu
@@ -164,6 +181,11 @@ screenshots come back blank and GSAP state freezes, while the DOM reports correc
 Verify scrolled states with headless Chrome over the DevTools Protocol (scroll, wait in
 real time, capture) instead. In development, `window.__ScrollTrigger` exposes ScrollTrigger
 so a probe can read every trigger's start, end, active state and animation progress.
+
+Anything that waits on the intro is built paused inside its own GSAP context and started with
+`onIntroDone(() => tween.play())`. Never pass a `contextSafe` callback to `onIntroDone` from
+inside a `matchMedia` block: when the intro is already over it runs synchronously there, nests
+the two contexts in each other, and reverting them recurses until the stack overflows.
 
 Global CSS transitions stay off `transform` and `opacity`. GSAP owns both, and a CSS
 transition underneath a `from()` tween hands it a half-finished value as its end state.

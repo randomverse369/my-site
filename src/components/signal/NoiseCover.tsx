@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, type ReactNode } from "react";
+import { ViewTransition, useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -18,10 +18,22 @@ type Props = {
   ground?: string;
   className?: string;
   sizes?: string;
+  /** "scroll" clears the noise as the cover scrolls in; "static" draws it resolved. */
+  reveal?: "scroll" | "static";
   /** Selector for the element whose scroll position drives the reveal. */
   trigger?: string;
   start?: string;
   end?: string;
+  /**
+   * Shared-element name for page transitions. Two pages that render a cover
+   * with the same name morph one into the other on navigation.
+   */
+  transitionName?: string;
+  imageFit?: "cover" | "contain";
+  /** For a cover that is the page's largest paint. */
+  preload?: boolean;
+  /** CSS aspect-ratio, for sizes only known at runtime. */
+  aspect?: string;
   children?: ReactNode;
 };
 
@@ -70,9 +82,14 @@ export default function NoiseCover({
   ground = "#0b0c0e",
   className = "",
   sizes = "100vw",
+  reveal = "scroll",
   trigger,
   start = "top 85%",
   end = "top 30%",
+  transitionName,
+  imageFit = "cover",
+  preload = false,
+  aspect,
   children,
 }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -221,7 +238,8 @@ export default function NoiseCover({
       gsap.matchMedia().add(
         { motion: "(prefers-reduced-motion: no-preference)", still: "(prefers-reduced-motion: reduce)" },
         (context) => {
-          if (context.conditions?.still) {
+          // A static cover (a case study's opening, a preview) is drawn resolved.
+          if (context.conditions?.still || reveal === "static") {
             state.p = 1;
             draw();
             return;
@@ -248,15 +266,34 @@ export default function NoiseCover({
     { scope: rootRef },
   );
 
-  return (
+  const cover = (
     <div
       ref={rootRef}
       className={`relative overflow-hidden ${className}`}
-      style={image ? undefined : { backgroundColor: ground }}
+      style={{ ...(image ? {} : { backgroundColor: ground }), ...(aspect ? { aspectRatio: aspect } : {}) }}
     >
-      {image && <Image src={image.src} alt={image.alt} fill sizes={sizes} className="object-cover" />}
+      {image && (
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          sizes={sizes}
+          preload={preload}
+          className={imageFit === "contain" ? "object-contain" : "object-cover"}
+        />
+      )}
       <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 size-full" />
       {children}
     </div>
+  );
+
+  // default="none": only the shared morph animates. Unpaired, the cover stays
+  // part of its page's snapshot and moves with the page.
+  return transitionName ? (
+    <ViewTransition name={transitionName} share="morph" default="none">
+      {cover}
+    </ViewTransition>
+  ) : (
+    cover
   );
 }

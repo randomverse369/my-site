@@ -112,6 +112,7 @@ export default function WorkStack({ panels }: { panels: WorkPanel[] }) {
               ground={panel.ground}
               sizes="(min-width: 768px) 94vw, 100vw"
               trigger={`#sentinel-${panel.id}`}
+              transitionName={`cover-${panel.id}`}
               start="top 80%"
               end="top 5%"
               className="mt-6 min-h-[8rem] flex-1 rounded-[1.25rem] md:mt-10"

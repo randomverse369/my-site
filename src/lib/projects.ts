@@ -28,6 +28,8 @@ export type Project = {
   meta: { label: string; value: string }[];
   image?: string;
   imageLabel: string;
+  /** Ground of the generated cover shown until real screens exist. */
+  ground?: string;
   /** Whether the case study itself is written — not whether the product ships. */
   caseStudy: "published" | "coming-soon";
   /** Appears in the home page's Selected Works. */
@@ -93,6 +95,7 @@ export const projects: Project[] = [
       { label: "Type", value: "Enterprise AI Platform" },
     ],
     imageLabel: "Amorphic IDP — Extraction Review",
+    ground: "#10151f",
     caseStudy: "published",
     featured: false,
   },
@@ -112,6 +115,7 @@ export const projects: Project[] = [
       { label: "Product", value: "jAI (within Jumpp)" },
     ],
     imageLabel: "jAI — UX Research",
+    ground: "#17120f",
     caseStudy: "published",
     featured: false,
   },
@@ -132,6 +136,7 @@ export const projects: Project[] = [
       { label: "Type", value: "Design Process" },
     ],
     imageLabel: "UX Process — AI Workflow",
+    ground: "#0f1712",
     caseStudy: "published",
     featured: false,
   },
@@ -151,6 +156,7 @@ export const projects: Project[] = [
       { label: "Type", value: "AI-Powered Mobile App · 0 to 1" },
     ],
     imageLabel: "Jumpp — App Design",
+    ground: "#15101a",
     caseStudy: "coming-soon",
     featured: false,
   },
@@ -170,6 +176,7 @@ export const projects: Project[] = [
       { label: "Type", value: "SaaS Platform · Design System" },
     ],
     imageLabel: "Friender — Platform Design",
+    ground: "#0f1418",
     caseStudy: "coming-soon",
     featured: false,
   },
@@ -189,9 +196,31 @@ export const projects: Project[] = [
       { label: "Type", value: "AI Product" },
     ],
     imageLabel: "UXMantra — In Development",
+    ground: "#18140c",
     caseStudy: "coming-soon",
     featured: false,
   },
 ];
 
 export const featuredProjects = projects.filter((project) => project.featured);
+
+export function getProject(id: string) {
+  const found = projects.find((project) => project.id === id);
+  if (!found) throw new Error(`Unknown project: ${id}`);
+  return found;
+}
+
+/** Two-digit position in the one list: the number on covers, rows and heroes. */
+export function projectNumber(id: string) {
+  return String(projects.findIndex((project) => project.id === id) + 1).padStart(2, "0");
+}
+
+/** The next written case study after this one, wrapping round the list. */
+export function nextCaseStudy(id: string) {
+  const from = projects.findIndex((project) => project.id === id);
+  for (let step = 1; step <= projects.length; step++) {
+    const candidate = projects[(from + step) % projects.length];
+    if (candidate.caseStudy === "published" && candidate.id !== id) return candidate;
+  }
+  return projects[0];
+}
