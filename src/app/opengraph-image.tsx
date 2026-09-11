@@ -41,7 +41,7 @@ export default function Image() {
             color: MUTED,
           }}
         >
-          Senior Product Designer · Fintech and AI
+          Senior Product Designer · 7+ Years
         </div>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>

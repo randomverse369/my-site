@@ -108,10 +108,13 @@ export default function Hero() {
           onScroll={false}
           waitForIntro
           delay={0.5}
-          className="sn-lead col-span-12 max-w-[30ch] [text-wrap:balance] md:col-span-6 lg:col-span-5"
+          className="sn-lead col-span-12 max-w-[34ch] [text-wrap:balance] md:col-span-6 lg:col-span-5"
         >
-          I design trading platforms and AI products for people who can&apos;t afford to{" "}
-          <em className="sn-serif">misread</em> a screen.
+          {/* Sachin's philosophy, not his sector: the line he had before the
+              redesign was about cutting through noise to deliver value to
+              users and businesses both. Keep it about how he works. */}
+          I cut through the <em className="sn-serif">noise</em> to design products that serve the
+          people using them and the business paying for them.
         </SplitReveal>
 
         <dl className="sn-mono col-span-12 grid grid-cols-2 gap-x-6 gap-y-5 md:col-span-5 md:col-start-8 lg:col-span-4 lg:col-start-9">
@@ -120,8 +123,8 @@ export default function Hero() {
             <dd className="mt-1">Senior Product Designer</dd>
           </div>
           <div>
-            <dt className="sn-muted">Focus</dt>
-            <dd className="mt-1">Fintech and AI</dd>
+            <dt className="sn-muted">Experience</dt>
+            <dd className="mt-1">7+ years</dd>
           </div>
           <div>
             <dt className="sn-muted">Local time</dt>
