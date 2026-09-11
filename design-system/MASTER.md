@@ -128,6 +128,9 @@ than plays so it can be scrolled back.
 | `SplitReveal` | Masked line reveal, re-split when fonts land. |
 | `WordFill` | Words fill from 14% to full as a statement scrolls through. |
 | `WorkStack` | Full-screen panels, CSS sticky, each sliding over the last while it sinks and dims. Triggers measure non-sticky sentinels, never the sticky panels. |
+| `ProcessTrack` | The six process stages on a sideways track. On `md`+ the section pins and scroll drives the track while a line of ticks straightens and lights. Stacked list on phones and for reduced motion. |
+| `ExperienceRows` | Roles as large rows that rise out of their own clip; hover fills the row into the gutter and turns the arrow signal. |
+| `VelocityMarquee` | Capabilities loop that speeds up with scroll velocity, reverses with scroll direction and leans into it, then settles. Alternate words are outlined. |
 | Page transition | The new page rises over the old with rounded top corners; the old sinks and dims. React `<ViewTransition>` keyed by path. |
 
 Easing is `expo.out` / `--ease-out-expo` for arrivals and `none` for scrubs. Reveals run
@@ -159,7 +162,11 @@ Easing is `expo.out` / `--ease-out-expo` for arrivals and `none` for scrubs. Rev
 The desktop app's Browser pane runs no animation frames while it is hidden: scrolled
 screenshots come back blank and GSAP state freezes, while the DOM reports correct values.
 Verify scrolled states with headless Chrome over the DevTools Protocol (scroll, wait in
-real time, capture) instead.
+real time, capture) instead. In development, `window.__ScrollTrigger` exposes ScrollTrigger
+so a probe can read every trigger's start, end, active state and animation progress.
+
+Global CSS transitions stay off `transform` and `opacity`. GSAP owns both, and a CSS
+transition underneath a `from()` tween hands it a half-finished value as its end state.
 
 - [ ] Tokens only; no Tailwind default palette
 - [ ] Contrast from §1 holds for every text colour on its ground

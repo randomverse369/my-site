@@ -1,4 +1,8 @@
+import Link from "next/link";
 import { projects } from "@/lib/projects";
+import ProcessTrack from "@/components/home/ProcessTrack";
+import ExperienceRows from "@/components/home/ExperienceRows";
+import VelocityMarquee from "@/components/home/VelocityMarquee";
 import Hero from "@/components/signal/Hero";
 import ScrambleText from "@/components/signal/ScrambleText";
 import SplitReveal from "@/components/signal/SplitReveal";
@@ -105,7 +109,37 @@ export default function Home() {
         </div>
 
         <WorkStack panels={panels} />
+
+        <div className="sn-gutter flex flex-wrap items-center justify-between gap-6 border-t sn-rule py-8">
+          <p className="sn-mono sn-muted">The index has all eight projects, drafts included</p>
+          <Link href="/works" data-cursor="Index" className="sn-pill sn-mono">
+            All work <span aria-hidden="true">→</span>
+          </Link>
+        </div>
       </section>
+
+      <ProcessTrack />
+
+      <section data-tone="dark" aria-labelledby="experience-heading" className="relative py-[18vh]">
+        <div className="sn-gutter">
+          <div className="mb-[8vh] flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
+            <SplitReveal as="h2" id="experience-heading" className="sn-display">
+              Designing since <em className="sn-serif">2019</em>
+            </SplitReveal>
+            <ScrambleText onScroll className="sn-mono sn-muted" text="(04) Experience" />
+          </div>
+
+          <ExperienceRows />
+
+          <div className="mt-10 flex justify-end">
+            <Link href="/experience" className="sn-mono sn-link">
+              The full record <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <VelocityMarquee />
     </>
   );
 }

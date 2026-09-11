@@ -1,9 +1,10 @@
 import ScrambleText from "@/components/signal/ScrambleText";
 import SplitReveal from "@/components/signal/SplitReveal";
 import LocalClock from "@/components/signal/LocalClock";
+import { contact } from "@/lib/site";
 import BackToTop from "./BackToTop";
 
-const EMAIL = "sachin.aiux@gmail.com";
+const { email: EMAIL, linkedin: LINKEDIN, resume: RESUME } = contact;
 
 /**
  * Every page ends here, on the light tone. It is the page's one tone change
@@ -34,7 +35,12 @@ export default function SiteFooter() {
           </a>
           <ul className="sn-mono col-span-12 flex flex-col gap-3 md:col-span-3 md:items-end md:self-end">
             <li>
-              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="sn-link">
+              <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="sn-link">
+                LinkedIn <span aria-hidden="true">↗</span>
+              </a>
+            </li>
+            <li>
+              <a href={RESUME} target="_blank" rel="noopener noreferrer" className="sn-link">
                 Résumé <span aria-hidden="true">↗</span>
               </a>
             </li>

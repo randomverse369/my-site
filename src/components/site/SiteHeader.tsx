@@ -7,6 +7,7 @@ import { useLenis } from "lenis/react";
 import gsap from "gsap";
 import Magnetic from "@/components/Magnetic";
 import LocalClock from "@/components/signal/LocalClock";
+import { contact } from "@/lib/site";
 
 const links = [
   { name: "Work", href: "/works" },
@@ -14,7 +15,7 @@ const links = [
   { name: "About", href: "/about" },
 ];
 
-const EMAIL = "sachin.aiux@gmail.com";
+const { email: EMAIL, linkedin: LINKEDIN } = contact;
 
 /** A case study lights up its parent section. */
 function isCurrent(pathname: string, href: string) {
@@ -235,6 +236,9 @@ export default function SiteHeader() {
             </a>
             <a href={`mailto:${EMAIL}`} className="sn-link self-start">
               {EMAIL}
+            </a>
+            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="sn-link self-start">
+              LinkedIn <span aria-hidden="true">↗</span>
             </a>
             <span className="sn-muted">
               Local time <LocalClock /> IST

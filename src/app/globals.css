@@ -151,11 +151,16 @@ body {
   border-radius: 2px;
 }
 
-/* Named properties, never `all`, and ease-out: ease-in reads sluggish. */
+/* Named properties, never `all`, and ease-out: ease-in reads sluggish.
+   Colour only. GSAP owns transform and opacity: with a CSS transition on
+   transform, a from() tween on a link reads the half-finished transition as
+   its resting value and reveals the link into a spot that is still hidden.
+   That hid every experience row. A component that wants a CSS transform on
+   hover opts in on its own element. */
 a,
 button,
 .interactive {
-  transition-property: color, background-color, border-color, opacity, transform;
+  transition-property: color, background-color, border-color;
   transition-duration: 200ms;
   transition-timing-function: var(--ease-out-expo);
 }
@@ -476,6 +481,172 @@ html[data-intro="skip"] .sn-preloader { display: none; }
 .sn-cursor[data-state="label"]::before { scale: 0.3; }
 .sn-cursor[data-state="hidden"] { opacity: 0; }
 
+/* ---- Home: process ----------------------------------------------------- */
+
+/* Stacked by default, for phones and reduced motion. ProcessTrack sets
+   data-pinned on wider screens and scrubs the track sideways. */
+.sn-process-viewport { padding-top: 18vh; }
+.sn-process-track { display: grid; gap: 3rem; padding-top: 3rem; }
+.sn-process-track > ol { display: grid; gap: 2.5rem; }
+.sn-process-intro { display: flex; flex-direction: column; }
+
+.sn-process-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1.5rem;
+}
+
+.sn-process-num {
+  font-size: clamp(4rem, 9vw, 9rem);
+  font-weight: 600;
+  font-variation-settings: "wdth" 80;
+  line-height: 0.85;
+  letter-spacing: -0.045em;
+  /* See .sn-outline for why the fill is the ground, not transparent. */
+  color: var(--ground);
+  -webkit-text-stroke: max(2px, 0.024em) var(--line-strong);
+  paint-order: stroke fill;
+}
+
+.sn-process-title {
+  font-size: clamp(1.75rem, 2.6vw, 2.75rem);
+  font-weight: 500;
+  font-variation-settings: "wdth" 90;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.sn-process-ticks,
+.sn-process-count { display: none; }
+
+.sn-process-tick {
+  display: block;
+  flex: 1 1 0;
+  max-width: 1rem;
+  height: 1.5px;
+  background-color: var(--fg);
+  opacity: 0.35;
+}
+
+.sn-process[data-pinned="true"] .sn-process-viewport {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+  overflow: hidden;
+  padding-top: calc(var(--nav-height) + 1.5rem);
+  padding-bottom: 8vh;
+}
+
+.sn-process[data-pinned="true"] .sn-process-ticks {
+  display: flex;
+  flex: 1;
+  max-width: 36rem;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.sn-process[data-pinned="true"] .sn-process-count { display: inline; }
+
+.sn-process[data-pinned="true"] .sn-process-track {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  width: max-content;
+  gap: clamp(3rem, 6vw, 7rem);
+  padding-top: 6vh;
+}
+
+.sn-process[data-pinned="true"] .sn-process-track > ol {
+  display: flex;
+  gap: clamp(1.5rem, 2.5vw, 2.5rem);
+}
+
+.sn-process[data-pinned="true"] .sn-process-intro {
+  flex: none;
+  width: min(40rem, 44vw);
+  justify-content: flex-end;
+}
+
+.sn-process[data-pinned="true"] .sn-process-card {
+  flex: none;
+  width: clamp(19rem, 28vw, 27rem);
+  justify-content: space-between;
+  border-top: 0;
+  border-left: 1px solid var(--line);
+  padding: 0 0 0 1.5rem;
+}
+
+/* ---- Home: experience -------------------------------------------------- */
+
+/* Clipped top and bottom so a row can rise out of itself, open at the sides
+   so the hover fill can run into the gutter. */
+.sn-row { position: relative; isolation: isolate; overflow-y: clip; }
+.sn-row-inner { position: relative; }
+
+.sn-row-inner::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0 calc(var(--gutter) * -1);
+  background-color: var(--raised);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 500ms var(--ease-out-expo);
+}
+
+.sn-row-company {
+  font-size: clamp(2.5rem, 6vw, 6rem);
+  font-weight: 600;
+  font-variation-settings: "wdth" 80;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  transition: translate 500ms var(--ease-out-expo);
+}
+
+.sn-row-arrow {
+  transition: rotate 500ms var(--ease-out-expo), color 300ms ease-out;
+}
+
+.sn-row-inner:is(:hover, :focus-visible)::before { transform: scaleY(1); }
+.sn-row-inner:is(:hover, :focus-visible) .sn-row-company { translate: 1rem 0; }
+.sn-row-inner:is(:hover, :focus-visible) .sn-row-arrow { rotate: -45deg; color: var(--signal); }
+
+/* ---- Home: capabilities ------------------------------------------------ */
+
+.sn-marquee-word {
+  padding-inline: clamp(1rem, 2.5vw, 2.5rem);
+  font-size: clamp(3rem, 8vw, 8rem);
+  font-weight: 600;
+  font-variation-settings: "wdth" 80;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+
+/* Instrument Sans is a variable font, and its glyphs are built from
+   overlapping contours: a plain text-stroke draws every overlap, like the flag
+   inside a "1" or the crossbar through a "t". Painting the stroke first and a
+   ground-coloured fill over it hides the inner half of the stroke, overlaps
+   included, so the stroke is doubled to keep its visible width. */
+.sn-outline {
+  color: var(--ground);
+  -webkit-text-stroke: max(2px, 0.024em) var(--fg);
+  paint-order: stroke fill;
+}
+
+.sn-marquee-tick {
+  display: block;
+  flex: none;
+  width: clamp(1.5rem, 3vw, 3rem);
+  height: max(2px, 0.25vw);
+  background-color: var(--signal);
+}
+
 /* ---- Texture ----------------------------------------------------------- */
 
 .sn-grain {
@@ -536,18 +707,6 @@ html[data-intro="skip"] .sn-preloader { display: none; }
   }
 }
 
-/* ---- Marquee ----------------------------------------------------------- */
-
-@keyframes marquee-drift {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-50%, 0, 0); }
-}
-
-.marquee-track {
-  animation: marquee-drift 32s linear infinite;
-  will-change: transform;
-}
-
 /* ---- Lenis ------------------------------------------------------------- */
 
 html.lenis,
@@ -569,12 +728,14 @@ html.lenis body {
   .sn-link,
   .sn-pill,
   .sn-header,
-  .sn-header-name > span {
+  .sn-header-name > span,
+  .sn-row-inner::before,
+  .sn-row-company,
+  .sn-row-arrow {
     transition-duration: 1ms;
   }
 
-  .sn-pulse,
-  .marquee-track {
+  .sn-pulse {
     animation: none;
   }
 

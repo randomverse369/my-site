@@ -15,6 +15,14 @@ gsap.registerPlugin(ScrollTrigger);
 function ScrollTriggerBridge() {
   const lenis = useLenis();
 
+  // Development only: lets headless verification read trigger positions
+  // (see MASTER.md §8). Never shipped to production builds.
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      Object.assign(window, { __ScrollTrigger: ScrollTrigger });
+    }
+  }, []);
+
   useEffect(() => {
     if (!lenis) return;
 
