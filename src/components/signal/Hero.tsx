@@ -1,23 +1,22 @@
 "use client";
 
 import { useRef } from "react";
-import Link from "next/link";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { onIntroDone } from "@/lib/intro";
 import NoiseField from "./NoiseField";
 import SplitReveal from "./SplitReveal";
 import LocalClock from "./LocalClock";
 
 gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP);
 
-const links = [
-  { name: "Work", href: "#work" },
-  { name: "About", href: "/about" },
-  { name: "Experience", href: "/experience" },
-];
-
+/**
+ * Full-bleed opening: the noise field, the standfirst and facts, and the name
+ * set edge to edge. `data-hero-name` tells SiteHeader to keep the name out of
+ * the bar while this one is on screen.
+ */
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
@@ -26,10 +25,10 @@ export default function Hero() {
   const nameRef = useRef<HTMLHeadingElement>(null);
 
   useGSAP(
-    () => {
+    (_context, contextSafe) => {
       const wrap = nameWrapRef.current;
       const name = nameRef.current;
-      if (!wrap || !name) return;
+      if (!wrap || !name || !contextSafe) return;
 
       // Edge to edge: measure the name at 100px, then scale it to the column.
       const fit = () => {
@@ -52,10 +51,19 @@ export default function Hero() {
         const split = SplitText.create(name.querySelectorAll(".sn-name-line"), { type: "chars" });
         fit(); // Split characters lose a little kerning; re-fit to the real width.
 
-        gsap.fromTo(
-          split.chars,
-          { yPercent: 115 },
-          { yPercent: 0, duration: 1.4, ease: "expo.out", stagger: 0.04, delay: 0.3 },
+        // The name rises as the preloader lifts off it, or at once on a
+        // return visit.
+        gsap.set(split.chars, { yPercent: 115 });
+        const stop = onIntroDone(
+          contextSafe(() => {
+            gsap.to(split.chars, {
+              yPercent: 0,
+              duration: 1.4,
+              ease: "expo.out",
+              stagger: 0.04,
+              delay: 0.15,
+            });
+          }),
         );
 
         // On the way out the name sinks behind the next section and the field dims.
@@ -68,7 +76,10 @@ export default function Hero() {
         gsap.to(name, { yPercent: 40, ease: "none", scrollTrigger: exit() });
         gsap.to(fieldRef.current, { opacity: 0.25, ease: "none", scrollTrigger: exit() });
 
-        return () => split.revert();
+        return () => {
+          stop();
+          split.revert();
+        };
       });
 
       return () => ro.disconnect();
@@ -79,6 +90,7 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
+      data-bleed
       data-tone="dark"
       aria-labelledby="hero-name"
       className="relative isolate flex h-[100svh] min-h-[620px] flex-col overflow-hidden"
@@ -87,29 +99,6 @@ export default function Hero() {
         <NoiseField className="absolute inset-0 size-full" quietRef={copyRef} />
       </div>
 
-      <header className="sn-gutter flex items-center justify-between gap-6 pt-5 md:pt-6">
-        {/* The mark only: the name is already set full width below. */}
-        <Link
-          href="/lab"
-          aria-label="Sachin Barnwal"
-          className="sn-mono grid size-9 place-items-center rounded-full bg-[var(--fg)] font-semibold tracking-normal text-[var(--ground)]"
-        >
-          <span aria-hidden="true">SB</span>
-        </Link>
-
-        <nav aria-label="Primary" className="sn-mono hidden items-center gap-8 md:flex">
-          {links.map((link) => (
-            <Link key={link.name} href={link.href} className="sn-link">
-              {link.name}
-            </Link>
-          ))}
-        </nav>
-
-        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="sn-pill sn-mono">
-          Résumé <span aria-hidden="true">↗</span>
-        </a>
-      </header>
-
       <div
         ref={copyRef}
         className="sn-gutter mt-auto grid grid-cols-12 items-end gap-x-6 gap-y-8 pb-6 md:pb-8"
@@ -117,7 +106,8 @@ export default function Hero() {
         <SplitReveal
           as="p"
           onScroll={false}
-          delay={0.9}
+          waitForIntro
+          delay={0.5}
           className="sn-lead col-span-12 max-w-[26ch] md:col-span-6 lg:col-span-5"
         >
           I design trading platforms and AI products that cut through the{" "}
@@ -144,7 +134,7 @@ export default function Hero() {
             <dd className="mt-1 flex items-start gap-2">
               <span
                 aria-hidden="true"
-                className="sn-pulse mt-[0.3em] size-2 shrink-0 rounded-full bg-[var(--signal)]"
+                className="sn-pulse mt-[0.3em] size-2 shrink-0 rounded-full bg-signal"
               />
               Open to senior roles at AI companies
             </dd>
@@ -153,7 +143,7 @@ export default function Hero() {
       </div>
 
       <div ref={nameWrapRef} className="sn-gutter pb-[1.5vw]">
-        <h1 id="hero-name" ref={nameRef} className="sn-mega w-max">
+        <h1 id="hero-name" ref={nameRef} data-hero-name className="sn-mega w-max">
           <span className="sn-name-line block pt-[0.06em] [overflow:clip] md:inline-block">Sachin</span>{" "}
           <span className="sn-name-line block pt-[0.06em] [overflow:clip] md:inline-block">Barnwal</span>
         </h1>

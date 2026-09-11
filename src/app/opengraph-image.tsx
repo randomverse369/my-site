@@ -6,10 +6,17 @@ export const contentType = "image/png";
 
 // Values mirror design-system/MASTER.md. ImageResponse cannot read the
 // stylesheet, so they are repeated here rather than referenced.
-const GROUND = "#F7F5F2";
-const INK = "#1A1C1E";
-const SUBTLE = "#6B7076";
-const ACCENT = "#B8422E";
+const INK = "#0B0C0E";
+const BONE = "#ECE9E2";
+const MUTED = "#8E8B85";
+const SIGNAL = "#D4FF3F";
+
+// The site's motif in miniature: ticks at random angles on the left settle
+// flat and lit on the right. Fixed angles so every render matches.
+const TICKS = Array.from({ length: 28 }, (_, i) => ({
+  angle: i < 16 ? ((i * 67) % 150) - 75 : 0,
+  signal: i >= 16,
+}));
 
 export default function Image() {
   return new ImageResponse(
@@ -21,50 +28,49 @@ export default function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          backgroundColor: GROUND,
-          padding: "80px",
+          backgroundColor: INK,
+          padding: "72px 80px",
         }}
       >
         <div
           style={{
             display: "flex",
             fontSize: 22,
-            letterSpacing: "0.12em",
+            letterSpacing: "0.08em",
             textTransform: "uppercase",
-            color: SUBTLE,
+            color: MUTED,
           }}
         >
-          Senior Product Designer · AI
+          Senior Product Designer · Fintech and AI
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          {TICKS.map((tick, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                width: 22,
+                height: 3,
+                backgroundColor: tick.signal ? SIGNAL : BONE,
+                opacity: tick.signal ? 1 : 0.45,
+                transform: `rotate(${tick.angle}deg)`,
+              }}
+            />
+          ))}
         </div>
 
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            fontSize: 92,
-            lineHeight: 1.05,
-            letterSpacing: "-0.03em",
-            color: INK,
+            fontSize: 150,
+            fontWeight: 700,
+            lineHeight: 0.9,
+            letterSpacing: "-0.05em",
+            color: BONE,
           }}
         >
-          <span>Hi I&apos;m Sachin.</span>
-          <span>Sr. Designer &amp;</span>
-          <span>AI Enthusiast.</span>
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-          <div style={{ display: "flex", width: 64, height: 2, backgroundColor: ACCENT }} />
-          <div
-            style={{
-              display: "flex",
-              fontSize: 22,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: SUBTLE,
-            }}
-          >
-            7+ Years of Experience
-          </div>
+          Sachin Barnwal
         </div>
       </div>
     ),

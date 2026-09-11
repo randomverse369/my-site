@@ -1,119 +1,111 @@
-import Image from "next/image";
-import WorksList from "@/components/WorksList";
-import HeroSection from "@/components/HeroSection";
-import ExperienceList from "@/components/ExperienceList";
+import { projects } from "@/lib/projects";
+import Hero from "@/components/signal/Hero";
+import ScrambleText from "@/components/signal/ScrambleText";
+import SplitReveal from "@/components/signal/SplitReveal";
+import WordFill from "@/components/signal/WordFill";
+import NoiseCover from "@/components/signal/NoiseCover";
+import WorkStack, { type WorkPanel } from "@/components/signal/WorkStack";
 
-const capabilities = [
-  "Problem Solving",
-  "User Research",
-  "Competitor Analysis",
-  "Design Systems",
-  "AI Prototyping",
+function project(id: string) {
+  const found = projects.find((p) => p.id === id);
+  if (!found) throw new Error(`Unknown project: ${id}`);
+  return found;
+}
+
+const shoonya = project("shoonya");
+const sensai = project("sensai");
+const amorphic = project("amorphic-idp");
+
+// Summaries are lifted from each case study's own approved copy. Shoonya's
+// status stays "In development": the redesign has not shipped.
+const panels: WorkPanel[] = [
+  {
+    id: shoonya.id,
+    title: shoonya.title,
+    href: shoonya.href,
+    category: shoonya.category,
+    meta: "Finvasia · In development",
+    summary:
+      "A redesign of Finvasia’s retail trading platform, web and mobile, designed so a trader reads their position before they scroll.",
+    image: { src: "/work-shoonya.png", alt: shoonya.imageLabel },
+  },
+  {
+    id: sensai.id,
+    title: sensai.title,
+    href: sensai.href,
+    category: sensai.category,
+    meta: "Finvasia · 0 to 1 AI product",
+    summary:
+      "Two agents behind one interface: a screener that takes plain English, and a chat assistant that answers questions about a stock while you are looking at it.",
+    image: { src: "/work-sensai.png", alt: sensai.imageLabel },
+  },
+  {
+    id: amorphic.id,
+    title: amorphic.title,
+    href: amorphic.href,
+    category: amorphic.category,
+    meta: "DigiMantra · Cloudwick",
+    summary: amorphic.summary,
+    glyph: "03",
+    ground: "#10151f",
+  },
 ];
 
-const Asterisk = () => (
-  <span aria-hidden="true" className="text-metadata/60">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" className="size-6">
-      <path d="M12 5v14M5.5 8.5l13 7M18.5 8.5l-13 7" />
-    </svg>
-  </span>
-);
-
+/*
+ * One tone change per page (MASTER.md §2): dark from the hero through the
+ * work, and the footer is the light turn on the way out.
+ */
 export default function Home() {
   return (
-    <div className="w-full">
-      {/* The hero band keeps the page ground rather than going white: the
-          iridescent plate blends in `color`, which takes its luminosity from
-          the backdrop, so over pure white it composites to nothing. */}
-      {/* Pulled up under <main>'s nav offset and given it back as padding, so
-          the white plane runs behind the floating nav pill as it does in the
-          design instead of leaving a strip of page ground above it. */}
-      <div className="relative -mt-[calc(var(--nav-height,4.75rem)+2rem)] overflow-hidden bg-background pb-24 pt-[calc(var(--nav-height,4.75rem)+5rem)] md:pb-32 md:pt-[calc(var(--nav-height,4.75rem)+7rem)]">
-        {/* The iridescent plate. `mix-blend-mode: color` takes hue and
-            saturation from the artwork and luminosity from what is behind it,
-            so it has to sit in the same stacking context as this white plane —
-            inside the z-10 content wrapper it had only transparency to blend
-            with and rendered as the raw chrome image. */}
-        <Image
-          src="/hero-iridescence.png"
-          alt=""
-          aria-hidden="true"
-          fill
-          priority
-          sizes="100vw"
-          className="iridescence scale-[1.6] object-cover saturate-[2.75]"
-        />
-        <HeroSection />
-      </div>
+    <>
+      <Hero />
 
-      <div className="pt-20 md:pt-28">
-        <WorksList />
-      </div>
-
-      <div className="container-page mb-32 md:mb-40">
-        {/* Experience */}
-        <section
-          className="mt-24 grid grid-cols-12 gap-x-6 gap-y-10 border-t border-rule pt-16"
-          aria-labelledby="since-heading"
-        >
-          <div className="col-span-12 md:col-span-4">
-            <p className="label text-metadata">Where I&apos;ve worked</p>
-            <h2
-              id="since-heading"
-              className="display mt-2 text-d3 text-foreground"
-            >
-              Designing for humans since 2019
-            </h2>
-          </div>
-
-          <div className="col-span-12 md:col-span-7 md:col-start-6">
-            <ExperienceList />
-          </div>
-        </section>
-
-        {/* 0 to 1 */}
-        <section className="mt-32 md:mt-40" aria-labelledby="zero-to-one-heading">
-          <h2
-            id="zero-to-one-heading"
-            className="display text-d2 text-foreground max-w-[820px]"
-          >
-            Building products from 0 to 1
+      <section data-tone="dark" aria-labelledby="approach-heading" className="relative py-[20vh]">
+        <div className="sn-gutter grid grid-cols-12 gap-x-6 gap-y-12">
+          <h2 id="approach-heading" className="col-span-12 lg:col-span-3">
+            <ScrambleText onScroll className="sn-mono sn-muted" text="(01) Approach" />
           </h2>
 
-          <div className="mt-16 flex items-center justify-end gap-10">
-            <span aria-hidden="true" className="hidden h-px flex-1 bg-rule md:block" />
-            <p className="text-body-lg text-steel md:max-w-[519px]">
-              I take unclear requirements and turn them into products people
-              actually use.
-            </p>
-          </div>
-        </section>
-      </div>
+          <div className="col-span-12 lg:col-span-9">
+            <WordFill className="sn-statement max-w-[22ch]">
+              I take <em className="sn-serif">unclear</em> requirements and turn them into products
+              people actually use.
+            </WordFill>
 
-      {/* Capabilities. The track is twice as wide as the strip and clipped to
-          it, so the loop reads as continuous inside the page column. */}
-      <div className="container-page mb-32 md:mb-40">
-        <div className="overflow-hidden border-y border-rule py-6">
-          <div className="marquee-track flex w-max items-center gap-4">
-            {[0, 1].map((copy) => (
-              <ul
-                key={copy}
-                aria-hidden={copy === 1}
-                className="flex items-center gap-4"
-              >
-                {capabilities.map((item) => (
-                  <li key={item} className="flex items-center gap-4">
-                    <span className="whitespace-nowrap px-4 py-2 text-body-lg font-medium text-metadata">
-                      {item}
-                    </span>
-                    <Asterisk />
-                  </li>
-                ))}
-              </ul>
-            ))}
+            <div className="mt-16 grid grid-cols-12 items-start gap-6 md:mt-24">
+              <p className="sn-lead sn-muted col-span-12 max-w-[34ch] md:col-span-6">
+                Seven years across fintech, SaaS and AI products, at Finvasia, DigiMantra, Tier5
+                and Tutelage.
+              </p>
+
+              {/* Reserved for a portrait. Sachin asked for the space, not a photo.
+                  One step above the ink ground, with a rule, so it reads as a
+                  frame on a dark section. */}
+              <figure className="col-span-8 col-start-5 md:col-span-4 md:col-start-9">
+                <NoiseCover
+                  seed="portrait"
+                  ground="#15161a"
+                  className="aspect-[4/5] rounded-[1rem] border sn-rule"
+                >
+                  <p className="sn-mono absolute left-4 top-4 text-bone/70">Portrait</p>
+                </NoiseCover>
+                <figcaption className="sn-mono sn-muted mt-3">Slot reserved</figcaption>
+              </figure>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+
+      <section id="work" data-tone="dark" aria-labelledby="work-heading" className="relative pt-[18vh]">
+        <div className="sn-gutter mb-[8vh] flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
+          <SplitReveal as="h2" id="work-heading" className="sn-display">
+            Selected <em className="sn-serif">work</em>
+          </SplitReveal>
+          <ScrambleText onScroll className="sn-mono sn-muted" text="(02) Three of five case studies" />
+        </div>
+
+        <WorkStack panels={panels} />
+      </section>
+    </>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type RefObject } from "react";
 import gsap from "gsap";
+import { onIntroDone } from "@/lib/intro";
 
 /*
  * The hero field. A grid of short ticks, each at its own angle and flickering
@@ -233,12 +234,18 @@ export default function NoiseField({ className = "", quietRef }: Props) {
 
       let raf = 0;
       let onScreen = true;
+      // Nothing is visible under the preloader, so the loop waits for it to
+      // lift. Drawing every frame beneath an opaque overlay only took frames
+      // from the preloader's own count.
+      let revealed = false;
       const loop = (now: number) => {
         render(now);
         raf = requestAnimationFrame(loop);
       };
       const play = () => {
-        if (!raf && !reduce && onScreen && !document.hidden) raf = requestAnimationFrame(loop);
+        if (!raf && !reduce && revealed && onScreen && !document.hidden) {
+          raf = requestAnimationFrame(loop);
+        }
       };
       const pause = () => {
         cancelAnimationFrame(raf);
@@ -277,12 +284,17 @@ export default function NoiseField({ className = "", quietRef }: Props) {
 
       resize();
       canvas.style.opacity = "1";
-      if (!reduce) {
-        gsap.to(uniforms.uIntro, { value: 1, duration: 2.4, ease: "power2.inOut", delay: 0.15 });
-      }
-      play();
+      // The field starts drawing, and its cells arrive, as the preloader lifts.
+      const stopWaiting = onIntroDone(() => {
+        revealed = true;
+        if (!reduce) {
+          gsap.to(uniforms.uIntro, { value: 1, duration: 2.4, ease: "power2.inOut", delay: 0.15 });
+        }
+        play();
+      });
 
       cleanup = () => {
+        stopWaiting();
         pause();
         io.disconnect();
         ro.disconnect();

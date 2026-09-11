@@ -1,18 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
-import { THEME_INIT_SCRIPT } from "@/lib/theme";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-});
+import { signalFonts } from "@/lib/fonts";
+import { INTRO_INIT_SCRIPT } from "@/lib/intro";
 
 // metadataBase needs an absolute origin to resolve OG image URLs. Set
 // NEXT_PUBLIC_SITE_URL to the production domain; Vercel supplies VERCEL_URL on
@@ -48,11 +38,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Every page opens on the dark tone.
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F5F7FA" },
-    { media: "(prefers-color-scheme: dark)", color: "#0D1013" },
-  ],
+  themeColor: "#0b0c0e",
 };
 
 export default function RootLayout({
@@ -63,22 +51,20 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
-      // The theme script writes data-theme onto this element before React
+      className={`${signalFonts} antialiased`}
+      // The intro script writes data-intro onto this element before React
       // sees it, so the server markup and the hydrated markup differ by design.
       suppressHydrationWarning
     >
       <head>
         {/*
-          Blocking and inline, ahead of everything else: it has to set the theme
-          before the first paint or a returning dark-theme visitor gets a white
-          flash. next/script cannot do this — even beforeInteractive is
-          explicitly documented as not blocking paint.
+          Blocking and inline, ahead of everything else: a return visit must
+          skip the preloader before the first paint, or it flashes. next/script
+          cannot do this; even beforeInteractive does not block paint.
         */}
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: INTRO_INIT_SCRIPT }} />
       </head>
-      <body className="flex flex-col min-h-screen" suppressHydrationWarning>
-        {/* Chrome lives in (site)/layout.tsx, so /lab can render without it. */}
+      <body className="flex min-h-screen flex-col" suppressHydrationWarning>
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

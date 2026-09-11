@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { onIntroDone } from "@/lib/intro";
 
 gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP);
 
@@ -16,12 +17,14 @@ type Props = {
   delay?: number;
   /** Reveal when scrolled into view; false runs it on load. */
   onScroll?: boolean;
+  /** Hold until the preloader lifts, for copy that sits under it. */
+  waitForIntro?: boolean;
 };
 
 /**
  * Masked line reveal. autoSplit re-measures the lines once the webfonts land
- * and on resize, which is the failure split-type had in HeroSection: it froze
- * the line breaks it measured against the fallback font.
+ * and on resize; the split-type version this replaced froze the line breaks it
+ * measured against the fallback font and stacked the hero one word per line.
  */
 export default function SplitReveal({
   as: Tag = "div",
@@ -30,6 +33,7 @@ export default function SplitReveal({
   children,
   delay = 0,
   onScroll = true,
+  waitForIntro = false,
 }: Props) {
   const ref = useRef<HTMLElement>(null);
 
@@ -39,23 +43,34 @@ export default function SplitReveal({
       if (!el) return;
 
       gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+        let stopWaiting = () => {};
         const split = SplitText.create(el, {
           type: "lines",
           mask: "lines",
           linesClass: "sn-line",
           autoSplit: true,
-          onSplit: (self) =>
-            gsap.from(self.lines, {
+          onSplit: (self) => {
+            const tween = gsap.from(self.lines, {
               yPercent: 115,
               duration: 1.2,
               ease: "expo.out",
               stagger: 0.08,
               delay,
+              paused: waitForIntro,
               scrollTrigger: onScroll ? { trigger: el, start: "top 88%", once: true } : undefined,
-            }),
+            });
+            if (waitForIntro) {
+              stopWaiting();
+              stopWaiting = onIntroDone(() => tween.play());
+            }
+            return tween;
+          },
         });
 
-        return () => split.revert();
+        return () => {
+          stopWaiting();
+          split.revert();
+        };
       });
     },
     { scope: ref },

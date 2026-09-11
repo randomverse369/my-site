@@ -1,18 +1,31 @@
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
+import SiteHeader from "@/components/site/SiteHeader";
+import SiteFooter from "@/components/site/SiteFooter";
+import PageTransition from "@/components/site/PageTransition";
+import Preloader from "@/components/site/Preloader";
+import ToneController from "@/components/signal/ToneController";
+import SignalCursor from "@/components/signal/SignalCursor";
 
 /**
- * The current site's chrome. It sits in a route group so /lab, the Signal /
- * Noise prototype, can render without it. URLs are unchanged: the group name
- * never appears in a path.
+ * The site's chrome. Only <main> sits inside the page transition, so the
+ * header, footer and fixed layers stay put while pages change under them.
  */
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <div className="grain-overlay" />
-      <Navigation />
-      <main className="flex-grow pt-[calc(var(--nav-height,4.75rem)+2rem)]">{children}</main>
-      <Footer />
+      <a href="#main" className="sn-skip">
+        Skip to content
+      </a>
+      <Preloader />
+      <SiteHeader />
+      <PageTransition>
+        <main id="main" tabIndex={-1} className="sn-main flex-grow outline-none">
+          {children}
+        </main>
+      </PageTransition>
+      <SiteFooter />
+      <ToneController />
+      <SignalCursor />
+      <div aria-hidden="true" className="sn-grain" />
     </>
   );
 }

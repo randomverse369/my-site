@@ -1,7 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "UX Process Reboot",
@@ -11,8 +9,6 @@ export const metadata = {
 export default function UXProcessPage() {
   return (
     <div className="w-full bg-background min-h-screen">
-      <Navigation />
-
       {/* Hero Section */}
       <section className="pt-40 pb-20 container-page">
         <div className="max-w-4xl">
@@ -185,8 +181,6 @@ export default function UXProcessPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

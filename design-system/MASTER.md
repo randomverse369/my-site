@@ -1,216 +1,171 @@
 # Design System — Sachin Barnwal Portfolio
 
-**Direction:** Swiss / product-editorial · **Accents:** blue (case studies), clay (outbound)
-**Status:** re-settled 2026-09-07 against the Figma home page
-([file `Ms2OgTXngvHyyQ7rDlrvHb`, node `11:6`](https://www.figma.com/design/Ms2OgTXngvHyyQ7rDlrvHb/Friday?node-id=11-6)).
-The Figma is the source of truth for the home page; this file records how its
-values land in code. Raw hex in JSX is a bug.
+**Direction:** Signal / Noise · **Accent:** signal lime, marks only
+**Status:** settled 2026-09-11, approved by Sachin against the `/lab` prototype.
 
-The previous direction here — warm limestone `#F7F5F2`, clay display type, Inter
-Light headings — was replaced wholesale by that Figma, not amended. Anything in
-git history describing the warm palette is superseded.
+This replaces the Swiss / product-editorial system (cool paper, white cards, Space
+Grotesk, the Figma file `Ms2OgTXngvHyyQ7rDlrvHb`) wholesale. Sachin found it too
+minimal. Anything in git history describing that system, or the warm limestone
+one before it, is superseded.
+
+**The idea.** Sachin designs trading platforms and AI products: work about pulling
+signal out of noisy data. Every surface says so. Things arrive as noise, short ticks
+at random angles, and resolve into order: ticks lie flat, lengthen and light up. If a
+new effect does not read as noise becoming signal, it does not belong here.
 
 ---
 
 ## 1. Colour
 
-Ratios computed against `--surface` `#FFFFFF`, which is the ground under every
-piece of text in the system (cards and footer are white; the page ground is one
-step off it and never carries small type on its own).
+| Token | Value | Use |
+|---|---|---|
+| `--ink` | `#0B0C0E` | The dark ground. |
+| `--ink-raised` | `#15161A` | One step above ink: portrait slot, raised planes. |
+| `--bone` | `#ECE9E2` | The light ground, and text on ink. |
+| `--signal` | `#D4FF3F` | The accent. Resolved ticks, the status dot, the cursor bubble, selection. |
+| `--on-signal` | `#0B0C0E` | Text on a signal ground. |
 
-| Token | Tailwind | Value | On white | Use |
-|---|---|---|---|---|
-| `--background` | `bg-background` | `#F5F7FA` | — | Page ground. Cool paper. |
-| `--surface` | `bg-surface` | `#FFFFFF` | — | Raised planes: nav pill, project cards, footer. |
-| `--forest` | `bg-forest` | `#082F25` | — | The ground inside a project card's image well. |
-| `--foreground` | `text-foreground` | `#1A1C1E` | 15.24:1 | Display type, card titles, primary UI. |
-| `--metadata` | `text-metadata` | `#5A6066` | 6.41:1 | Nav, standfirsts, dates, micro-labels. |
-| `--steel` | `text-steel` | `#424242` | 9.73:1 | Card and section descriptions. |
-| `--subtle` | `text-subtle` | `#5A6066` | 6.41:1 | Alias of `--metadata`, kept for ~38 inner-page call sites. |
-| `--rule` | `border-rule` | `rgba(90,96,102,.2)` | 1.4:1 | Hairlines and dividers — **decorative only**. |
-| `--rule-strong` | `border-rule-strong` | `rgba(90,96,102,.3)` | — | Control borders (the two Download Resume buttons). |
-| `--chip` | `bg-chip` | `rgba(90,96,102,.1)` | — | Tag pill ground on a project card. |
-| `--accent` | `text-accent` | `#B8422E` | 5.44:1 | Focus rings, footer ↗ arrows. Clay. |
-| `--accent-blue` | `text-accent-blue` | `#0088FF` | 3.20:1 | The card's open-case-study mark **and its ring only**. |
+### Tone tokens
+
+Components never name ink or bone for text and lines. They ask for the tone.
+
+| Token | Dark tone | Light tone |
+|---|---|---|
+| `--ground` | `#0B0C0E` | `#ECE9E2` |
+| `--raised` | `#15161A` | `#E0DCD2` |
+| `--fg` | `#ECE9E2` | `#0B0C0E` |
+| `--fg-muted` | `#8E8B85` | `#5E5B55` |
+| `--line` | bone at 16% | ink at 16% |
+| `--line-strong` | bone at 42% | ink at 42% |
+
+Tailwind exposes all of them: `bg-ground`, `text-fg`, `text-fg-muted`, `border-line`,
+`bg-signal`, and so on. The classes `.sn-muted` and `.sn-rule` do the same job.
+
+### Contrast (WCAG, against the ground each sits on)
+
+| Pair | Ratio |
+|---|---|
+| bone on ink | 16.2:1 |
+| `#8E8B85` muted on ink | 5.8:1 |
+| ink on bone | 16.2:1 |
+| `#5E5B55` muted on bone | 5.6:1 |
+| signal on ink | 16.9:1 |
+| ink on signal | 16.9:1 |
+| signal on bone | **1.05:1, never** |
 
 ### Hard rules
 
-- **Three text colours, no more.** `--foreground`, `--steel`, `--metadata`. Every one clears
-  4.5:1 on white, so none of them can be misused at small sizes.
-- **`--accent-blue` never carries text.** At 3.20:1 it clears the 3:1 for a non-text mark
-  (WCAG 1.4.11) and nothing else. In the design it appears exactly twice: the arrow glyph and
-  the ring around it.
-- **`--rule` may never delimit an interactive control** — it is 1.4:1. Control borders use
-  `--rule-strong`, which is what the Figma draws on both Download Resume buttons.
-- **Focus rings use `--accent`**, 2px, offset 2px. Never removed.
+- **Signal never carries text on bone.** On a light section it is a ground with ink on it.
+- **No raw hex in components.** Exceptions are named: shaders, Canvas 2D covers and
+  the OG image cannot read CSS, so they repeat the values with a pointer here.
+- **Focus rings are `--fg`,** 2px, offset 4px. They hold contrast in both tones.
+- **Control borders use `--line-strong`.** `--line` is decorative only.
 
-### 1a. Dark theme
+## 2. Tone: light and dark with no toggle
 
-Added 2026-09-08. Not a filter over the light palette — the same eight roles
-re-measured against a dark ground, so the ratios above have counterparts here
-rather than exceptions. Ratios are against `--surface` `#15191D`, which is the
-ground under every piece of text in the dark theme exactly as `#FFFFFF` is in
-the light one.
+There is no theme switch. Sections declare `data-tone="dark"` or `"light"`, and
+`ToneController` tweens the tone tokens on `<html>` whenever a different section
+crosses the middle of the viewport. The header, footer and every token-driven colour
+follow. With no tone section at the midline, the page is dark.
 
-| Token | Light | Dark | On dark surface |
-|---|---|---|---|
-| `--background` | `#F5F7FA` | `#0D1013` | — |
-| `--surface` | `#FFFFFF` | `#15191D` | — |
-| `--forest` | `#082F25` | `#0A2C22` | — |
-| `--foreground` | `#1A1C1E` | `#F2F4F7` | 16.03:1 |
-| `--steel` | `#424242` | `#CBD1D8` | 11.48:1 |
-| `--metadata` / `--subtle` | `#5A6066` | `#9AA2AB` | 6.84:1 |
-| `--rule` | `rgba(90,96,102,.2)` | `rgba(154,162,171,.22)` | — |
-| `--rule-strong` | `rgba(90,96,102,.3)` | `rgba(154,162,171,.36)` | — |
-| `--chip` | `rgba(90,96,102,.1)` | `rgba(154,162,171,.14)` | — |
-| `--accent` | `#B8422E` | `#E8836B` | 6.64:1 |
-| `--accent-blue` | `#0088FF` | `#4DA6FF` | 6.91:1 |
-| `--on-accent` | `#FFFFFF` | `#241009` | 6.84:1 on `--accent` |
-| `--on-foreground` | `#FFFFFF` | `#0D1013` | 16.03:1 on `--foreground` |
-| `--glass` / `--glass-border` | `rgba(255,255,255,.1)` / `.4` | `rgba(21,25,29,.55)` / `rgba(154,162,171,.18)` | nav pill |
+**Switch sparingly: one change per page, used to mark a turn.** Sachin reviewed a home
+page that went dark, light, dark, light and said "not so often". Pages run dark, and
+`SiteFooter` is the light turn on the way out. A page that needs a light passage in
+the middle has to give something up for it.
 
-### Dark-theme rules
+Surfaces that stay dark whatever the page is doing (the menu, the preloader) carry
+`.sn-tone-dark`, which re-points the tone tokens locally.
 
-- **The light accents cannot be reused.** `#B8422E` and `#0088FF` measure 1.9:1
-  and 2.7:1 on `#15191D`. The dark pair is lightened until each clears 4.5:1,
-  with the hue held: clay stays clay, blue stays blue.
-- **`--accent-blue` carries text in neither theme.** It clears 3:1 for a
-  non-text mark and that is all it is for.
-- **Surface stays one step above the ground**, 1.08:1 — the same separation the
-  light theme puts between `#FFFFFF` and `#F5F7FA` (1.06:1). Raised planes are
-  lighter than the ground in dark and in light alike.
-- **Hairline alphas are nudged up** (.2/.3/.1 → .22/.36/.14). A light line on a
-  dark ground reads thinner than a dark line on a light one at equal alpha.
-- **Never pair a page-ground grey with an inverted panel.** `--metadata` /
-  `--subtle` are mixed for `--background` and `--surface`; inside a
-  `bg-foreground` panel they land on the opposite ground and fail. Use
-  `text-on-foreground/70` for a muted label there.
+**Transitional aliases.** The pre-redesign token names (`--foreground`, `--metadata`,
+`--surface`, `--accent` and the rest) are aliased onto the tone tokens in
+`globals.css`, so the pages not yet rebuilt already sit on the new palette. Delete each
+alias once nothing asks for it; the same goes for the old `text-d1` to `text-tag` scale
+and `.container-page`.
 
-### How it is applied
+## 3. Type
 
-`data-theme="dark"` on `<html>`, plus a `prefers-color-scheme` branch guarded by
-`:root:not([data-theme="light"])` so the OS setting is honoured before any
-choice is made — and with JavaScript disabled. `src/lib/theme.ts` holds the
-blocking `<head>` script that sets the attribute before first paint;
-`ThemeToggle` writes the choice and subscribes to it as an external store.
-Storage absent means "follow the OS", which is why the toggle is two-state.
+Three free Google families through `next/font` (`src/lib/fonts.ts`):
 
-Two things do not survive a straight token swap and are handled in
-`globals.css`:
+- **Instrument Sans** carries everything, with the width axis for condensed display.
+- **Instrument Serif italic** takes one emphasis word per headline, never more:
+  "Selected *work*", "Let's *talk*".
+- **Geist Mono** sets labels, metadata and data readouts, uppercase.
 
-- **The hero plate.** `mix-blend-mode: color` takes luminosity from the
-  backdrop, so it composites to nothing on the dark ground. Dark uses `screen`
-  with `blur(40px)` (to dissolve the chrome silhouette), `saturate(10)` (to put
-  back the chroma the blur averages out) and **opacity 0.22, which is a
-  contrast budget** — `screen` lifts the ground under the hero copy, and 0.22
-  is the last stop where the headline, standfirst and Download Resume all still
-  clear 4.5:1. See the comment on the rule before changing it.
-- **The grain.** 2.5% → 4%. The same noise sits nearer the page colour on a
-  dark ground and needs slightly more of itself to stay perceptible.
+| Class | Size | Use |
+|---|---|---|
+| `.sn-mega` | fitted to the column by JS; 13vw without it | The hero name, edge to edge |
+| `.sn-title` | `clamp(3.25rem, 8.5vw, 8.5rem)`, 600, wdth 80 | Project titles, "Let's talk" |
+| `.sn-display` | `clamp(2.75rem, 7vw, 8rem)`, 500, wdth 88 | Section headings |
+| `.sn-statement` | `clamp(2rem, 4.4vw, 4.75rem)`, 500 | Statements, the email link |
+| `.sn-lead` | `clamp(1.125rem, 1.5vw, 1.5rem)` | Standfirsts and summaries |
+| `.sn-mono` | 0.75rem, uppercase, 0.04em | Labels, facts, nav |
+| `.sn-serif` | inherits size, +6% inside display type | The emphasis word |
 
----
+**Name once per screen.** The hero sets the name full width, so the header carries only
+the SB mark until the hero has scrolled away (`data-hero-name` plus `.sn-hero-out`).
+Sachin flagged the name appearing in both places at once.
 
-## 2. Type
+## 4. Space and shape
 
-Two families, already wired through `next/font` in `layout.tsx`.
+- Gutter: `--gutter`, `clamp(1.25rem, 3.2vw, 3rem)`, through `.sn-gutter`. Sections run
+  full bleed; content sits on a 12-column grid inside the gutter.
+- Section rhythm: 18 to 20vh of padding between major sections.
+- Radius: 1.75rem on a panel's top corners (work panels, page transitions, the preloader's
+  lift), 1.25rem on covers, 1rem on small frames. Pills and the SB mark are round.
+- No shadows. Separation comes from tone, rules and the grain.
 
-- **Display:** Space Grotesk (`--font-space-grotesk`), via the `.display` utility.
-  Hero and section headings are 500; the card title is 700; the 0-to-1 headline is 400.
-- **Body:** Inter (`--font-inter`). Standfirsts and descriptions 400, footer headline 300.
-- **Labels:** Space Grotesk uppercase, through the `.label` utility.
+## 5. Motion
 
-| Token | Design value | Fluid value | Use |
-|---|---|---|---|
-| `--text-d1` | 60 / 66 / −1.5px | `clamp(2.375rem, 4.2vw, 3.75rem)` | Hero headline; footer headline |
-| `--text-d2` | 96 / −1.5px | `clamp(3rem, 6.7vw, 6rem)` | "Building products from 0 to 1" |
-| `--text-d3` | 48 / −1.2px | `clamp(2rem, 3.4vw, 3rem)` | Section headings |
-| `--text-title` | 36 | `clamp(1.75rem, 2.5vw, 2.25rem)` | Project card title |
-| `--text-lead` | 30 / 42 | `clamp(1.375rem, 2.1vw, 1.875rem)` | Hero standfirst |
-| `--text-body-lg` | 24 / 36 | `clamp(1.0625rem, 1.7vw, 1.5rem)` | Descriptions, experience rows, capabilities |
-| `--text-label` | 12 / 18 / 0.6px | `0.75rem` / `0.05em` | Mono uppercase labels — **the only micro size** |
-| `--text-tag` | 11.2 / 16.8 / 0.56px | `0.7rem` / `0.05em` | Tag pills on a project card |
+GSAP owns motion, bridged to Lenis in `LenisProvider`. Every effect has a still state
+behind `prefers-reduced-motion: reduce`, and every scroll-driven effect scrubs rather
+than plays so it can be scrolled back.
 
-Each clamp's upper bound is the Figma value, so at ≥1440px the page measures 1:1
-against the frame. Tracking is converted from px to em at the design size, so it
-holds as the type scales.
+| Primitive | What it does |
+|---|---|
+| `NoiseField` | WebGL (OGL) hero field. A hidden price-like trace, and a lens that follows the pointer or wanders on touch, straighten the ticks around them. Quiet below the hero copy. Pauses off screen and in hidden tabs; DPR capped at 1.5. |
+| `NoiseCover` | Canvas 2D cover. A screenshot clears top to bottom behind a ragged signal-lit front; a project without screens gets a generated cover whose glyph resolves out of the noise. Seeded per project. |
+| `ScrambleText` | Mono labels scramble into their words. Screen readers get the words at once. |
+| `SplitReveal` | Masked line reveal, re-split when fonts land. |
+| `WordFill` | Words fill from 14% to full as a statement scrolls through. |
+| `WorkStack` | Full-screen panels, CSS sticky, each sliding over the last while it sinks and dims. Triggers measure non-sticky sentinels, never the sticky panels. |
+| Page transition | The new page rises over the old with rounded top corners; the old sinks and dims. React `<ViewTransition>` keyed by path. |
 
----
+Easing is `expo.out` / `--ease-out-expo` for arrivals and `none` for scrubs. Reveals run
+1.1 to 1.4s; hovers 300 to 500ms, on named properties only.
 
-## 3. Space, rule, radius
+## 6. Chrome
 
-Spacious density (dial 3/10).
+- **Header**: SB mark, desktop links, Résumé; a Menu button opens a full-screen dark menu
+  below `md`. Bone with `mix-blend-mode: difference`, so it reads over any tone or
+  screenshot. Retracts on scroll down, returns on scroll up.
+- **Preloader**: first visit per session. A counter runs while a line of ticks straightens
+  and turns signal, then the overlay lifts from the bottom and the hero name rises. A
+  blocking head script skips it on return visits and for reduced motion; a CSS fallback
+  hides it after 4s if the script never runs.
+- **Cursor**: a ring that trails the native pointer and opens into a signal bubble over
+  `data-cursor="…"`. Fine pointers only. The native cursor is never hidden.
+- **Grain**: fixed SVG noise at 5%.
+- **Footer**: "Let's talk", the email, Résumé, local time. The page's light turn.
 
-No custom spacing tokens: Tailwind's default 4px scale already expresses the
-whole set — `2`=8 · `4`=16 · `6`=24 · `10`=40 · `16`=64 · `24`=96 · `40`=160.
+## 7. Performance
 
-Section rhythm: `mt-40` (160px) between major sections, `py-24` (96px) inside them.
+- The hero name is the LCP element, never the canvas. OGL loads after first paint.
+- One WebGL context per page. Covers use Canvas 2D and redraw only while scrubbing.
+- Screenshots need 2x exports. `work-shoonya.png` and `work-sensai.png` are 1016px wide
+  and soften at full width.
 
-**Radius:** `--radius-sm` 4px (buttons) · `--radius-md` 12px (a card's image well) ·
-`--radius-lg` 24px (the card itself). `rounded-full` is allowed on exactly three
-marks, all of which the Figma draws that way: the nav pill, the tag pills, and
-the card's arrow ring.
+## 8. Checking your work
 
-**Rules:** 1px, `--rule`. Borders carry the structure; shadows do not exist in this system.
-`shadow-[0_8px_30px_...]` on cards and nav is retired.
+The desktop app's Browser pane runs no animation frames while it is hidden: scrolled
+screenshots come back blank and GSAP state freezes, while the DOM reports correct values.
+Verify scrolled states with headless Chrome over the DevTools Protocol (scroll, wait in
+real time, capture) instead.
 
-**Grid:** 12 columns, `--space-3` gutter. Already the inner-page convention; the home page adopts it.
-
-**Container:** the `.container-page` utility in `globals.css`. Replaced the
-`px-4 sm:px-8 md:px-16 lg:px-32 max-w-7xl mx-auto` string that was copy-pasted
-across 15 files. A CSS utility rather than a `<Container>` component: same
-single definition, no structural edits, and it works on any element. Its top
-step is a 180px gutter on a 1440px frame, which reproduces the Figma's 1080px
-content column exactly.
-
-**Labels:** the `.label` utility carries font, size, tracking and casing
-together — a label is a role, not just a size.
-
----
-
-## 4. Motion
-
-- Micro-interactions: 200ms `ease-out`, on **named properties only**.
-  `transition: all 0.4s ease-in` on every `a`/`button` is retired — `all` transitions layout
-  properties, and `ease-in` reads sluggish because it starts slow.
-- Reveals: 700ms `cubic-bezier(0.16, 1, 0.3, 1)`, 60ms stagger, translate + opacity only.
-- Every animation sits behind `prefers-reduced-motion: reduce`, which renders the final state
-  immediately. Currently only the cursor checks this — and the cursor is being removed.
-- One animation system. The `.reveal-up` / `.in-view` CSS path is dead (both classes are applied
-  statically in JSX on 40+ elements) and gets deleted; GSAP owns motion.
-
----
-
-## 5. Chrome
-
-Settled and applied.
-
-- **Kept:** the grain overlay at 2.5% opacity — the only full-viewport layer left.
-- **Removed:** `HUD.tsx`. The SYS.TIME / POS / VSN readout collided with the nav
-  pill, read as debug output, and belonged to the retired "Weightless Gravitas"
-  concept.
-- **Removed:** `SpacetimeCursor.tsx`, and with it the `three` dependency and the
-  global `* { cursor: none !important }`. It also ran on touch devices, where it
-  left a stuck blob in the corner.
-- **Removed:** `QuoteBlock.tsx` — dead file, referenced nowhere.
-- **Restored, with the right asset:** the hero's iridescent plate, now
-  `public/hero-iridescence.png` exported from the Figma. It blends in `color`,
-  which takes hue and saturation from the artwork and **luminosity from the
-  backdrop** — so it needs a light, opaque, off-white ground. That is why the
-  hero band keeps `--background` instead of going white: over `#FFFFFF` the
-  blend composites to nothing, which is what killed the earlier attempt with
-  `Background.png` (a near-greyscale asset, still unused in `public/`).
-  It also has to sit in the same stacking context as that ground; inside a
-  `z-10` wrapper it has only transparency to blend with and renders as the raw
-  chrome image.
-
-## 6. Pre-delivery checklist
-
-- [ ] No raw hex in JSX — tokens only, and **no Tailwind default palette**
-      (`bg-white`, `text-blue-500`): those cannot follow the theme
-- [ ] Contrast ≥ 4.5:1 for all text; ≥ 3:1 for control borders and focus rings
-- [ ] **Checked in both themes**, not just the one you were working in
-- [ ] `:focus-visible` on every interactive element
-- [ ] `prefers-reduced-motion` honoured
-- [ ] Renders at 375 / 768 / 1024 / 1440, no horizontal scroll
-- [ ] SVG icons only, no emoji
-- [ ] Hover transitions 150–300ms on named properties
+- [ ] Tokens only; no Tailwind default palette
+- [ ] Contrast from §1 holds for every text colour on its ground
+- [ ] At most one tone change on the page
+- [ ] Name appears once per screen
+- [ ] `prefers-reduced-motion` gives a complete, still page
+- [ ] `:focus-visible` on every control; the menu traps focus and closes on Escape
+- [ ] 375 / 768 / 1024 / 1440 / 1920, no horizontal scroll
+- [ ] Copy follows stop-slop, and no metric appears that Sachin has not sourced
