@@ -57,13 +57,21 @@ export function Decisions({ items }: { items: Numbered[] }) {
   );
 }
 
-/** An aside hung off a signal rule: an implication, a caveat. */
+/**
+ * A caveat or implication hung off a signal rule.
+ *
+ * A <div>, not an <aside>: these sit inside a decision, a card or a section's
+ * flow, so they are part of that argument rather than complementary to the
+ * page. Nested, the aside still surfaced as a landmark inside a landmark,
+ * which put a run of unnamed regions into landmark navigation on three case
+ * studies and made the real ones harder to find.
+ */
 export function Note({ label, children }: { label?: string; children: ReactNode }) {
   return (
-    <aside className="cs-note">
+    <div className="cs-note">
       {label && <p className="sn-mono sn-muted">{label}</p>}
       <div className="cs-body">{children}</div>
-    </aside>
+    </div>
   );
 }
 
@@ -118,6 +126,28 @@ export function Cards({
   );
 }
 
+/**
+ * The scroll container a wide table needs.
+ *
+ * .cs-table has a min-width, so on a narrow column the table scrolls
+ * sideways inside this box. A plain overflow container is reachable with a
+ * mouse and a touch screen and with nothing else: keyboard users never get to
+ * the right-hand columns (WCAG 2.1.1). tabIndex makes it a scroll stop, and
+ * because that puts it in the tab order it needs a name and a role to say
+ * what it is.
+ *
+ * It is focusable at every width rather than only when it overflows: the
+ * measuring version needs JavaScript to grant keyboard access, and this does
+ * not. .cs-table-stack handles phones by dropping the scroll entirely.
+ */
+export function TableScroll({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div role="region" aria-label={label} tabIndex={0} className="overflow-x-auto">
+      {children}
+    </div>
+  );
+}
+
 /** A screen from the project. The noise clears off it as it scrolls in. */
 export function Media({
   src,
@@ -142,6 +172,38 @@ export function Media({
         className="rounded-[1.25rem] bg-raised"
       />
       {caption && <figcaption className="sn-mono sn-muted mt-4 max-w-3xl">{caption}</figcaption>}
+    </figure>
+  );
+}
+
+/**
+ * A screen that does not exist yet. The noise field stands in for it, which is
+ * the honest picture: the page knows what belongs here and does not have it.
+ *
+ * To fill one, drop the export in /public and swap this for a <Media> with the
+ * same caption. Nothing else on the page changes.
+ */
+export function Placeholder({
+  label,
+  caption,
+  ratio = "1016 / 640",
+}: {
+  /** Names the missing screen, printed on the field itself. */
+  label: string;
+  caption: ReactNode;
+  /** CSS aspect-ratio. Phone screens want a tall one. */
+  ratio?: string;
+}) {
+  return (
+    <figure className="sn-gutter py-[8vh]">
+      {/* No glyph and no image: every cell stays noise, so the slot reads as
+          unresolved for as long as the screen is missing. */}
+      <NoiseCover seed={label} aspect={ratio} className="rounded-[1.25rem]">
+        <p className="sn-mono absolute bottom-4 left-4 rounded-full bg-ink/70 px-3 py-1.5 text-bone/80">
+          {label}
+        </p>
+      </NoiseCover>
+      <figcaption className="sn-mono sn-muted mt-4 max-w-3xl">{caption}</figcaption>
     </figure>
   );
 }

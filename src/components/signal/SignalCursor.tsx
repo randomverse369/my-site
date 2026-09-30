@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { FINE_POINTER, REDUCED_MOTION, useMediaQuery } from "@/lib/useMediaQuery";
 
 /**
  * A ring that trails the native pointer and opens into a label over anything
@@ -11,14 +12,16 @@ import gsap from "gsap";
 export default function SignalCursor() {
   const ref = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
+  // Watched rather than read once: turning on Reduce Motion used to leave the
+  // ring trailing the pointer until the next reload.
+  const finePointer = useMediaQuery(FINE_POINTER);
+  const reduceMotion = useMediaQuery(REDUCED_MOTION);
+  const enabled = finePointer && !reduceMotion;
 
   useEffect(() => {
     const el = ref.current;
     const labelEl = labelRef.current;
-    if (!el || !labelEl) return;
-
-    const query = window.matchMedia("(pointer: fine) and (prefers-reduced-motion: no-preference)");
-    if (!query.matches) return;
+    if (!el || !labelEl || !enabled) return;
 
     el.hidden = false;
     const xTo = gsap.quickTo(el, "x", { duration: 0.45, ease: "power3.out" });
@@ -51,9 +54,10 @@ export default function SignalCursor() {
     return () => {
       window.removeEventListener("pointermove", onMove);
       document.documentElement.removeEventListener("pointerleave", onLeave);
+      el.dataset.state = "hidden";
       el.hidden = true;
     };
-  }, []);
+  }, [enabled]);
 
   return (
     <div ref={ref} aria-hidden="true" hidden data-state="hidden" className="sn-cursor">

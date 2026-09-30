@@ -3,6 +3,7 @@
 import { useEffect, useRef, type RefObject } from "react";
 import gsap from "gsap";
 import { onIntroDone } from "@/lib/intro";
+import { FINE_POINTER, REDUCED_MOTION, useMediaQuery } from "@/lib/useMediaQuery";
 
 /*
  * The hero field. A grid of short ticks, each at its own angle and flickering
@@ -126,6 +127,29 @@ type Props = {
 export default function NoiseField({ className = "", quietRef }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  /*
+   * Watched rather than read once inside the effect: a reader who turned on
+   * Reduce Motion mid-visit used to keep the field animating until a reload.
+   *
+   * They arrive through a ref, and the effect below never lists them as
+   * dependencies, because re-running it would tear the WebGL context down and
+   * build a new one on the same canvas. Cleanup calls loseContext(), and a
+   * canvas whose context has been lost hands the same dead context back: the
+   * shaders then fail to compile and the first draw throws. The loop reads the
+   * ref instead, and onPrefs applies the change in place.
+   */
+  const reduce = useMediaQuery(REDUCED_MOTION);
+  const finePointer = useMediaQuery(FINE_POINTER);
+  // The initial value is already right for the first render; this effect is
+  // declared above the setup effect so the two stay in step on mount.
+  const prefs = useRef({ reduce, finePointer });
+  const onPrefs = useRef(() => {});
+
+  useEffect(() => {
+    prefs.current = { reduce, finePointer };
+    onPrefs.current();
+  }, [reduce, finePointer]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const host = canvas?.parentElement;
@@ -138,9 +162,6 @@ export default function NoiseField({ className = "", quietRef }: Props) {
     // Loaded after first paint: the hero's text is the LCP element, not this.
     void import("ogl").then(({ Renderer, Program, Mesh, Triangle }) => {
       if (disposed) return;
-
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const finePointer = window.matchMedia("(pointer: fine)").matches;
 
       let renderer: InstanceType<typeof Renderer>;
       try {
@@ -164,7 +185,7 @@ export default function NoiseField({ className = "", quietRef }: Props) {
         uMouse: { value: [0, 0] },
         uLens: { value: 200 },
         uCell: { value: 16 },
-        uIntro: { value: reduce ? 1 : 0 },
+        uIntro: { value: prefs.current.reduce ? 1 : 0 },
         uQuiet: { value: 0.4 },
         uInk: { value: rgb("#0b0c0e") },
         uBone: { value: rgb("#ece9e2") },
@@ -200,6 +221,9 @@ export default function NoiseField({ className = "", quietRef }: Props) {
 
       const start = performance.now();
       const render = (now = performance.now()) => {
+        const { reduce, finePointer } = prefs.current;
+        // Reduced motion draws one fixed frame, far enough into the clock that
+        // the trace has some shape to it.
         const t = reduce ? 12 : (now - start) / 1000;
         const target = finePointer && pointer.inside ? pointer : wander(t);
         if (!lens.placed) {
@@ -243,7 +267,7 @@ export default function NoiseField({ className = "", quietRef }: Props) {
         raf = requestAnimationFrame(loop);
       };
       const play = () => {
-        if (!raf && !reduce && revealed && onScreen && !document.hidden) {
+        if (!raf && !prefs.current.reduce && revealed && onScreen && !document.hidden) {
           raf = requestAnimationFrame(loop);
         }
       };
@@ -287,14 +311,28 @@ export default function NoiseField({ className = "", quietRef }: Props) {
       // The field starts drawing, and its cells arrive, as the preloader lifts.
       const stopWaiting = onIntroDone(() => {
         revealed = true;
-        if (!reduce) {
+        if (!prefs.current.reduce) {
           gsap.to(uniforms.uIntro, { value: 1, duration: 2.4, ease: "power2.inOut", delay: 0.15 });
         }
         play();
       });
 
+      // Reduce Motion switched on or off while the page is open: settle the
+      // field on its still frame, or start it running again. No rebuild.
+      onPrefs.current = () => {
+        if (prefs.current.reduce) {
+          pause();
+          gsap.killTweensOf(uniforms.uIntro);
+          uniforms.uIntro.value = 1;
+          render();
+        } else {
+          play();
+        }
+      };
+
       cleanup = () => {
         stopWaiting();
+        onPrefs.current = () => {};
         pause();
         io.disconnect();
         ro.disconnect();

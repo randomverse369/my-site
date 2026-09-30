@@ -48,7 +48,15 @@ export default function Hero() {
       document.fonts?.ready.then(fit);
 
       gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
-        const split = SplitText.create(name.querySelectorAll(".sn-name-line"), { type: "chars" });
+        // aria: "none" leaves the accessibility tree alone. The default writes
+        // aria-label onto each .sn-name-line <span>, where ARIA prohibits it;
+        // letting it label the chars instead would read the name out one
+        // letter at a time. The <h1> carries the name itself, and the spans
+        // are hidden in the markup below.
+        const split = SplitText.create(name.querySelectorAll(".sn-name-line"), {
+          type: "chars",
+          aria: "none",
+        });
         fit(); // Split characters lose a little kerning; re-fit to the real width.
 
         // The name rises as the preloader lifts off it, or at once on a
@@ -148,9 +156,22 @@ export default function Hero() {
       </div>
 
       <div ref={nameWrapRef} className="sn-gutter pb-[1.5vw]">
-        <h1 id="hero-name" ref={nameRef} data-hero-name className="sn-mega w-max">
-          <span className="sn-name-line block pt-[0.06em] [overflow:clip] md:inline-block">Sachin</span>{" "}
-          <span className="sn-name-line block pt-[0.06em] [overflow:clip] md:inline-block">Barnwal</span>
+        {/* The name is set on the <h1>, where aria-label is permitted, and the
+            two lines are hidden: split into characters they would otherwise be
+            announced letter by letter. */}
+        <h1
+          id="hero-name"
+          ref={nameRef}
+          data-hero-name
+          aria-label="Sachin Barnwal"
+          className="sn-mega w-max"
+        >
+          <span aria-hidden="true" className="sn-name-line block pt-[0.06em] [overflow:clip] md:inline-block">
+            Sachin
+          </span>{" "}
+          <span aria-hidden="true" className="sn-name-line block pt-[0.06em] [overflow:clip] md:inline-block">
+            Barnwal
+          </span>
         </h1>
       </div>
     </section>

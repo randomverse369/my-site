@@ -46,7 +46,7 @@ export default function SensAICaseStudy() {
       </CaseSection>
 
       <Media
-        src="/main.svg"
+        src="/work-sensai-overview.webp"
         alt="sensAI — AI multi-agent trading intelligence platform"
         width={1920}
         height={1080}
@@ -73,7 +73,7 @@ export default function SensAICaseStudy() {
         </p>
       </CaseSection>
 
-      <Media src="/main2.svg" alt="sensAI — Agent interface design" width={1440} height={1080} />
+      <Media src="/work-sensai-agents.webp" alt="sensAI — Agent interface design" width={1440} height={1080} />
 
       <PullQuote>
         &ldquo;A multi-agent system has a seam in it. The trader hits that seam mid-question, and if I
@@ -92,7 +92,7 @@ export default function SensAICaseStudy() {
         </p>
       </CaseSection>
 
-      <Media src="/main3.svg" alt="sensAI — Single entry point interface" width={1440} height={1080} />
+      <Media src="/work-sensai-entry.webp" alt="sensAI — Single entry point interface" width={1440} height={1080} />
 
       <CaseSection index={4} label="What Shipped">
         <p className="cs-lead">

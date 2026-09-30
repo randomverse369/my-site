@@ -1,19 +1,31 @@
 /**
  * The preloader plays once per browser session.
  *
- * `data-intro` on <html> carries the state:
- *   "skip" — set before first paint by INTRO_INIT_SCRIPT on a return visit or
- *            for reduced motion, so the overlay never flashes;
- *   "done" — set by the preloader as it starts to lift.
+ * `data-intro` on <html> carries the state, all of it set before first paint
+ * by INTRO_INIT_SCRIPT or by the preloader itself:
+ *   "skip"    — a return visit, or reduced motion, so the overlay never flashes;
+ *   "playing" — the overlay is up. globals.css locks scrolling on this, because
+ *               a fixed overlay stops clicks but not a wheel or a trackpad;
+ *   "done"    — set by the preloader as it starts to lift.
  * Anything choreographed with the intro (the hero name, the noise field)
  * waits on onIntroDone().
  */
 export const INTRO_SESSION_KEY = "sn-intro-seen";
 export const INTRO_DONE_EVENT = "sn:intro-done";
 
-export const INTRO_INIT_SCRIPT = `(function(){var d=document.documentElement;try{if(sessionStorage.getItem(${JSON.stringify(
+/**
+ * Blocking, inline, ahead of everything else. It decides whether the intro
+ * plays before the first paint, so a return visit never flashes the overlay
+ * and a first visit is scroll-locked from the very first frame rather than
+ * from whenever React and Lenis get going.
+ *
+ * The timeout is the safety net: it clears "playing" after 5s, one second
+ * after the CSS fallback hides the overlay, so a bundle that never hydrates
+ * leaves a readable page instead of a permanently locked one.
+ */
+export const INTRO_INIT_SCRIPT = `(function(){var d=document.documentElement;var s=false;try{s=!!sessionStorage.getItem(${JSON.stringify(
   INTRO_SESSION_KEY,
-)})||matchMedia("(prefers-reduced-motion: reduce)").matches){d.setAttribute("data-intro","skip")}}catch(e){d.setAttribute("data-intro","skip")}})()`;
+)})||matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){s=true}d.setAttribute("data-intro",s?"skip":"playing");if(!s){setTimeout(function(){if(d.getAttribute("data-intro")==="playing"){d.removeAttribute("data-intro")}},5000)}})()`;
 
 export function isIntroDone() {
   const state = document.documentElement.getAttribute("data-intro");

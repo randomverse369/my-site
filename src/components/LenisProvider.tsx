@@ -1,9 +1,10 @@
 "use client";
 
 import { ReactLenis, useLenis } from "lenis/react";
-import { ReactNode, useEffect, useMemo, useSyncExternalStore } from "react";
+import { ReactNode, useEffect, useMemo } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { REDUCED_MOTION, useMediaQuery } from "@/lib/useMediaQuery";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,24 +43,8 @@ function ScrollTriggerBridge() {
   return null;
 }
 
-const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
-
-function subscribeToReducedMotion(onChange: () => void) {
-  const query = window.matchMedia(REDUCED_MOTION);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-}
-
-function usePrefersReducedMotion() {
-  return useSyncExternalStore(
-    subscribeToReducedMotion,
-    () => window.matchMedia(REDUCED_MOTION).matches,
-    () => false, // server render: assume motion is fine, correct on hydration
-  );
-}
-
 export default function LenisProvider({ children }: { children: ReactNode }) {
-  const reducedMotion = usePrefersReducedMotion();
+  const reducedMotion = useMediaQuery(REDUCED_MOTION);
 
   // Keep ReactLenis mounted either way. Swapping the provider out on the
   // reduced-motion branch would remount the whole tree and re-run every

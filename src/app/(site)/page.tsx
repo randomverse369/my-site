@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { projects } from "@/lib/projects";
+import { projectCounts, projects, spell } from "@/lib/projects";
 import ProcessTrack from "@/components/home/ProcessTrack";
 import ExperienceRows from "@/components/home/ExperienceRows";
 import VelocityMarquee from "@/components/home/VelocityMarquee";
@@ -22,6 +22,7 @@ const amorphic = project("amorphic-idp");
 
 // Summaries are lifted from each case study's own approved copy. Shoonya's
 // status stays "In development": the redesign has not shipped.
+// (Shoonya is now the mobile dashboard IA redesign, not the whole platform.)
 const panels: WorkPanel[] = [
   {
     id: shoonya.id,
@@ -30,7 +31,7 @@ const panels: WorkPanel[] = [
     category: shoonya.category,
     meta: "Finvasia · In development",
     summary:
-      "A redesign of Finvasia’s retail trading platform, web and mobile, designed so a trader reads their position before they scroll.",
+      "One overloaded landing screen, split in two: Home for the user’s own money and what they can do next, Market for what the market is doing.",
     image: { src: "/work-shoonya.png", alt: shoonya.imageLabel },
   },
   {
@@ -105,13 +106,19 @@ export default function Home() {
           <SplitReveal as="h2" id="work-heading" className="sn-display">
             Selected <em className="sn-serif">work</em>
           </SplitReveal>
-          <ScrambleText onScroll className="sn-mono sn-muted" text="(02) Three of five case studies" />
+          <ScrambleText
+            onScroll
+            className="sn-mono sn-muted"
+            text={`(02) ${spell(panels.length, true)} of ${spell(projectCounts.published)} case studies`}
+          />
         </div>
 
         <WorkStack panels={panels} />
 
         <div className="sn-gutter flex flex-wrap items-center justify-between gap-6 border-t sn-rule py-8">
-          <p className="sn-mono sn-muted">The index has all eight projects, drafts included</p>
+          <p className="sn-mono sn-muted">
+            The index has all {spell(projectCounts.total)} projects, drafts included
+          </p>
           <Link href="/works" data-cursor="Index" className="sn-pill sn-mono">
             All work <span aria-hidden="true">→</span>
           </Link>

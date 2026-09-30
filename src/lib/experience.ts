@@ -109,3 +109,66 @@ export const experiences: Experience[] = [
     ],
   },
 ];
+
+/* ---- Timeline maths ------------------------------------------------------
+ *
+ * Months since year zero is enough resolution for a bar that is only ever read
+ * as "this role was longer than that one".
+ *
+ * The current role's length depends on today, and /experience is statically
+ * prerendered, so anything computed here at module scope would be frozen at
+ * the last deploy: a site left alone for a year would still claim the role had
+ * run a year less than it had. The functions below take `now` as an argument
+ * and the page reads it on the client through useNowMonths().
+ */
+
+export const monthsOf = (yearMonth: string) => {
+  const [year, month] = yearMonth.split("-").map(Number);
+  return year * 12 + (month - 1);
+};
+
+export const startOf = (role: Experience) => monthsOf(role.start);
+export const endOf = (role: Experience, now: number) =>
+  role.end ? monthsOf(role.end) : now;
+
+/** The earliest start. Fixed: it never depends on today. */
+export const timelineStart = Math.min(...experiences.map(startOf));
+
+/**
+ * Where a role's bar sits on the shared timeline, as percentages.
+ * The span is floored at one month so a single-month history cannot divide
+ * by zero and lay every bar out as NaN%.
+ */
+export function timelineBar(role: Experience, now: number) {
+  const end = Math.max(...experiences.map((other) => endOf(other, now)));
+  const span = Math.max(1, end - timelineStart);
+  return {
+    offset: ((startOf(role) - timelineStart) / span) * 100,
+    width: ((endOf(role, now) - startOf(role)) / span) * 100,
+  };
+}
+
+/** "3 yrs", "1 yr 4 mo", "6 mo". */
+export function readableLength(role: Experience, now: number) {
+  const months = Math.max(0, endOf(role, now) - startOf(role));
+  const years = Math.floor(months / 12);
+  const rest = months % 12;
+  const parts = [];
+  if (years > 0) parts.push(`${years} ${years === 1 ? "yr" : "yrs"}`);
+  if (rest > 0) parts.push(`${rest} mo`);
+  return parts.join(" ") || "under a month";
+}
+
+/**
+ * Whatever month it is wherever this runs.
+ *
+ * Deliberately a function and not a module constant: a constant is evaluated
+ * once per environment, so on the client it would hold the month the *browser*
+ * loaded the page while the prerendered HTML held the month of the build. The
+ * two agree right after a deploy and drift apart afterwards, which shows up as
+ * a hydration mismatch rather than as anything visible. The page reads it on
+ * the server and hands the value to RoleDuration as the server snapshot.
+ */
+export function nowMonths(at: Date = new Date()) {
+  return at.getFullYear() * 12 + at.getMonth();
+}

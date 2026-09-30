@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
-import { projects } from "@/lib/projects";
+import { projectCounts, projects, spell } from "@/lib/projects";
 import ScrambleText from "@/components/signal/ScrambleText";
 import SplitReveal from "@/components/signal/SplitReveal";
 import WorksIndex, { type WorksItem } from "@/components/works/WorksIndex";
 
 export const metadata: Metadata = {
   title: "Works",
-  description:
-    "Eight product design projects from Finvasia, DigiMantra and Tier5. Five carry a written case study.",
+  description: `${spell(projectCounts.total, true)} product design projects from Finvasia, DigiMantra and Tier5. ${spell(
+    projectCounts.published,
+    true,
+  )} carry a written case study.`,
 };
 
 // The number is the position in the one source list, so the index, the covers
@@ -37,14 +39,16 @@ export default function Works() {
         <p className="sn-mono sn-muted">
           <ScrambleText text="Works" delay={0.2} />
         </p>
-        {/* The two counts are the counts below. Change the list in
-            src/lib/projects.ts and this line has to move with it. */}
+        {/* Counted from the list itself, so it cannot fall out of step with
+            the rows below. */}
         <SplitReveal as="h1" onScroll={false} waitForIntro className="sn-title mt-8 max-w-[14ch]">
-          Eight projects. Five <em className="sn-serif">written</em> up.
+          {spell(projectCounts.total, true)} projects. {spell(projectCounts.published, true)}{" "}
+          <em className="sn-serif">written</em> up.
         </SplitReveal>
         <p className="cs-standfirst mt-10 max-w-3xl">
           I did this work at Finvasia, DigiMantra and Tier5, most of it on trading platforms and the
-          AI layered onto them. Three of the case studies are still in draft, and each one says so.
+          AI layered onto them. {spell(projectCounts.draft, true)} of the case studies are still in draft,
+          and each one says so.
         </p>
       </header>
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import CaseHero from "@/components/case-study/CaseHero";
 import CaseSection from "@/components/case-study/CaseSection";
-import { Callout, Cards, Decisions, NextProject } from "@/components/case-study/blocks";
+import { Callout, Cards, Decisions, NextProject, TableScroll } from "@/components/case-study/blocks";
 
 export const metadata: Metadata = {
   title: "jAI Research Sprint",
@@ -185,8 +185,11 @@ export default function JAIResearchPage() {
       </CaseSection>
 
       <CaseSection index={5} label="Synthesis & Opportunities">
-        <div className="overflow-x-auto">
-          <table className="cs-table">
+        <TableScroll label="User expectations, product tensions and opportunities">
+          {/* cs-table-stack turns each row into a labelled block below 40rem,
+              so a phone never has to scroll sideways to find the third
+              column. Every cell needs its data-label. */}
+          <table className="cs-table cs-table-stack">
             <thead>
               <tr>
                 <th scope="col">User Expectation</th>
@@ -196,23 +199,27 @@ export default function JAIResearchPage() {
             </thead>
             <tbody>
               <tr>
-                <td>&quot;Let me inspect my money.&quot;</td>
-                <td>jAI competes with familiar tracker actions.</td>
-                <td>Position jAI as the interpretation layer on top of tracking.</td>
+                <td data-label="User Expectation">&quot;Let me inspect my money.&quot;</td>
+                <td data-label="Product Tension">jAI competes with familiar tracker actions.</td>
+                <td data-label="Opportunity">
+                  Position jAI as the interpretation layer on top of tracking.
+                </td>
               </tr>
               <tr>
-                <td>&quot;Show me what I&apos;ll get.&quot;</td>
-                <td>The personalized-insight path is unclear.</td>
-                <td>Add a concrete preview and explicit next step.</td>
+                <td data-label="User Expectation">&quot;Show me what I&apos;ll get.&quot;</td>
+                <td data-label="Product Tension">The personalized-insight path is unclear.</td>
+                <td data-label="Opportunity">Add a concrete preview and explicit next step.</td>
               </tr>
               <tr>
-                <td>&quot;Keep my data under my control.&quot;</td>
-                <td>Linking is understood but emotionally risky.</td>
-                <td>Explain access, boundaries, account scope, and control at the decision point.</td>
+                <td data-label="User Expectation">&quot;Keep my data under my control.&quot;</td>
+                <td data-label="Product Tension">Linking is understood but emotionally risky.</td>
+                <td data-label="Opportunity">
+                  Explain access, boundaries, account scope, and control at the decision point.
+                </td>
               </tr>
             </tbody>
           </table>
-        </div>
+        </TableScroll>
         <Callout label="Resulting Design Principle">
           <p>Make the value visible before making the data request.</p>
         </Callout>

@@ -42,18 +42,18 @@ export const projects: Project[] = [
     title: "Shoonya",
     href: "/works/shoonya",
     category: "Product Redesign · Fintech",
-    summary: "Complete redesign of trading platform from ambiguity to clarity",
+    summary: "One overloaded landing screen, split into Home and Market",
     body: [
-      "I rebuilt Finvasia's retail trading platform across web and mobile. Nine of its traders told me the order speed was the best thing about it, and that they found their way around the screens from memory.",
+      "Shoonya's mobile dashboard had become a market, discovery, tools and account-utility screen all at once. I split the entry point in two: Home for the user's own money and what they can do next, Market for what the market is doing.",
     ],
-    tags: ["Mobile", "Web", "Fintech"],
+    tags: ["Mobile", "Fintech", "Information Architecture"],
     meta: [
       { label: "Role", value: "Senior Product Designer" },
       { label: "Company", value: "Finvasia" },
-      { label: "Type", value: "Platform Redesign" },
+      { label: "Type", value: "Mobile IA Redesign" },
     ],
     image: "/work-shoonya.png",
-    imageLabel: "Shoonya — Dashboard Redesign",
+    imageLabel: "Shoonya — Mobile Dashboard Redesign",
     caseStudy: "published",
     featured: true,
   },
@@ -223,4 +223,37 @@ export function nextCaseStudy(id: string) {
     if (candidate.caseStudy === "published" && candidate.id !== id) return candidate;
   }
   return projects[0];
+}
+
+/**
+ * Counts the copy quotes. The home page and /works both print sentences like
+ * "Eight projects. Five written up." Spelling those by hand meant every change
+ * to the list above silently made three sentences wrong, so they are derived.
+ */
+export const projectCounts = {
+  total: projects.length,
+  published: projects.filter((project) => project.caseStudy === "published").length,
+  draft: projects.filter((project) => project.caseStudy === "coming-soon").length,
+};
+
+const WORDS = [
+  "zero",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "eleven",
+  "twelve",
+];
+
+/** Small numbers as words, for sentences. Anything larger stays a numeral. */
+export function spell(n: number, capitalise = false) {
+  const word = WORDS[n] ?? String(n);
+  return capitalise ? word.charAt(0).toUpperCase() + word.slice(1) : word;
 }

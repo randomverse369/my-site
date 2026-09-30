@@ -10,6 +10,11 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 /**
  * The two tones a section can declare with `data-tone`. Values mirror the
  * contrast table in MASTER.md §1; change one, re-measure both.
+ *
+ * --line-strong is 0.48, not 0.42, because it draws the border of .sn-pill,
+ * which is a control rather than a rule: 1.4.11 wants 3:1 for a boundary that
+ * identifies one. At 0.42 the light tone measured 2.77:1 on the ground and
+ * 2.69:1 on a raised panel. 0.48 gives 4.31:1 dark and 3.30:1 light.
  */
 const TONES = {
   dark: {
@@ -18,7 +23,7 @@ const TONES = {
     "--fg": "#ece9e2",
     "--fg-muted": "#8e8b85",
     "--line": "rgba(236, 233, 226, 0.16)",
-    "--line-strong": "rgba(236, 233, 226, 0.42)",
+    "--line-strong": "rgba(236, 233, 226, 0.48)",
   },
   light: {
     "--ground": "#ece9e2",
@@ -26,7 +31,7 @@ const TONES = {
     "--fg": "#0b0c0e",
     "--fg-muted": "#5e5b55",
     "--line": "rgba(11, 12, 14, 0.16)",
-    "--line-strong": "rgba(11, 12, 14, 0.42)",
+    "--line-strong": "rgba(11, 12, 14, 0.48)",
   },
 } as const;
 

@@ -3,13 +3,7 @@ import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
 import { signalFonts } from "@/lib/fonts";
 import { INTRO_INIT_SCRIPT } from "@/lib/intro";
-
-// metadataBase needs an absolute origin to resolve OG image URLs. Set
-// NEXT_PUBLIC_SITE_URL to the production domain; Vercel supplies VERCEL_URL on
-// previews, and localhost is the local fallback.
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+import { siteUrl } from "@/lib/site";
 
 const title = "Sachin Barnwal — Senior Product Designer";
 const description =
@@ -22,18 +16,23 @@ export const metadata: Metadata = {
     template: "%s — Sachin Barnwal",
   },
   description,
+  // Resolved against metadataBase and the current route, so every page
+  // declares itself canonical rather than pointing at the home page.
+  alternates: { canonical: "./" },
+  /*
+   * No title, description or url here on purpose. Next inherits an openGraph
+   * block wholesale when a page does not declare one, so naming them meant
+   * every case study shared as "Sachin Barnwal — Senior Product Designer"
+   * pointing at the home page. Left out, Next fills each page's own title and
+   * description in instead.
+   */
   openGraph: {
-    title,
-    description,
-    url: siteUrl,
     siteName: "Sachin Barnwal",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title,
-    description,
     creator: "@vyaktava",
   },
 };

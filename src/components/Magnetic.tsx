@@ -15,6 +15,12 @@ export default function Magnetic({ children, strength = 0.5 }: MagneticProps) {
     const element = magneticRef.current;
     if (!element) return;
 
+    // Every other effect on the site has a still state; this one used to pull
+    // the résumé pill around under the cursor whatever the reader had asked
+    // for. Fine pointers only, and only when motion is welcome.
+    const query = window.matchMedia("(pointer: fine) and (prefers-reduced-motion: no-preference)");
+    if (!query.matches) return;
+
     const xTo = gsap.quickTo(element, "x", {
       duration: 1,
       ease: "elastic.out(1, 0.3)",

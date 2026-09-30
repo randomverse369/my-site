@@ -47,6 +47,12 @@ export default function SplitReveal({
         const split = SplitText.create(el, {
           type: "lines",
           mask: "lines",
+          // SplitText's default writes aria-label onto the element it splits
+          // and hides every line. ARIA prohibits aria-label on <p>, which this
+          // renders as often as a heading, so an AT that honours the
+          // prohibition would find nothing at all. The split lines are real
+          // text; leave the accessibility tree to them.
+          aria: "none",
           linesClass: "sn-line",
           autoSplit: true,
           onSplit: (self) => {

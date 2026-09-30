@@ -23,7 +23,7 @@
   --fg: #ece9e2;
   --fg-muted: #8e8b85;
   --line: rgba(236, 233, 226, 0.16);
-  --line-strong: rgba(236, 233, 226, 0.42);
+  --line-strong: rgba(236, 233, 226, 0.48);
 
   --gutter: clamp(1.25rem, 3.2vw, 3rem);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -210,7 +210,7 @@ button,
   --fg: #ece9e2;
   --fg-muted: #8e8b85;
   --line: rgba(236, 233, 226, 0.16);
-  --line-strong: rgba(236, 233, 226, 0.42);
+  --line-strong: rgba(236, 233, 226, 0.48);
   background-color: var(--ground);
   color: var(--fg);
 }
@@ -300,12 +300,33 @@ button,
 
 /* ---- Controls ---------------------------------------------------------- */
 
+/*
+ * 2.5.8 wants 24px of target. These labels set at 12px mono, so every one of
+ * them measured 16-17px tall: the nav, the footer links, the back links, the
+ * read-on links. The pseudo-element grows the hit area around the text
+ * without moving the text, the underline or the layout, so the bar and the
+ * footer look exactly as they did.
+ *
+ * This is the standalone-link role; a link inside a sentence uses .cs-link,
+ * which 2.5.8 exempts and which is left alone so prose targets never overlap.
+ */
 .sn-link {
+  position: relative;
   background-image: linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;
   background-position: 100% 100%;
   background-size: 0% max(1px, 0.06em);
   transition: background-size 500ms var(--ease-out-expo);
+}
+
+.sn-link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  translate: 0 -50%;
+  height: 100%;
+  min-height: 24px;
 }
 
 .sn-link:hover,
@@ -362,22 +383,56 @@ button,
 
 /* ---- Header ------------------------------------------------------------ */
 
-/* Bone with difference blending: it reads over ink, bone and screenshots
-   alike, so the bar never has to know which tone is under it. */
+/*
+ * The bar reads over the page ground, over the opposite tone and over a
+ * screenshot, and it used to do that with bone text and difference blending.
+ * Difference only separates at the ends of the range: against a mid grey the
+ * blend lands back on the backdrop it is sitting on. Measured across the grey
+ * range it drops under 4.5:1 for 41% of it, bottoming out at 1.10:1, and on
+ * the real covers 7% of Shoonya's pixels and 1% of sensAI's take it there,
+ * with a true worst case of 1.00:1. The bar disappeared into the artwork.
+ *
+ * So the bar carries its own ground instead. The scrim is --ground, the same
+ * colour the page already is, which makes it invisible everywhere except over
+ * artwork, where it is exactly what is needed. The text is --fg over it:
+ * 16.1:1 in both tones, whatever is underneath. It has to be the bar's own
+ * ground rather than the tone the text happens to be in, because the tone is
+ * set by whichever section holds the middle of the viewport and the bar is at
+ * the top: near the footer the document turns light while the top of the
+ * screen is still dark, and text alone would invert against the wrong thing.
+ */
 .sn-header {
   position: fixed;
   inset-inline: 0;
   top: 0;
   z-index: 50;
-  color: var(--bone);
-  mix-blend-mode: difference;
+  color: var(--fg);
   transition: translate 600ms var(--ease-out-expo);
+}
+
+/* Opaque behind the bar, faded out below it, so the text always sits on solid
+   ground and the edge never draws a line across the page. */
+.sn-header::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  z-index: -1;
+  height: calc(var(--nav-height) + 2.25rem);
+  background: linear-gradient(
+    to bottom,
+    var(--ground) 0%,
+    var(--ground) 62%,
+    color-mix(in srgb, var(--ground) 55%, transparent) 82%,
+    transparent 100%
+  );
+  pointer-events: none;
 }
 
 .sn-header[data-hidden="true"] { translate: 0 -110%; }
 
-.sn-header .sn-pill { border-color: rgba(236, 233, 226, 0.5); }
-.sn-header .sn-pill:hover { background-color: var(--bone); border-color: var(--bone); color: var(--ink); }
+.sn-header .sn-pill { border-color: var(--line-strong); }
+.sn-header .sn-pill:hover { background-color: var(--fg); border-color: var(--fg); color: var(--ground); }
 
 /* Name once per screen: while a page's hero sets the name full width, the bar
    carries only the mark. SiteHeader adds .sn-hero-out when the hero leaves. */
@@ -414,6 +469,14 @@ html:has([data-hero-name]):not(.sn-hero-out) .sn-header-name > span {
 }
 
 html[data-intro="skip"] .sn-preloader { display: none; }
+
+/* A fixed overlay stops clicks but not a wheel or a trackpad. The lock rides
+   on the attribute the blocking init script sets, so it is in force from the
+   first paint: waiting for useLenis() to hand back an instance left one render
+   of a first visit in which the page could be scrolled underneath. The script
+   clears the attribute after 5s if nothing hydrates, and markIntroDone swaps
+   it for "done" at the moment the overlay starts to lift. */
+html[data-intro="playing"] { overflow: hidden; }
 
 .sn-preloader-line {
   position: absolute;
@@ -647,6 +710,16 @@ html[data-intro="skip"] .sn-preloader { display: none; }
   background-color: var(--signal);
 }
 
+/* WordFill's resting state. The words fill from --fg-muted to --fg rather
+   than from transparent, because a low opacity composites toward the ground:
+   0.14 measured 1.38:1, unreadable for anyone who stops mid-scroll. Muted is
+   5.8:1 on ink and 5.6:1 on bone, so an unfilled word is always legible and
+   the fill still reads as faint-to-full. Unset means filled, which is what
+   no-JS and reduced motion get. */
+.sn-fill-word {
+  color: color-mix(in srgb, var(--fg) calc(var(--fill, 1) * 100%), var(--fg-muted));
+}
+
 /* ---- Case studies ------------------------------------------------------ */
 
 .cs-standfirst {
@@ -786,6 +859,43 @@ html[data-intro="skip"] .sn-preloader { display: none; }
   color: color-mix(in srgb, var(--fg) 74%, var(--ground));
 }
 .cs-table td:last-child { color: var(--fg); }
+
+/* A four-column table does not survive a phone: the last column falls off the
+   scroll and a reader never learns it is there. Opt a wide table into
+   .cs-table-stack and each row becomes a labelled block below 40rem. Every
+   cell needs a data-label; the header row is hidden from sight, not from
+   screen readers. */
+@media (max-width: 40rem) {
+  .cs-table-stack { min-width: 0; }
+  .cs-table-stack thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .cs-table-stack tr {
+    display: block;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .cs-table-stack td {
+    display: block;
+    padding: 0;
+    border: 0;
+  }
+  .cs-table-stack td + td { margin-top: 1rem; }
+  .cs-table-stack td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.25rem;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+}
 
 .cs-next-title {
   transition: translate 500ms var(--ease-out-expo), color 300ms ease-out;

@@ -36,7 +36,7 @@ Components never name ink or bone for text and lines. They ask for the tone.
 | `--fg` | `#ECE9E2` | `#0B0C0E` |
 | `--fg-muted` | `#8E8B85` | `#5E5B55` |
 | `--line` | bone at 16% | ink at 16% |
-| `--line-strong` | bone at 42% | ink at 42% |
+| `--line-strong` | bone at 48% | ink at 48% |
 
 Tailwind exposes all of them: `bg-ground`, `text-fg`, `text-fg-muted`, `border-line`,
 `bg-signal`, and so on. The classes `.sn-muted` and `.sn-rule` do the same job.
@@ -52,6 +52,12 @@ Tailwind exposes all of them: `bg-ground`, `text-fg`, `text-fg-muted`, `border-l
 | signal on ink | 16.9:1 |
 | ink on signal | 16.9:1 |
 | signal on bone | **1.05:1, never** |
+| `--line-strong` on ink (control border) | 4.3:1 |
+| `--line-strong` on bone (control border) | 3.3:1 |
+
+A control border carries meaning, so it is held to 1.4.11's 3:1, not to the
+decorative bar. `--line-strong` sat at 42% and measured 2.77:1 on bone and
+2.69:1 on a raised light panel, which is why it is 48%.
 
 ### Hard rules
 
@@ -77,10 +83,12 @@ Surfaces that stay dark whatever the page is doing (the menu, the preloader) car
 `.sn-tone-dark`, which re-points the tone tokens locally.
 
 **Transitional aliases.** The pre-redesign token names (`--foreground`, `--metadata`,
-`--surface`, `--accent` and the rest) are aliased onto the tone tokens in
-`globals.css`, so the pages not yet rebuilt already sit on the new palette. Delete each
-alias once nothing asks for it; the same goes for the old `text-d1` to `text-tag` scale
-and `.container-page`.
+`--surface`, `--accent` and the rest) are aliased onto the tone tokens in `globals.css`.
+Every page is now on the `sn-*` roles, so nothing should still be asking for them:
+delete each alias, the old `text-d1` to `text-tag` scale and `.container-page` once a
+grep confirms it. The generic `.cs-*` type roles (`.cs-body`, `.cs-lead`,
+`.cs-standfirst`, `.cs-list`, `.cs-flow`) are not transitional — /works, /about and
+/experience use them for long-form reading type alongside the case studies.
 
 ## 3. Type
 
@@ -156,8 +164,11 @@ from the Amorphic reference. Words come from the page, unchanged; the kit is lay
 ## 6. Chrome
 
 - **Header**: SB mark, desktop links, Résumé; a Menu button opens a full-screen dark menu
-  below `md`. Bone with `mix-blend-mode: difference`, so it reads over any tone or
-  screenshot. Retracts on scroll down, returns on scroll up.
+  below `md`. It carries its own ground — a `--ground` scrim fading out below the bar —
+  with `--fg` text on it, so it holds 16:1 over any tone or screenshot. It used to blend
+  with `mix-blend-mode: difference`, which bottomed out at 1.10:1 against mid greys and
+  disappeared into the covers; see the note above `.sn-header` in `globals.css`.
+  Retracts on scroll down, returns on scroll up.
 - **Preloader**: first visit per session. A counter runs while a line of ticks straightens
   and turns signal, then the overlay lifts from the bottom and the hero name rises. A
   blocking head script skips it on return visits and for reduced motion; a CSS fallback
