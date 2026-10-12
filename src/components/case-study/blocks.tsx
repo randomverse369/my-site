@@ -89,6 +89,90 @@ export function FactGrid({ items }: { items: string[] }) {
   );
 }
 
+/**
+ * A band of figures under the hero, the big number first and its label under
+ * it. Every figure must be checkable: a count of the work's own scope is fine,
+ * an outcome needs a source. The caption says which kind the band holds.
+ */
+export function Figures({
+  items,
+  caption,
+}: {
+  items: { value: string; label: ReactNode }[];
+  caption?: ReactNode;
+}) {
+  return (
+    <div className="sn-gutter py-[8vh]">
+      <dl className="grid grid-cols-2 gap-x-6 gap-y-10 border-t sn-rule pt-8 md:grid-cols-4">
+        {items.map((item, i) => (
+          // dt first for the reader, number first for the eye.
+          <div key={i} className="flex flex-col-reverse justify-end gap-3">
+            <dt className="sn-mono sn-muted max-w-[24ch]">{item.label}</dt>
+            <dd className="cs-figure">{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+      {caption && <p className="sn-mono sn-muted mt-10 max-w-3xl">{caption}</p>}
+    </div>
+  );
+}
+
+type Screen = { label: string; src?: string; alt?: string };
+
+/**
+ * The same job before and after, phone screens side by side. A screen with
+ * no `src` stays noise, the way a <Placeholder> does, until its export lands
+ * in /public. Before takes one column, after takes two, so every phone draws
+ * at the same width.
+ */
+export function BeforeAfter({
+  before,
+  after,
+  ratio = "9 / 19.5",
+  caption,
+}: {
+  before: Screen[];
+  after: Screen[];
+  ratio?: string;
+  caption?: ReactNode;
+}) {
+  const screen = (s: Screen) => (
+    <div key={s.label}>
+      <NoiseCover
+        seed={s.label}
+        image={s.src ? { src: s.src, alt: s.alt ?? s.label } : undefined}
+        imageFit="contain"
+        aspect={ratio}
+        sizes="(min-width: 768px) 30vw, 45vw"
+        className="rounded-[1.25rem] bg-raised"
+      >
+        {!s.src && (
+          <p className="sn-mono absolute bottom-3 left-3 rounded-full bg-ink/70 px-3 py-1.5 text-bone/80">
+            Screen to come
+          </p>
+        )}
+      </NoiseCover>
+      <p className="sn-mono mt-3">{s.label}</p>
+    </div>
+  );
+
+  return (
+    <figure className="sn-gutter py-[8vh]">
+      <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3">
+        <div className="col-span-2 md:col-span-1">
+          <p className="sn-mono sn-muted mb-4">Before</p>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-1">{before.map(screen)}</div>
+        </div>
+        <div className="col-span-2">
+          <p className="sn-mono sn-muted mb-4">After</p>
+          <div className="grid grid-cols-2 gap-4">{after.map(screen)}</div>
+        </div>
+      </div>
+      {caption && <figcaption className="sn-mono sn-muted mt-6 max-w-3xl">{caption}</figcaption>}
+    </figure>
+  );
+}
+
 /** A raised panel for a statement the section turns on; `signal` for the one that matters most. */
 export function Callout({
   label,
@@ -155,20 +239,23 @@ export function Media({
   width,
   height,
   caption,
+  narrow = false,
 }: {
   src: string;
   alt: string;
   width: number;
   height: number;
   caption?: ReactNode;
+  /** For a tall screen: hold it to a reading width instead of the full gutter. */
+  narrow?: boolean;
 }) {
   return (
-    <figure className="sn-gutter py-[8vh]">
+    <figure className={`sn-gutter py-[8vh] ${narrow ? "mx-auto max-w-4xl" : ""}`}>
       <NoiseCover
         seed={src}
         image={{ src, alt }}
         aspect={`${width} / ${height}`}
-        sizes="(min-width: 768px) 94vw, 100vw"
+        sizes={narrow ? "(min-width: 896px) 896px, 100vw" : "(min-width: 768px) 94vw, 100vw"}
         className="rounded-[1.25rem] bg-raised"
       />
       {caption && <figcaption className="sn-mono sn-muted mt-4 max-w-3xl">{caption}</figcaption>}

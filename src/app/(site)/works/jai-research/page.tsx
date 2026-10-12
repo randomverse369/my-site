@@ -31,20 +31,9 @@ export default function JAIResearchPage() {
           intended to introduce users to personalized financial insights and encourage them to connect
           their bank account.
         </p>
-        <p className="cs-body">
-          I got the opportunity to conduct UX research with real users, but we had a limited window and
-          no dedicated research setup. Instead of waiting for the “perfect” study, we used the resources
-          available to us: the existing screen, lightweight Google Forms, and a shared findings sheet.
-        </p>
-        <Callout>
-          <p>
-            &ldquo;We wanted a fast, honest signal on what users noticed, what they understood, and what
-            made them hesitate. Statistical significance was out of reach in a week.&rdquo;
-          </p>
-        </Callout>
       </CaseSection>
 
-      <CaseSection index={2} label="The Challenge">
+      <CaseSection index={2} label="The Problem">
         <p className="cs-body">
           The landing screen had to introduce a new AI interaction without undermining the familiar
           financial tools users already trusted, such as Spends and Budget.
@@ -57,11 +46,38 @@ export default function JAIResearchPage() {
         </Callout>
       </CaseSection>
 
-      <CaseSection index={3} label="Working within constraints">
+      <CaseSection index={3} label="Users">
+        {/* TODO(sachin): who the 25 were. Existing Jumpp users or not, how you recruited
+            them, and anything that set them apart (age, how they manage money today). */}
+        <p className="cs-body">
+          Jumpp users, reached through a pool of 25 participants. They came to the screen already
+          using Spends and Budget, the tracker tools jAI had to sit beside.
+        </p>
+      </CaseSection>
+
+      <CaseSection index={4} label="My Role">
+        {/* TODO(sachin): who "we" is. Who else worked on the sprint, and who the findings
+            went to. */}
+        <p className="cs-body">
+          Product designer on Jumpp. I got the opportunity to conduct UX research with real users, and
+          I ran the sprint from the questions to the proposed design response: research, strategy,
+          and interaction design.
+        </p>
+      </CaseSection>
+
+      <CaseSection index={5} label="Scope & Constraints">
         <p className="cs-body">
           We had a short window to learn from real users while the product was still moving, and no
-          research program to run it through.
+          research program to run it through. Instead of waiting for the “perfect” study, we used the
+          resources available to us: the existing screen, lightweight Google Forms, and a shared
+          findings sheet.
         </p>
+        <Callout>
+          <p>
+            &ldquo;We wanted a fast, honest signal on what users noticed, what they understood, and what
+            made them hesitate. Statistical significance was out of reach in a week.&rdquo;
+          </p>
+        </Callout>
         <Cards
           items={[
             {
@@ -89,7 +105,11 @@ export default function JAIResearchPage() {
         />
       </CaseSection>
 
-      <CaseSection index={4} label="What we learned">
+      <CaseSection index={6} label="Process: What We Learned">
+        <p className="cs-body">
+          We showed participants the existing jAI screen, asked first-impression questions, and pooled
+          the answers in one report. Six findings came out of it.
+        </p>
         <Decisions
           items={[
             {
@@ -184,7 +204,7 @@ export default function JAIResearchPage() {
         />
       </CaseSection>
 
-      <CaseSection index={5} label="Synthesis & Opportunities">
+      <CaseSection index={7} label="Process: Synthesis">
         <TableScroll label="User expectations, product tensions and opportunities">
           {/* cs-table-stack turns each row into a labelled block below 40rem,
               so a phone never has to scroll sideways to find the third
@@ -225,7 +245,7 @@ export default function JAIResearchPage() {
         </Callout>
       </CaseSection>
 
-      <CaseSection index={6} label="Proposed Design Response">
+      <CaseSection index={8} label="Process: Design Response">
         <Cards
           items={[
             {
@@ -283,7 +303,7 @@ export default function JAIResearchPage() {
         />
       </CaseSection>
 
-      <CaseSection index={7} label="What the research changed">
+      <CaseSection index={9} label="Outcomes & Lessons">
         <p className="cs-body">
           Going in, I would have made jAI more prominent and called it solved. Participants showed me
           they already had a way to start, and that jAI had to earn both its usefulness and their trust
@@ -295,6 +315,7 @@ export default function JAIResearchPage() {
             interpretation, and make the value visible before asking for financial data.&rdquo;
           </p>
         </Callout>
+        {/* TODO(sachin): did any of the five design responses ship, or get tested? */}
         <h3 className="cs-decision-title">Reflection &amp; Limitations</h3>
         <p className="cs-body">
           The study moved the problem from discoverability to trust and mental models. It has clear

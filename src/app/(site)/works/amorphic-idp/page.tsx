@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import CaseHero from "@/components/case-study/CaseHero";
 import CaseSection from "@/components/case-study/CaseSection";
-import { Decisions, FactGrid, NextProject, PullQuote } from "@/components/case-study/blocks";
+import { Cards, Decisions, FactGrid, NextProject, PullQuote } from "@/components/case-study/blocks";
 
 export const metadata: Metadata = {
   title: "Amorphic IDP",
@@ -9,9 +9,10 @@ export const metadata: Metadata = {
     "A review layer for generative AI extraction, designed for people who don't know what a prompt is.",
 };
 
-// The reference build for the case study spine: product, problem, the pull
-// quote, six decisions (decision first, reason second), coverage, and where
-// it went.
+// The reference build for the case study spine, which follows Sarah Doody's
+// UX case study template: overview, problem, users, role, scope and
+// constraints, process (six decisions, decision first, reason second), and
+// outcomes and lessons.
 export default function AmorphicIDPCaseStudy() {
   return (
     <>
@@ -33,7 +34,7 @@ export default function AmorphicIDPCaseStudy() {
         ]}
       />
 
-      <CaseSection index={1} label="The Product">
+      <CaseSection index={1} label="Overview">
         <p className="cs-lead">
           Amorphic IDP turns business documents into structured data. A user uploads invoices,
           contracts, or court complaints. The system runs OCR, passes the text to Claude 3.5 Sonnet
@@ -61,12 +62,81 @@ export default function AmorphicIDPCaseStudy() {
         </p>
       </CaseSection>
 
+      <CaseSection index={3} label="Users">
+        <Cards
+          items={[
+            {
+              title: "Reviewers",
+              body: (
+                <p>
+                  Procurement teams and research analysts who check an extracted value against the page
+                  it came from. They have no technical background and no reason to learn what a prompt
+                  is. At CJRI, the reviewer is an analyst whose counts become policy recommendations.
+                </p>
+              ),
+            },
+            {
+              title: "Cloudwick's engineers",
+              body: (
+                <p>
+                  The people who change prompts when a field comes back wrong. They never meet the
+                  reviewer. What reaches them is a flag, and the flag has to say what wrong looks like.
+                </p>
+              ),
+            },
+          ]}
+        />
+      </CaseSection>
+
+      <CaseSection index={4} label="My Role">
+        {/* TODO(sachin): team size, any other designers, who signed off on the screens,
+            and whether the work was remote. The template asks for all four. */}
+        <p className="cs-body">
+          I was the product designer on the review layer, working for DigiMantra and embedded with
+          Cloudwick from October 2024 to April 2025. Cloudwick&apos;s engineers had built the
+          extraction before I joined, and prompt changes went through them.
+        </p>
+        <p className="cs-body">
+          I owned the screens: six product areas, each one with blank, happy path, error, and edge case
+          states drawn and handed off, along with the shared components behind them: file status,
+          badges, alerts, search and filter groups, and the create and update modals.
+        </p>
+        <FactGrid
+          items={[
+            "Onboarding",
+            "Dashboard",
+            "Document Stores",
+            "Process Flows",
+            "Management",
+            "Profile & Settings",
+          ]}
+        />
+      </CaseSection>
+
+      <CaseSection index={5} label="Scope & Constraints">
+        <ul className="cs-list cs-body">
+          <li>
+            The model was fixed. Extraction worked and was measured before I arrived, so the design
+            could change what a person did with a value, not the value itself.
+          </li>
+          <li>
+            Records feed analysis that feeds policy. Whatever a reviewer did, the original extracted
+            value had to survive it.
+          </li>
+          <li>
+            The same screens had to hold a three field invoice and a ten page complaint with nested
+            tables.
+          </li>
+          <li>Desktop web, designed at 1440px.</li>
+        </ul>
+      </CaseSection>
+
       <PullQuote>
         &ldquo;The reviewer never sees the model. She sees a value, a page, and a decision she has to
         be able to defend.&rdquo;
       </PullQuote>
 
-      <CaseSection index={3} label="What I Designed">
+      <CaseSection index={6} label="Process: Six Decisions">
         <Decisions
           items={[
             {
@@ -176,30 +246,7 @@ export default function AmorphicIDPCaseStudy() {
         />
       </CaseSection>
 
-      <CaseSection index={4} label="Coverage">
-        <p className="cs-body">
-          I built six areas, each one with blank, happy path, error, and edge case states drawn and
-          handed off, along with the shared components behind them: file status, badges, alerts,
-          search and filter groups, and the create and update modals.
-        </p>
-        <FactGrid
-          items={[
-            "Onboarding",
-            "Dashboard",
-            "Document Stores",
-            "Process Flows",
-            "Management",
-            "Profile & Settings",
-          ]}
-        />
-        <p className="cs-lead">
-          The blank states did more work than I expected. A new user opening Document Stores on day
-          one sees an empty table, and that screen has to explain what a document store is and why
-          she&apos;d make one.
-        </p>
-      </CaseSection>
-
-      <CaseSection index={5} label="Where It Went">
+      <CaseSection index={7} label="Outcomes & Lessons">
         <p className="cs-body">
           Cloudwick deployed Amorphic IDP at the Hawaii State Judiciary&apos;s Criminal Justice
           Research Institute. CJRI used it to pull drug types and quantities out of freeform text in
@@ -212,6 +259,14 @@ export default function AmorphicIDPCaseStudy() {
         <p className="cs-lead">
           Those numbers belong to the platform and the model, not to the screens.
         </p>
+        <h3 className="cs-decision-title">What I learned</h3>
+        <p className="cs-body">
+          The blank states did more work than I expected. A new user opening Document Stores on day
+          one sees an empty table, and that screen has to explain what a document store is and why
+          she&apos;d make one.
+        </p>
+        {/* TODO(sachin): what you would do differently, and any feedback from Cloudwick or CJRI
+            on the review screens. Only what you can stand behind. */}
       </CaseSection>
 
       <NextProject id="amorphic-idp" />

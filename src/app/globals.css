@@ -785,6 +785,17 @@ html[data-intro="playing"] { overflow: hidden; }
   paint-order: stroke fill;
 }
 
+/* The number in a <Figures> band. Solid, not outlined like .cs-num: these
+   are the values a reader checks. */
+.cs-figure {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 600;
+  font-variation-settings: "wdth" 80;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  color: var(--fg);
+}
+
 .cs-note {
   border-left: 2px solid var(--signal);
   padding: 0.25rem 0 0.25rem 1.25rem;

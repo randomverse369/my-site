@@ -27,7 +27,14 @@ export default function UXProcessPage() {
         ]}
       />
 
-      <CaseSection index={1} label="The Problem">
+      <CaseSection index={1} label="Overview">
+        <p className="cs-lead">
+          The process I run on every requirement at Finvasia. Six stages, most of them AI-assisted,
+          that turn a requirement into a walkable prototype in a day.
+        </p>
+      </CaseSection>
+
+      <CaseSection index={2} label="The Problem">
         <p className="cs-body">
           Design reviews have a moment when the room goes quiet. Someone points at screen twelve and
           asks a question that should have come up in week one. The flow doesn&apos;t work for their use
@@ -56,7 +63,38 @@ export default function UXProcessPage() {
         </Callout>
       </CaseSection>
 
-      <CaseSection index={2} label="The Process (6 Stages)">
+      <CaseSection index={3} label="Users">
+        <p className="cs-body">
+          The people in the room when a flow gets reviewed: product, engineering, business, BAs and QA.
+          Under the old process they saw the design for the first time after it was finished. This
+          process is built so they see it first.
+        </p>
+      </CaseSection>
+
+      <CaseSection index={4} label="My Role">
+        {/* TODO(sachin): did the team adopt this, or is it yours alone? Who else runs any
+            stage of it? */}
+        <p className="cs-body">
+          Senior Product Designer at Finvasia. I built the process and I run it. I also built the
+          design system it hands to Codex in stage five.
+        </p>
+      </CaseSection>
+
+      <CaseSection index={5} label="Scope & Constraints">
+        <ul className="cs-list cs-body">
+          <li>
+            Requirements arrive as Confluence pages, written by people who have worked in Indian
+            broking long enough that its rules go unsaid.
+          </li>
+          <li>Compliance rules and missing API data surfaced only after a flow was finished.</li>
+          <li>
+            The tools: Confluence and Rovo, Figma Make, Figma, Codex,
+            and a separate AI project for copy.
+          </li>
+        </ul>
+      </CaseSection>
+
+      <CaseSection index={6} label="Process: Six Stages">
         <Decisions
           items={[
             {
@@ -154,7 +192,7 @@ export default function UXProcessPage() {
         />
       </CaseSection>
 
-      <CaseSection index={3} label="The Outcome">
+      <CaseSection index={7} label="Outcomes & Lessons">
         <Callout>
           <p>
             I used to build for weeks and learn in a review whether I&apos;d built the right thing. Now
@@ -167,14 +205,14 @@ export default function UXProcessPage() {
             once.
           </p>
         </Callout>
-      </CaseSection>
-
-      <CaseSection index={4} label="What the Tools Don't Decide">
+        <h3 className="cs-decision-title">What the tools don&apos;t decide</h3>
         <p className="cs-body">
           A tool cannot tell me whether a flow serves the user or whether a generated screen fits the
           system. I decide both, the same as before. What changed is timing: I decide before I build, so
           a review doesn&apos;t have to tell me I got it wrong.
         </p>
+        {/* TODO(sachin): one requirement this caught early that would have been rework before.
+            A real one, named. */}
       </CaseSection>
 
       <PullQuote>

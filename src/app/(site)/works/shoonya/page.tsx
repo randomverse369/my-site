@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import CaseHero from "@/components/case-study/CaseHero";
 import CaseSection from "@/components/case-study/CaseSection";
 import {
+  BeforeAfter,
   Callout,
   Cards,
   Decisions,
+  Figures,
+  Media,
   NextProject,
   Note,
-  Placeholder,
   PullQuote,
   TableScroll,
 } from "@/components/case-study/blocks";
@@ -19,16 +21,27 @@ export const metadata: Metadata = {
 };
 
 /**
- * Source: Sachin's own case study deck for the mobile dashboard redesign.
+ * Source: Sachin's own case study deck for the mobile dashboard redesign,
+ * second version (Dashboard.pdf, Oct 2026, 15 slides). Its images are cropped
+ * into /public as shoonya-*.webp. The deck's hi-fi slide is only a link to an
+ * internal Jira ticket, which stays off the site.
+ * Shape, from Oct 2026: figures and a before/after pair up top, the way Josie
+ * Ng's Afterpay page opens, then the argument on the house spine.
  *
  * This redesign had no internal behavioural data behind it, and the deck says
  * so. Keep it that way: the evidence here is a competitor benchmark, public
  * discussion, and UX principles, and none of it is allowed to harden into a
- * claim about what Shoonya's users do. No outcome numbers until the work ships
- * and Finvasia publishes figures.
+ * claim about what Shoonya's users do. The figures band counts scope, never
+ * outcomes. No outcome numbers until the work ships and Finvasia publishes
+ * figures.
  *
- * Every <Placeholder> is a screen Sachin is uploading. To fill one, drop the
- * export in /public and swap the block for <Media> with the same caption.
+ * The <BeforeAfter> After pair is the low-fidelity wireframes. When hi-fi
+ * exports land, swap their `src` and the caption.
+ *
+ * TODO(sachin): three facts only you have, each worth a paragraph.
+ *   1. What you owned: the only designer on it? Who you worked with.
+ *   2. Who had to agree to splitting the landing screen, and what pushback came.
+ *   3. What you would measure once it ships.
  */
 export default function ShoonyaCaseStudy() {
   return (
@@ -39,8 +52,8 @@ export default function ShoonyaCaseStudy() {
         title="Shoonya"
         standfirst={
           <>
-            A mobile dashboard redesign that split one overloaded landing screen in two: Home for
-            the user&apos;s own money, Market for what the market is doing.
+            Shoonya&apos;s mobile landing screen was doing four jobs at once. I split it in two: Home
+            for the user&apos;s own money, Market for what the market is doing.
           </>
         }
         meta={[
@@ -54,36 +67,56 @@ export default function ShoonyaCaseStudy() {
         ]}
       />
 
-      <CaseSection index={1} label="The Starting Point">
+      <Figures
+        items={[
+          { value: "4 → 2", label: "Jobs on one landing screen, split across Home and Market" },
+          { value: "5", label: "Competing apps benchmarked" },
+          { value: "3", label: "Evidence sources: benchmark, public threads, UX principles" },
+          { value: "0", label: "Internal behavioural data behind the redesign" },
+        ]}
+        caption="Scope, not results. The redesign has not shipped, so there are no outcome numbers yet."
+      />
+
+      <BeforeAfter
+        before={[
+          {
+            label: "Landing screen today",
+            src: "/shoonya-before-landing.webp",
+            alt: "Shoonya's current mobile landing screen: Stocks, FnO and IPO tabs, an index ticker, and a Collections carousel.",
+          },
+        ]}
+        after={[
+          {
+            label: "Home",
+            src: "/shoonya-after-home.webp",
+            alt: "Home wireframe: portfolio value and P&L, shortcuts to holdings, positions and orders, a watchlist with Buy and Sell, and trading tools.",
+          },
+          {
+            label: "Market",
+            src: "/shoonya-after-market.webp",
+            alt: "Market wireframe: key indices, market movers, top sectors, FII and DII activity, market events, and news.",
+          },
+        ]}
+        caption="One screen doing four jobs, then two screens doing one each. The after screens are wireframes until the hi-fi is done."
+      />
+
+      <CaseSection index={1} label="Overview">
         <p className="cs-lead">
-          The requirement was to refresh Shoonya&apos;s existing mobile dashboard so it could take on
-          newly introduced trading features while improving information hierarchy.
+          Shoonya is Finvasia&apos;s retail trading platform. The brief was to refresh its mobile
+          dashboard so it could take new trading features and read more clearly.
         </p>
         <p className="cs-body">
-          The existing landing experience had grown into a broad market and discovery surface. At the
-          same time Shoonya&apos;s product ecosystem kept expanding with more trading and investment
-          capabilities, and all of it arrived on the same screen.
+          At the same time, Shoonya&apos;s product ecosystem was expanding with more trading and
+          investment capabilities, and every one of them wanted a place on that screen.
         </p>
       </CaseSection>
 
-      <CaseSection index={2} label="The Challenge">
-        <p className="cs-lead">
-          Redesign the existing dashboard without losing access to Shoonya&apos;s growing set of
-          trading and investment capabilities.
-        </p>
+      <CaseSection index={2} label="The Problem">
         <p className="cs-body">
-          The task initially appeared to be a dashboard redesign. While analysing the existing
-          experience, I started questioning something underneath it.
+          Every capability Shoonya added had landed on the same screen. By the time I opened it, one
+          scroll held four jobs, and nothing on it ranked one above another. Total Funds and Add Funds
+          sat between two discovery modules.
         </p>
-      </CaseSection>
-
-      <PullQuote>
-        Was the problem really the arrangement of content, or was the entry-point architecture itself
-        becoming overloaded?
-      </PullQuote>
-
-      <CaseSection index={3} label="The Existing Experience">
-        <p className="cs-lead">The existing landing screen was performing multiple jobs at once.</p>
         <Cards
           items={[
             {
@@ -92,7 +125,7 @@ export default function ShoonyaCaseStudy() {
             },
             {
               title: "Account Utility",
-              body: <p>Total Funds and Add Funds, sitting between two discovery modules.</p>,
+              body: <p>Total Funds and Add Funds.</p>,
             },
             {
               title: "Product Discovery",
@@ -106,52 +139,138 @@ export default function ShoonyaCaseStudy() {
         />
         <Callout label="Key Observation">
           <p>
-            The screen wasn&apos;t serving one clear user intent. It was trying to be Market,
-            Discover, Tools and Account Utility at the same time.
+            The screen wasn&apos;t serving one clear user intent. It was trying to be Market, Discover,
+            Tools and Account Utility at the same time.
           </p>
         </Callout>
+        <p className="cs-body">
+          A tidier layout would have moved the same modules around and kept all four jobs. I wanted
+          one screen for each kind of question.
+        </p>
       </CaseSection>
 
-      <Placeholder
-        label="Existing landing screen, annotated"
-        ratio="1016 / 900"
+      <Media
+        narrow
+        src="/shoonya-existing-annotated.webp"
+        alt="Shoonya's current landing screen top to bottom, with modules tagged Market Discovery, Account Utility, Product Discovery and Market Intelligence."
+        width={1650}
+        height={3140}
         caption="The current dashboard end to end, with each module tagged by the job it was doing: Market Discovery, Account Utility, Product Discovery, Market Intelligence."
       />
 
-      <CaseSection index={4} label="My Thought Process">
+      <PullQuote>
+        Was the problem really the arrangement of content, or was the entry-point architecture itself
+        becoming overloaded?
+      </PullQuote>
+
+      <CaseSection index={3} label="Users">
+        <p className="cs-body">
+          One landing screen, four kinds of Shoonya user, each arriving with a different question.
+        </p>
+        <Cards
+          items={[
+            {
+              title: "Beginner",
+              body: (
+                <p>
+                  &ldquo;I don&apos;t know where to start.&rdquo; Needs learning, simple product
+                  discovery, contextual guidance and an easy first action.
+                </p>
+              ),
+            },
+            {
+              title: "Investor",
+              body: (
+                <p>
+                  &ldquo;I want to manage and grow my investments.&rdquo; Needs the portfolio, mutual
+                  funds and SIPs, IPOs, and discovery that fits.
+                </p>
+              ),
+            },
+            {
+              title: "Active trader",
+              body: (
+                <p>
+                  &ldquo;I know what I want to trade.&rdquo; Needs positions, orders, the watchlist,
+                  trading tools and a market snapshot.
+                </p>
+              ),
+            },
+            {
+              title: "Advanced trader",
+              body: (
+                <p>
+                  &ldquo;I need efficient access to powerful trading workflows.&rdquo; Needs F&amp;O
+                  Edge, advanced charting, scalping and the option chain.
+                </p>
+              ),
+            },
+          ]}
+        />
+        <Note>
+          <p>
+            These are working types, not research personas. No internal behavioural data stood behind
+            them. Shoonya needs one common starting point, with relevance following each user&apos;s
+            intent and experience.
+          </p>
+        </Note>
+      </CaseSection>
+
+      <CaseSection index={4} label="My Role">
+        {/* TODO(sachin): the rest of this section. Were you the only designer on it, who you
+            worked with (PM, engineering, research), and who had to agree to the split. */}
+        <p className="cs-body">
+          Senior Product Designer at Finvasia. I ran the benchmark, framed the hypothesis, and drew the
+          Home and Market wireframes.
+        </p>
+      </CaseSection>
+
+      <CaseSection index={5} label="Scope & Constraints">
+        <ul className="cs-list cs-body">
+          <li>
+            No internal behavioural data. Claims like &ldquo;users prefer X&rdquo; were off the table
+            from the start.
+          </li>
+          <li>Every capability on the old screen had to stay reachable from the new ones.</li>
+          <li>Information architecture for two screens, Home and Market.</li>
+          <li>Phone only, iOS and Android.</li>
+          <li>Wireframes are settled. Hi-fi is in progress.</li>
+        </ul>
+      </CaseSection>
+
+      <CaseSection index={6} label="Process: How I Got There">
         <Decisions
           items={[
             {
               num: "01",
               label: "I noticed",
-              title: "The existing dashboard was doing too many jobs at once.",
+              title: "The dashboard was doing too many jobs at once.",
               body: (
                 <p className="cs-body">
-                  Market and product discovery, account utility and market intelligence, stacked into
-                  a single scroll with nothing ranking them.
+                  Market discovery, product discovery, account utility and market intelligence,
+                  stacked in a single scroll.
                 </p>
               ),
             },
             {
               num: "02",
               label: "I questioned",
-              title: "Should all these experiences really live under one landing screen?",
+              title: "Could one landing screen serve every kind of Shoonya user?",
               body: (
                 <p className="cs-body">
-                  Can one home experience effectively serve a beginner, an investor, an active trader
-                  and an advanced trader at the same time?
+                  The beginner, the investor, the active trader and the advanced trader each opened the
+                  app with a different question. The old screen gave all four the same scroll.
                 </p>
               ),
             },
             {
               num: "03",
               label: "I explored",
-              title: "A separation of user-centric and market-centric experiences.",
+              title: "Pulling the user's world apart from the market's.",
               body: (
                 <p className="cs-body">
-                  Instead of treating the existing dashboard as a collection of sections to
-                  rearrange, I explored whether Shoonya needed the two kinds of experience pulled
-                  apart.
+                  Rather than rearrange sections, I asked whether Shoonya needed two entry points:
+                  one about the user, one about the market.
                 </p>
               ),
             },
@@ -159,17 +278,17 @@ export default function ShoonyaCaseStudy() {
         />
       </CaseSection>
 
-      <CaseSection index={5} label="The Hypothesis">
-        <Callout tone="signal">
+      <CaseSection index={7} label="Process: Hypothesis">
+        <Callout tone="signal" label="Hypothesis">
           <p>
-            What if Home was designed around the user&apos;s world in Shoonya, while Market was
-            designed around what is happening in the market?
+            Home is built around the user&apos;s world in Shoonya. Market is built around what is
+            happening in the market.
           </p>
         </Callout>
         <Cards
           items={[
             {
-              title: "Home should help users answer",
+              title: "Home answers",
               body: (
                 <ul className="cs-list">
                   <li>What is happening with my money?</li>
@@ -180,7 +299,7 @@ export default function ShoonyaCaseStudy() {
               ),
             },
             {
-              title: "Market should help users answer",
+              title: "Market answers",
               body: (
                 <ul className="cs-list">
                   <li>What is happening in the market?</li>
@@ -195,99 +314,19 @@ export default function ShoonyaCaseStudy() {
         />
         <Note>
           <p>
-            This separation reduces the need for one screen to communicate every possible Shoonya
-            capability.
+            Neither screen has to show every Shoonya capability, and neither has to show everything to
+            everyone.
           </p>
         </Note>
       </CaseSection>
 
-      <CaseSection index={6} label="Who Uses Shoonya">
-        <p className="cs-lead">
-          Shoonya is not used by one homogeneous user group. The same product can be entered with
-          very different levels of knowledge and intent.
-        </p>
-        <Cards
-          items={[
-            {
-              title: "Beginner",
-              body: (
-                <>
-                  <p className="cs-em">&ldquo;I don&apos;t know where to start.&rdquo;</p>
-                  <ul className="cs-list mt-4">
-                    <li>Learning</li>
-                    <li>Simple product discovery</li>
-                    <li>Contextual guidance</li>
-                    <li>Easy first actions</li>
-                  </ul>
-                </>
-              ),
-            },
-            {
-              title: "Investor",
-              body: (
-                <>
-                  <p className="cs-em">&ldquo;I want to manage and grow my investments.&rdquo;</p>
-                  <ul className="cs-list mt-4">
-                    <li>Portfolio</li>
-                    <li>Mutual Funds and SIP</li>
-                    <li>IPOs</li>
-                    <li>Investment opportunities</li>
-                    <li>Relevant discovery</li>
-                  </ul>
-                </>
-              ),
-            },
-            {
-              title: "Active Trader",
-              body: (
-                <>
-                  <p className="cs-em">&ldquo;I know what I want to trade.&rdquo;</p>
-                  <ul className="cs-list mt-4">
-                    <li>Positions</li>
-                    <li>Orders</li>
-                    <li>Watchlist</li>
-                    <li>Trading tools</li>
-                    <li>Market snapshot</li>
-                  </ul>
-                </>
-              ),
-            },
-            {
-              title: "Advanced Trader",
-              body: (
-                <>
-                  <p className="cs-em">
-                    &ldquo;I need efficient access to powerful trading workflows.&rdquo;
-                  </p>
-                  <ul className="cs-list mt-4">
-                    <li>F&amp;O Edge</li>
-                    <li>Advanced Charting</li>
-                    <li>Scalping</li>
-                    <li>Option Chain</li>
-                    <li>Other advanced tools</li>
-                  </ul>
-                </>
-              ),
-            },
-          ]}
-        />
-        <Note>
-          <p>
-            Shoonya needs to provide a common starting point, while letting relevance emerge from the
-            user&apos;s intent and maturity.
-          </p>
-        </Note>
-      </CaseSection>
-
-      <CaseSection index={7} label="Research Approach">
-        <p className="cs-lead">
-          Shoonya had no internal behavioural data for this redesign, so I avoided unsupported claims
-          like &ldquo;users prefer X.&rdquo; I drew on three evidence sources instead: a competitor
-          benchmark, public user conversations, and established UX principles.
-        </p>
+      <CaseSection index={8} label="Process: Evidence">
+        <p className="cs-lead">With no internal data, I worked from three sources.</p>
         <p className="cs-body">
-          The benchmark went looking for patterns in how leading platforms balance trading, personal
-          finance, discovery and complexity.
+          A benchmark of five competing apps. Public threads and store reviews. And established principle: Nielsen&apos;s heuristics, discoverability, and
+          the mental models people bring from other apps, and cutting effort a screen doesn&apos;t
+          need to ask for. The benchmark looked at how each platform
+          balances trading, personal finance, discovery and complexity.
         </p>
         <TableScroll label="Competitor benchmark">
           <table className="cs-table cs-table-stack">
@@ -301,8 +340,8 @@ export default function ShoonyaCaseStudy() {
             </thead>
             <tbody>
               <tr>
-                <td data-label="Competitor">Zerodha</td>
-                <td data-label="Key Pattern">Strong focus on Marketwatch, trading and account workflows.</td>
+                <td data-label="Competitor">Sahi</td>
+                <td data-label="Key Pattern">Strong focus on trading workflows.</td>
                 <td data-label="Shoonya Implication">Keep search, watchlist and core trading workflows easy to reach.</td>
                 <td data-label="Design Area">Core trading hierarchy</td>
               </tr>
@@ -313,7 +352,7 @@ export default function ShoonyaCaseStudy() {
                 <td data-label="Design Area">Discover &amp; Invest</td>
               </tr>
               <tr>
-                <td data-label="Competitor">Upstox</td>
+                <td data-label="Competitor">Kotak Neo</td>
                 <td data-label="Key Pattern">Portfolio, watchlist and discovery/trading capabilities are prominent.</td>
                 <td data-label="Shoonya Implication">Keep account state and instrument discovery accessible.</td>
                 <td data-label="Design Area">Portfolio + Watchlist</td>
@@ -325,26 +364,8 @@ export default function ShoonyaCaseStudy() {
                 <td data-label="Design Area">Trading Tools</td>
               </tr>
               <tr>
-                <td data-label="Competitor">Angel One</td>
-                <td data-label="Key Pattern">Portfolio and market context are surfaced within the primary experience.</td>
-                <td data-label="Shoonya Implication">
-                  Provide lightweight market context on Home while keeping deeper intelligence inside
-                  Market.
-                </td>
-                <td data-label="Design Area">Market Snapshot</td>
-              </tr>
-              <tr>
-                <td data-label="Competitor">Pocketful</td>
-                <td data-label="Key Pattern">Differentiated product and trading discovery.</td>
-                <td data-label="Shoonya Implication">
-                  Use Home to make differentiated Shoonya capabilities discoverable without creating a
-                  feature catalogue.
-                </td>
-                <td data-label="Design Area">Product Discovery</td>
-              </tr>
-              <tr>
-                <td data-label="Competitor">Lemonn</td>
-                <td data-label="Key Pattern">Strong positioning around trading tools and signals.</td>
+                <td data-label="Competitor">5paisa</td>
+                <td data-label="Key Pattern">Gives every feature equal priority and its own entry point.</td>
                 <td data-label="Shoonya Implication">Trading tools should have clear purpose rather than becoming a generic feature grid.</td>
                 <td data-label="Design Area">Trading Tools</td>
               </tr>
@@ -352,133 +373,35 @@ export default function ShoonyaCaseStudy() {
           </table>
         </TableScroll>
         <p className="cs-body">
-          The benchmark reinforced a direction: Home should be user-centric and discovery-friendly,
-          while Market should remain the destination for deeper market intelligence.
-        </p>
-      </CaseSection>
-
-      <Placeholder
-        label="Public discussions and store reviews"
-        ratio="1016 / 700"
-        caption="Threads from r/IndianStockMarket on Groww and Lemonn, a comment chain comparing Zerodha and Dhan, and three Play Store reviews asking for a more focused interface."
-      />
-
-      <CaseSection index={8} label="Public Conversations">
-        <p className="cs-lead">
-          I read publicly available discussions and app feedback to find recurring directional themes.
+          The benchmark pointed one way: Home should be about the user and open to discovery, and
+          Market should hold the deeper market intelligence.
         </p>
         <p className="cs-body">
-          The same complaint kept surfacing across competitors, and it was never about capability. It
-          was about structure. One thread argued a basic app was better precisely because it had
-          fewer features. Another asked its platform to restructure into core modes rather than keep
-          adding to the same navigation. Reviews asked for a more focused interface and a more
-          self-explanatory dashboard.
+          The public threads complained about structure, across several competitors. One thread argued a basic app was better because it
+          had fewer features. Another asked its platform to split into core modes instead of adding to
+          the same navigation. Store reviews asked for a more focused interface and a dashboard that
+          explains itself.
         </p>
         <Callout label="Important">
           <p>
             Public reviews and community discussions are directional signals, not representative user
-            research. I used them to identify hypotheses, not to validate them.
+            research. I used them to form hypotheses, not to validate them.
           </p>
         </Callout>
       </CaseSection>
 
-      <CaseSection index={9} label="UX Principles">
-        <p className="cs-body">The third source was established principle rather than observation.</p>
-        <ul className="cs-list cs-body">
-          <li>Nielsen&apos;s heuristic evaluation.</li>
-          <li>Discoverability, signifiers and mental models.</li>
-          <li>Clarity, and reducing unnecessary cognitive effort.</li>
-        </ul>
-      </CaseSection>
+      <Media
+        src="/shoonya-public-threads.webp"
+        alt="Two r/IndianStockMarket threads, a Reddit comment chain comparing Zerodha and Dhan, and three app store reviews."
+        width={1720}
+        height={1210}
+        caption="Threads from r/IndianStockMarket on Lemonn and Groww, a comment chain comparing Zerodha and Dhan, and three store reviews: one asking for a quicker way to add to a watchlist, two asking for a simpler, more self-explanatory dashboard."
+      />
 
-      <CaseSection index={10} label="Key Insights">
-        <Cards
-          items={[
-            {
-              title: "Feature richness needs hierarchy",
-              body: (
-                <>
-                  <p>
-                    Shoonya can offer many capabilities, but every capability does not need equal
-                    prominence.
-                  </p>
-                  <Note>
-                    <p>
-                      Feature richness is valuable only when users can understand where things belong.
-                    </p>
-                  </Note>
-                </>
-              ),
-            },
-            {
-              title: "Different intents need different spaces",
-              body: (
-                <>
-                  <p>Portfolio management and market discovery are fundamentally different jobs.</p>
-                  <Note>
-                    <p>
-                      Trying to make one screen equally good at both increases cognitive load.
-                    </p>
-                  </Note>
-                </>
-              ),
-            },
-            {
-              title: "Home should not become another feature catalogue",
-              body: (
-                <>
-                  <p>
-                    Moving every existing module into a new Home would simply recreate the original
-                    problem.
-                  </p>
-                  <Note>
-                    <p>
-                      Home needs a strong hierarchy: My Money, then Actions, then Discovery, then
-                      Learning.
-                    </p>
-                  </Note>
-                </>
-              ),
-            },
-            {
-              title: "Learning is part of product discoverability",
-              body: (
-                <>
-                  <p>
-                    For beginners, education is not merely an external content section. It can help
-                    users understand what a product is, why it may be relevant, and what action they
-                    can take next.
-                  </p>
-                  <Note>
-                    <p>This makes learning a bridge between understanding and action.</p>
-                  </Note>
-                </>
-              ),
-            },
-            {
-              wide: true,
-              title: "Discoverability should support different user maturity levels",
-              body: (
-                <>
-                  <p>
-                    A beginner may need to discover what an SIP is. An active trader may need to find
-                    the Option Chain. An investor may need to know which investment opportunities are
-                    available.
-                  </p>
-                  <Note>
-                    <p>Discoverability should not mean showing everything to everyone.</p>
-                  </Note>
-                </>
-              ),
-            },
-          ]}
-        />
-      </CaseSection>
-
-      <CaseSection index={11} label="Reframing the Dashboard">
+      <CaseSection index={9} label="Process: Home">
         <p className="cs-lead">
-          Rather than defining Home purely as a portfolio dashboard, I structured it around four
-          user-centric jobs.
+          Home answers what is happening with the user&apos;s money, and what they can do next. I
+          ranked it in four bands, in this order.
         </p>
         <Cards
           items={[
@@ -486,190 +409,87 @@ export default function ShoonyaCaseStudy() {
               num: "01",
               title: "My Money",
               body: (
-                <>
-                  <ul className="cs-list">
-                    <li>Portfolio Value</li>
-                    <li>Today&apos;s P&amp;L</li>
-                    <li>Overall P&amp;L</li>
-                    <li>Holdings</li>
-                    <li>Positions</li>
-                    <li>Orders</li>
-                  </ul>
-                  <p className="mt-4">And any other my-money action.</p>
-                </>
+                <p>
+                  Portfolio value, today&apos;s P&amp;L, overall P&amp;L, and quick access to
+                  holdings, positions and orders.
+                </p>
               ),
             },
             {
               num: "02",
               title: "My Actions",
-              body: (
-                <>
-                  <ul className="cs-list">
-                    <li>Watchlist</li>
-                    <li>Buy and Sell</li>
-                    <li>Trading Tools</li>
-                    <li>Add Funds</li>
-                  </ul>
-                  <p className="mt-4">And any other relevant account action.</p>
-                </>
-              ),
+              body: <p>Watchlist, Buy and Sell, trading tools, Add Funds.</p>,
             },
             {
               num: "03",
-              title: "Product & Opportunities",
-              body: (
-                <>
-                  <ul className="cs-list">
-                    <li>Mutual Funds and SIP</li>
-                    <li>IPO</li>
-                    <li>NFO</li>
-                    <li>Bonds</li>
-                    <li>MTF</li>
-                  </ul>
-                  <p className="mt-4">And any other relevant investment opportunity.</p>
-                </>
-              ),
+              title: "Products & Opportunities",
+              body: <p>Mutual funds and SIPs, IPOs, NFOs, bonds, MTF.</p>,
             },
             {
               num: "04",
               title: "Learn & Explore",
               body: (
-                <>
-                  <ul className="cs-list">
-                    <li>Educational Content</li>
-                    <li>Product Explainers</li>
-                    <li>Market Concepts</li>
-                    <li>Contextual Learning</li>
-                  </ul>
-                  <p className="mt-4">And any other learn-and-explore option.</p>
-                </>
-              ),
-            },
-          ]}
-        />
-      </CaseSection>
-
-      <Placeholder
-        label="Home, low-fidelity wireframe"
-        ratio="1016 / 820"
-        caption="Home: My Money, Actions and Tools for every investor and trader, annotated section by section."
-      />
-
-      <CaseSection index={12} label="Updated IA · Home">
-        <p className="cs-lead">
-          Home answers what is happening with the user&apos;s money, and what they can do about it
-          next.
-        </p>
-        <Cards
-          items={[
-            {
-              num: "01",
-              title: "Utility Header",
-              body: <p>Persistent access to Search, Notifications, Profile and Add Funds.</p>,
-            },
-            {
-              num: "02",
-              title: "My Money",
-              body: (
                 <p>
-                  The primary account snapshot, with key metrics and quick access to Holdings,
-                  Positions and Orders.
+                  Explainers and market concepts, placed next to the products they explain. For a
+                  beginner, this is how they find out what an SIP is and whether it fits them.
                 </p>
               ),
             },
-            {
-              num: "03",
-              title: "My Watchlist",
-              body: (
-                <p>
-                  Quick access to personally relevant instruments with LTP, change, and Buy/Sell
-                  actions.
-                </p>
-              ),
-            },
-            {
-              num: "04",
-              title: "Trading Tools",
-              body: <p>A focused set of high-value trading tools.</p>,
-            },
-            {
-              num: "05",
-              title: "SensAI FAB",
-              body: <p>Global access to SensAI across the app.</p>,
-            },
           ]}
         />
+        <Note>
+          <p>
+            Moving every old module into the new Home would have rebuilt the original problem. The
+            ranking is what stops Home turning into a feature catalogue.
+          </p>
+        </Note>
       </CaseSection>
 
-      <Placeholder
-        label="Market, low-fidelity wireframe"
-        ratio="1016 / 820"
-        caption="Market: a dedicated destination for market intelligence, insights and opportunities, annotated section by section."
+      <Media
+        narrow
+        src="/shoonya-home-annotated.webp"
+        alt="Annotated Home wireframe: utility header, My Money, My Watchlist, Trading Tools and the SensAI button."
+        width={1328}
+        height={1986}
+        caption="Home, top to bottom: a utility header with search, notifications, profile and Add Funds; My Money; My Watchlist with price, change and Buy/Sell; a short set of trading tools; and a SensAI button that floats over every screen."
       />
 
-      <CaseSection index={13} label="Updated IA · Market">
+      <CaseSection index={10} label="Process: Market">
         <p className="cs-lead">
-          Market answers what is happening out there, and stays the destination for anything deeper
-          than a glance.
+          Market answers what the market is doing. Home keeps a glance at it, and Market holds
+          everything deeper.
         </p>
-        <Cards
-          items={[
-            {
-              num: "01",
-              title: "Page Header",
-              body: <p>Clear page identity with search, notifications and profile.</p>,
-            },
-            {
-              num: "02",
-              title: "Key Indices",
-              body: <p>A quick view of major indices with real-time movement. Tap to view details.</p>,
-            },
-            {
-              num: "03",
-              title: "Market Movers",
-              body: <p>Top gainers, losers and volume shockers, with tabs for easy switching.</p>,
-            },
-            {
-              num: "04",
-              title: "Top Sectors",
-              body: <p>Sector-wise performance with percentage change and mini charts.</p>,
-            },
-            {
-              num: "05",
-              title: "FII / DII Activity",
-              body: <p>Daily net buying and selling data with trend visualisation.</p>,
-            },
-            {
-              num: "06",
-              title: "Market Events",
-              body: <p>Upcoming corporate actions, results calendar and IPO listings.</p>,
-            },
-            {
-              num: "07",
-              title: "News & Research",
-              body: <p>Latest market news, insights and research updates.</p>,
-            },
-            {
-              num: "08",
-              title: "Bottom Navigation",
-              body: <p>Consistent navigation across the app, with Market as the active state.</p>,
-            },
-          ]}
-        />
+        <ul className="cs-list cs-body">
+          <li>Key indices with live movement. Tap one for detail.</li>
+          <li>Market movers: top gainers, losers and volume shockers, one tab each.</li>
+          <li>Top sectors with percentage change and a mini chart.</li>
+          <li>FII and DII activity: daily net buying and selling, with the trend.</li>
+          <li>Market events: corporate actions, the results calendar, IPO listings.</li>
+          <li>News and research.</li>
+        </ul>
       </CaseSection>
 
-      <CaseSection index={14} label="Hi-Fi Prototype">
-        <p className="cs-lead">
-          The wireframes are settled. The high-fidelity screens are still in progress, and they go
-          here once they are done.
-        </p>
-      </CaseSection>
-
-      <Placeholder
-        label="Hi-fi screens, in progress"
-        ratio="1016 / 640"
-        caption="Home and Market at full fidelity, drawn from the Shoonya design system."
+      <Media
+        narrow
+        src="/shoonya-market-annotated.webp"
+        alt="Annotated Market wireframe: page header, key indices, market movers, top sectors, FII and DII activity, market events, news and research, bottom navigation."
+        width={1368}
+        height={2056}
+        caption="Market, annotated section by section, with Market as the active tab in the bottom navigation."
       />
+
+      <CaseSection index={11} label="Outcomes & Lessons">
+        <p className="cs-lead">
+          The wireframes are settled. The hi-fi screens are in progress, and they replace the
+          wireframes at the top of this page when they&apos;re done.
+        </p>
+        <p className="cs-body">
+          The split is still a hypothesis. The benchmark, the public threads and the principles shaped
+          it. None of them proves it, and there are no outcome numbers until it ships.
+        </p>
+        {/* TODO(sachin): what you would measure once it ships, and one thing you learned or
+            would do differently. The template asks for both. */}
+      </CaseSection>
 
       <NextProject id="shoonya" />
     </>
