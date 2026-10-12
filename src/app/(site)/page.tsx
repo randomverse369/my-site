@@ -7,7 +7,6 @@ import Hero from "@/components/signal/Hero";
 import ScrambleText from "@/components/signal/ScrambleText";
 import SplitReveal from "@/components/signal/SplitReveal";
 import WordFill from "@/components/signal/WordFill";
-import NoiseCover from "@/components/signal/NoiseCover";
 import WorkStack, { type WorkPanel } from "@/components/signal/WorkStack";
 
 function project(id: string) {
@@ -77,26 +76,10 @@ export default function Home() {
               people actually use.
             </WordFill>
 
-            <div className="mt-16 grid grid-cols-12 items-start gap-6 md:mt-24">
-              <p className="sn-lead sn-muted col-span-12 max-w-[34ch] md:col-span-6">
-                Seven years across fintech, SaaS and AI products, at Finvasia, DigiMantra, Tier5
-                and Tutelage.
-              </p>
-
-              {/* Reserved for a portrait. Sachin asked for the space, not a photo.
-                  One step above the ink ground, with a rule, so it reads as a
-                  frame on a dark section. */}
-              <figure className="col-span-8 col-start-5 md:col-span-4 md:col-start-9">
-                <NoiseCover
-                  seed="portrait"
-                  ground="#15161a"
-                  className="aspect-[4/5] rounded-[1rem] border sn-rule"
-                >
-                  <p className="sn-mono absolute left-4 top-4 text-bone/70">Portrait</p>
-                </NoiseCover>
-                <figcaption className="sn-mono sn-muted mt-3">Slot reserved</figcaption>
-              </figure>
-            </div>
+            <p className="sn-lead sn-muted mt-16 max-w-[34ch] md:mt-24">
+              Users and the business sometimes want different things. I stay on the problem until
+              one design works for both.
+            </p>
           </div>
         </div>
       </section>

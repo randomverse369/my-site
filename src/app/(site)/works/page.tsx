@@ -6,7 +6,7 @@ import WorksIndex, { type WorksItem } from "@/components/works/WorksIndex";
 
 export const metadata: Metadata = {
   title: "Works",
-  description: `${spell(projectCounts.total, true)} product design projects from Finvasia, DigiMantra and Tier5. ${spell(
+  description: `${spell(projectCounts.total, true)} projects from Finvasia, DigiMantra, Tier5 and client work. ${spell(
     projectCounts.published,
     true,
   )} carry a written case study.`,
@@ -27,6 +27,7 @@ const items: WorksItem[] = projects.map((project, index) => ({
     .map((item) => item.value)
     .join(" · "),
   draft: project.caseStudy === "coming-soon",
+  external: project.caseStudy === "live-site",
   tags: project.tags,
   image: project.image ? { src: project.image, alt: project.imageLabel } : undefined,
   ground: project.ground,
@@ -47,7 +48,7 @@ export default function Works() {
         </SplitReveal>
         <p className="cs-standfirst mt-10 max-w-3xl">
           I did this work at Finvasia, DigiMantra and Tier5, most of it on trading platforms and the
-          AI layered onto them. {spell(projectCounts.draft, true)} of the case studies are still in draft,
+          AI layered onto them. One is a client site I built on my own. {spell(projectCounts.draft, true)} of the case studies are still in draft,
           and each one says so.
         </p>
       </header>

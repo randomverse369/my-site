@@ -18,6 +18,8 @@ export type WorksItem = {
   body: string;
   meta: string;
   draft: boolean;
+  /** Links off-site to a live product instead of a case study. */
+  external?: boolean;
   tags: string[];
   image?: { src: string; alt: string };
   ground?: string;
@@ -141,6 +143,7 @@ export default function WorksIndex({ items }: { items: WorksItem[] }) {
           <li key={item.id} hidden={!active.test(item.tags)} className="sn-row border-t sn-rule">
             <Link
               href={item.href}
+              {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
               onPointerEnter={() => setHovered(item.id)}
               className="sn-row-inner grid grid-cols-12 items-baseline gap-x-6 gap-y-4 py-8 md:py-10"
             >
@@ -153,6 +156,11 @@ export default function WorksIndex({ items }: { items: WorksItem[] }) {
                   <span className="sn-muted">{item.meta}</span>
                   {item.draft ? (
                     <span className="rounded-full border sn-rule px-2.5 py-0.5">In draft</span>
+                  ) : item.external ? (
+                    <span className="text-signal">
+                      Live site <span aria-hidden="true">↗</span>
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </span>
                   ) : (
                     <span className="text-signal">
                       Case study <span aria-hidden="true">→</span>

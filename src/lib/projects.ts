@@ -30,8 +30,12 @@ export type Project = {
   imageLabel: string;
   /** Ground of the generated cover shown until real screens exist. */
   ground?: string;
-  /** Whether the case study itself is written — not whether the product ships. */
-  caseStudy: "published" | "coming-soon";
+  /**
+   * Whether the case study itself is written — not whether the product ships.
+   * "live-site" has no case study at all: `href` is the live site, opened in a
+   * new tab, and the row says so instead of promising a write-up.
+   */
+  caseStudy: "published" | "coming-soon" | "live-site";
   /** Appears in the home page's Selected Works. */
   featured: boolean;
 };
@@ -198,6 +202,28 @@ export const projects: Project[] = [
     imageLabel: "UXMantra — In Development",
     ground: "#18140c",
     caseStudy: "coming-soon",
+    featured: false,
+  },
+  {
+    // A client job, linked rather than written up. The live site still carries
+    // placeholder reviews and results (Oct 2026); none of them belong here.
+    id: "tcoi",
+    title: "TCOI",
+    href: "https://tcoiglobal.com/",
+    category: "Client Website · Built with AI",
+    summary: "A live marketing site for a digital services company, built in Antigravity.",
+    body: [
+      "TCOI sells design, engineering and AI services, and needed a site to sell them from. I built it for them in Google's Antigravity, and it is live.",
+    ],
+    tags: ["Web", "AI", "Client"],
+    meta: [
+      { label: "Client", value: "TCOI" },
+      { label: "Built with", value: "Antigravity" },
+      { label: "Status", value: "Live" },
+    ],
+    imageLabel: "TCOI — Live Site",
+    ground: "#121016",
+    caseStudy: "live-site",
     featured: false,
   },
 ];
