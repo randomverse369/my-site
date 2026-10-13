@@ -35,8 +35,9 @@ export const metadata: Metadata = {
  * outcomes. No outcome numbers until the work ships and Finvasia publishes
  * figures.
  *
- * The <BeforeAfter> After pair is the low-fidelity wireframes. When hi-fi
- * exports land, swap their `src` and the caption.
+ * The <BeforeAfter> After pair: Home is the final UI (Sachin's export, Oct
+ * 2026, 390px wide at 1x), Market is still the wireframe. When a Market hi-fi
+ * lands, swap its `src` and the caption.
  *
  * TODO(sachin): three facts only you have, each worth a paragraph.
  *   1. What you owned: the only designer on it? Who you worked with.
@@ -61,7 +62,7 @@ export default function ShoonyaCaseStudy() {
           { label: "Company", value: "Finvasia" },
           // TODO(sachin): fill in the dates for this redesign and restore this row.
           // { label: "Dates", value: "" },
-          { label: "Status", value: "Wireframes done, hi-fi in progress" },
+          { label: "Status", value: "Home in final UI, Market in wireframe" },
           { label: "Surface", value: "Phone, iOS and Android" },
           { label: "Scope", value: "Information architecture, Home and Market" },
         ]}
@@ -87,17 +88,17 @@ export default function ShoonyaCaseStudy() {
         ]}
         after={[
           {
-            label: "Home",
-            src: "/shoonya-after-home.webp",
-            alt: "Home wireframe: portfolio value and P&L, shortcuts to holdings, positions and orders, a watchlist with Buy and Sell, and trading tools.",
+            label: "Home, final UI",
+            src: "/shoonya-after-home-final.webp",
+            alt: "Final Home screen: search, NIFTY 50 and NIFTY BANK tickers, total portfolio value with invested amount and overall P&L, and shortcuts to holdings, positions and orders.",
           },
           {
-            label: "Market",
+            label: "Market, wireframe",
             src: "/shoonya-after-market.webp",
             alt: "Market wireframe: key indices, market movers, top sectors, FII and DII activity, market events, and news.",
           },
         ]}
-        caption="One screen doing four jobs, then two screens doing one each. The after screens are wireframes until the hi-fi is done."
+        caption="One screen doing four jobs, then two screens doing one each. Home is the final UI. Market is still the wireframe."
       />
 
       <CaseSection index={1} label="Overview">
@@ -234,7 +235,7 @@ export default function ShoonyaCaseStudy() {
           <li>Every capability on the old screen had to stay reachable from the new ones.</li>
           <li>Information architecture for two screens, Home and Market.</li>
           <li>Phone only, iOS and Android.</li>
-          <li>Wireframes are settled. Hi-fi is in progress.</li>
+          <li>Home is through to final UI. Market is at wireframe.</li>
         </ul>
       </CaseSection>
 
@@ -454,6 +455,15 @@ export default function ShoonyaCaseStudy() {
         caption="Home, top to bottom: a utility header with search, notifications, profile and Add Funds; My Money; My Watchlist with price, change and Buy/Sell; a short set of trading tools; and a SensAI button that floats over every screen."
       />
 
+      <Media
+        phone
+        src="/shoonya-home-final.webp"
+        alt="Final Home screen, top to bottom: portfolio value and P&L, holdings, positions and orders, My Watchlist with four tabs, Trading Tools, Discover & Invest, a Market Insights banner, Unsure where to invest, and a feedback prompt."
+        width={390}
+        height={1982}
+        caption="Home in final UI. The four bands held: My Money at the top, then the watchlist and trading tools, then Discover & Invest, then the learning row under Unsure where to invest?"
+      />
+
       <CaseSection index={10} label="Process: Market">
         <p className="cs-lead">
           Market answers what the market is doing. Home keeps a glance at it, and Market holds
@@ -480,8 +490,8 @@ export default function ShoonyaCaseStudy() {
 
       <CaseSection index={11} label="Outcomes & Lessons">
         <p className="cs-lead">
-          The wireframes are settled. The hi-fi screens are in progress, and they replace the
-          wireframes at the top of this page when they&apos;re done.
+          Home is through to final UI, and the ranking survived it: My Money, then actions, then
+          discovery, then learning. Market is still at wireframe on this page.
         </p>
         <p className="cs-body">
           The split is still a hypothesis. The benchmark, the public threads and the principles shaped

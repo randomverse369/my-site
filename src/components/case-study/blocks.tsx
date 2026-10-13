@@ -240,6 +240,7 @@ export function Media({
   height,
   caption,
   narrow = false,
+  phone = false,
 }: {
   src: string;
   alt: string;
@@ -248,14 +249,19 @@ export function Media({
   caption?: ReactNode;
   /** For a tall screen: hold it to a reading width instead of the full gutter. */
   narrow?: boolean;
+  /** For a single phone screen exported at 1x: drawn at phone width so it stays sharp. */
+  phone?: boolean;
 }) {
+  const frame = phone ? "mx-auto max-w-[27rem]" : narrow ? "mx-auto max-w-4xl" : "";
   return (
-    <figure className={`sn-gutter py-[8vh] ${narrow ? "mx-auto max-w-4xl" : ""}`}>
+    <figure className={`sn-gutter py-[8vh] ${frame}`}>
       <NoiseCover
         seed={src}
         image={{ src, alt }}
         aspect={`${width} / ${height}`}
-        sizes={narrow ? "(min-width: 896px) 896px, 100vw" : "(min-width: 768px) 94vw, 100vw"}
+        sizes={
+          phone ? "432px" : narrow ? "(min-width: 896px) 896px, 100vw" : "(min-width: 768px) 94vw, 100vw"
+        }
         className="rounded-[1.25rem] bg-raised"
       />
       {caption && <figcaption className="sn-mono sn-muted mt-4 max-w-3xl">{caption}</figcaption>}
