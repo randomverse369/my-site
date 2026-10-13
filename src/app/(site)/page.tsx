@@ -31,7 +31,7 @@ const panels: WorkPanel[] = [
     meta: "Finvasia · In development",
     summary:
       "One overloaded landing screen, split in two: Home for the user’s own money and what they can do next, Market for what the market is doing.",
-    image: { src: "/work-shoonya.png", alt: shoonya.imageLabel },
+    image: { src: "/work-shoonya.webp", alt: shoonya.imageLabel },
   },
   {
     id: sensai.id,
