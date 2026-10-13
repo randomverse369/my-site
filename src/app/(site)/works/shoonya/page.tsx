@@ -35,9 +35,9 @@ export const metadata: Metadata = {
  * outcomes. No outcome numbers until the work ships and Finvasia publishes
  * figures.
  *
- * The <BeforeAfter> After pair: Home is the final UI (Sachin's export, Oct
- * 2026, 390px wide at 1x), Market is still the wireframe. When a Market hi-fi
- * lands, swap its `src` and the caption.
+ * The <BeforeAfter> After pair and the full-length screens in Home and Market
+ * are the final UI, from Sachin's 2x exports (Home.png, Market.png, Oct 2026).
+ * The pair shows each screen's first fold, cropped to match the before.
  *
  * TODO(sachin): three facts only you have, each worth a paragraph.
  *   1. What you owned: the only designer on it? Who you worked with.
@@ -62,7 +62,7 @@ export default function ShoonyaCaseStudy() {
           { label: "Company", value: "Finvasia" },
           // TODO(sachin): fill in the dates for this redesign and restore this row.
           // { label: "Dates", value: "" },
-          { label: "Status", value: "Home in final UI, Market in wireframe" },
+          { label: "Status", value: "Final UI, Home and Market" },
           { label: "Surface", value: "Phone, iOS and Android" },
           { label: "Scope", value: "Information architecture, Home and Market" },
         ]}
@@ -90,15 +90,15 @@ export default function ShoonyaCaseStudy() {
           {
             label: "Home, final UI",
             src: "/shoonya-after-home-final.webp",
-            alt: "Final Home screen: search, NIFTY 50 and NIFTY BANK tickers, total portfolio value with invested amount and overall P&L, and shortcuts to holdings, positions and orders.",
+            alt: "Final Home screen: search, NIFTY 50 and NIFTY BANK tickers, total portfolio value with invested amount and overall P&L, shortcuts to holdings, positions and orders, and My Watchlist.",
           },
           {
-            label: "Market, wireframe",
-            src: "/shoonya-after-market.webp",
-            alt: "Market wireframe: key indices, market movers, top sectors, FII and DII activity, market events, and news.",
+            label: "Market, final UI",
+            src: "/shoonya-after-market-final.webp",
+            alt: "Final Market screen: Stocks, FnO, Bonds and IPO tabs, index tickers, Market Movers, and Invest by Sectors.",
           },
         ]}
-        caption="One screen doing four jobs, then two screens doing one each. Home is the final UI. Market is still the wireframe."
+        caption="One screen doing four jobs, then two screens doing one each, in final UI."
       />
 
       <CaseSection index={1} label="Overview">
@@ -235,7 +235,7 @@ export default function ShoonyaCaseStudy() {
           <li>Every capability on the old screen had to stay reachable from the new ones.</li>
           <li>Information architecture for two screens, Home and Market.</li>
           <li>Phone only, iOS and Android.</li>
-          <li>Home is through to final UI. Market is at wireframe.</li>
+          <li>Wireframes first, then final UI for both screens.</li>
         </ul>
       </CaseSection>
 
@@ -459,8 +459,8 @@ export default function ShoonyaCaseStudy() {
         phone
         src="/shoonya-home-final.webp"
         alt="Final Home screen, top to bottom: portfolio value and P&L, holdings, positions and orders, My Watchlist with four tabs, Trading Tools, Discover & Invest, a Market Insights banner, Unsure where to invest, and a feedback prompt."
-        width={390}
-        height={1982}
+        width={780}
+        height={3964}
         caption="Home in final UI. The four bands held: My Money at the top, then the watchlist and trading tools, then Discover & Invest, then the learning row under Unsure where to invest?"
       />
 
@@ -488,10 +488,19 @@ export default function ShoonyaCaseStudy() {
         caption="Market, annotated section by section, with Market as the active tab in the bottom navigation."
       />
 
+      <Media
+        phone
+        src="/shoonya-market-final.webp"
+        alt="Final Market screen, top to bottom: Stocks, FnO, Bonds and IPO tabs, index tickers, Market Movers, Invest by Sectors, Corporate Actions, Tools, FII DII Provisional Cash, an AI predictions banner, and News."
+        width={780}
+        height={5040}
+        caption="Market in final UI: movers, sectors, corporate actions, tools, FII and DII cash, and news, with Market active in the bottom navigation."
+      />
+
       <CaseSection index={11} label="Outcomes & Lessons">
         <p className="cs-lead">
-          Home is through to final UI, and the ranking survived it: My Money, then actions, then
-          discovery, then learning. Market is still at wireframe on this page.
+          Home and Market are through to final UI, and Home&apos;s ranking survived it: My Money,
+          then actions, then discovery, then learning.
         </p>
         <p className="cs-body">
           The split is still a hypothesis. The benchmark, the public threads and the principles shaped
