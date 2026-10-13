@@ -20,6 +20,8 @@ export type WorksItem = {
   draft: boolean;
   /** Links off-site to a live product instead of a case study. */
   external?: boolean;
+  /** The label on an external row. Defaults to "Live site". */
+  linkLabel?: string;
   tags: string[];
   image?: { src: string; alt: string };
   ground?: string;
@@ -158,7 +160,7 @@ export default function WorksIndex({ items }: { items: WorksItem[] }) {
                     <span className="rounded-full border sn-rule px-2.5 py-0.5">In draft</span>
                   ) : item.external ? (
                     <span className="text-signal">
-                      Live site <span aria-hidden="true">↗</span>
+                      {item.linkLabel ?? "Live site"} <span aria-hidden="true">↗</span>
                       <span className="sr-only"> (opens in a new tab)</span>
                     </span>
                   ) : (

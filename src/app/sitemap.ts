@@ -17,11 +17,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/works", priority: 0.9 },
     { path: "/about", priority: 0.8 },
     { path: "/experience", priority: 0.7 },
-    ...projects.map((project) => ({
-      path: project.href,
-      // A written case study is worth more than a placeholder page.
-      priority: project.caseStudy === "published" ? 0.8 : 0.4,
-    })),
+    // Live-site rows link off the domain, so they are not pages of this site.
+    ...projects
+      .filter((project) => project.caseStudy !== "live-site")
+      .map((project) => ({
+        path: project.href,
+        // A written case study is worth more than a placeholder page.
+        priority: project.caseStudy === "published" ? 0.8 : 0.4,
+      })),
   ];
 
   return pages.map(({ path, priority }) => ({

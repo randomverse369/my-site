@@ -59,7 +59,11 @@ const currently = [
     label: "Working at",
     value: "Finvasia — Senior Product Designer. Building Jumpp and Shoonya.",
   },
-  { label: "Building", value: "UXMantra. AI-powered UX research assistant. In development." },
+  {
+    label: "Building",
+    value:
+      "UXMantra, a UX research partner that shows its sources, in private alpha. whysogood, a hundred-plus free browser tools, live.",
+  },
   {
     label: "Interested in",
     value: "AI behaviour design, system prompt design, conversation design, AI red teaming.",

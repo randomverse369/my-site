@@ -3,7 +3,7 @@
  *
  * The home page and /works previously hardcoded two separate lists, which had
  * already drifted: home showed four projects, /works showed a different four,
- * and /works/uxmantra was reachable from neither.
+ * and one project page was reachable from neither.
  */
 
 export type Project = {
@@ -36,6 +36,8 @@ export type Project = {
    * new tab, and the row says so instead of promising a write-up.
    */
   caseStudy: "published" | "coming-soon" | "live-site";
+  /** What a "live-site" row says beside its arrow. Defaults to "Live site". */
+  linkLabel?: string;
   /** Appears in the home page's Selected Works. */
   featured: boolean;
   /** Kept in the source but left off the site: no listing, no page, no sitemap entry. */
@@ -189,23 +191,48 @@ const allProjects: Project[] = [
     featured: false,
   },
   {
+    // Linked, not written up. Facts from uxmantra.ai as of Oct 13 2026: private
+    // alpha, research answers switched off until the research loop is tested.
     id: "uxmantra",
     title: "UXMantra",
-    href: "/works/uxmantra",
-    category: "Personal Project · AI Tool",
-    summary: "An AI agent that pulls the research while you are still making the decision.",
+    href: "https://uxmantra.ai/",
+    category: "Personal Product · Built AI-first",
+    summary: "A research partner for UX decisions, built to show the source behind every answer.",
     body: [
-      "I built UXMantra alone on the Gemini API, prototyped it in Google AI Studio and put it on Vercel. It holds UX research within reach while you are still making the call.",
+      "UXMantra takes a design question and connects it to research a designer can open, check and push back on, and it says where the evidence stops. It is in private alpha: the app, saved questions and a first reviewed evidence collection are built, and research answers stay off until they have been tested against a ChatGPT baseline.",
     ],
     tags: ["Personal", "AI", "UX Research"],
     meta: [
       { label: "Role", value: "Solo Builder" },
       { label: "Built with", value: "Gemini API · Vercel" },
-      { label: "Type", value: "AI Product" },
+      { label: "Status", value: "Private alpha" },
     ],
-    imageLabel: "UXMantra — In Development",
+    imageLabel: "UXMantra — Private Alpha",
     ground: "#18140c",
-    caseStudy: "coming-soon",
+    caseStudy: "live-site",
+    linkLabel: "Private alpha",
+    featured: false,
+  },
+  {
+    // Linked, not written up. Facts from whysogood.space as of Oct 13 2026:
+    // 110 tools live across eight categories, three more categories marked Soon.
+    id: "whysogood",
+    title: "whysogood",
+    href: "https://whysogood.space/",
+    category: "Personal Product · Built AI-first",
+    summary: "Free tools for images, PDFs, data and code that run entirely in the browser.",
+    body: [
+      "A free toolbox I am building AI-first: more than a hundred tools for images, PDFs, code, data, text, audio and design, plus calculators. Every one runs in the browser tab, so files never leave the device and nobody has to sign up.",
+    ],
+    tags: ["Personal", "AI", "Web"],
+    meta: [
+      { label: "Type", value: "Browser tool suite" },
+      { label: "Runs", value: "In the browser, no uploads" },
+      { label: "Status", value: "Live" },
+    ],
+    imageLabel: "whysogood — Live Site",
+    ground: "#0c1416",
+    caseStudy: "live-site",
     featured: false,
   },
   {
@@ -267,6 +294,7 @@ export const projectCounts = {
   total: projects.length,
   published: projects.filter((project) => project.caseStudy === "published").length,
   draft: projects.filter((project) => project.caseStudy === "coming-soon").length,
+  linked: projects.filter((project) => project.caseStudy === "live-site").length,
 };
 
 const WORDS = [
