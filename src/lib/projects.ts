@@ -193,6 +193,7 @@ const allProjects: Project[] = [
   {
     // Linked, not written up. Facts from uxmantra.ai as of Oct 13 2026: private
     // alpha, research answers switched off until the research loop is tested.
+    // Stack from Sachin, Oct 13 2026: ChatGPT, Supabase, Vercel, GitHub.
     id: "uxmantra",
     title: "UXMantra",
     href: "https://uxmantra.ai/",
@@ -204,7 +205,7 @@ const allProjects: Project[] = [
     tags: ["Personal", "AI", "UX Research"],
     meta: [
       { label: "Role", value: "Solo Builder" },
-      { label: "Built with", value: "Gemini API · Vercel" },
+      { label: "Built with", value: "ChatGPT · Supabase · Vercel · GitHub" },
       { label: "Status", value: "Private alpha" },
     ],
     imageLabel: "UXMantra — Private Alpha",
@@ -216,6 +217,7 @@ const allProjects: Project[] = [
   {
     // Linked, not written up. Facts from whysogood.space as of Oct 13 2026:
     // 110 tools live across eight categories, three more categories marked Soon.
+    // Stack from Sachin, Oct 13 2026: ChatGPT, Supabase, Vercel, GitHub.
     id: "whysogood",
     title: "whysogood",
     href: "https://whysogood.space/",
@@ -227,6 +229,7 @@ const allProjects: Project[] = [
     tags: ["Personal", "AI", "Web"],
     meta: [
       { label: "Type", value: "Browser tool suite" },
+      { label: "Built with", value: "ChatGPT · Supabase · Vercel · GitHub" },
       { label: "Runs", value: "In the browser, no uploads" },
       { label: "Status", value: "Live" },
     ],

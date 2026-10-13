@@ -45,7 +45,7 @@ const skills = [
       "Lovable, Antigravity",
       "ChatGPT, Claude",
       "Gemini API, Google AI Studio",
-      "Vercel",
+      "Vercel, Supabase, GitHub",
     ],
   },
 ];
