@@ -57,7 +57,7 @@ const beliefs = [
 const currently = [
   {
     label: "Working at",
-    value: "Finvasia — Senior Product Designer. Building sensAI and Jumpp.",
+    value: "Finvasia — Senior Product Designer. Building Jumpp and Shoonya.",
   },
   { label: "Building", value: "UXMantra. AI-powered UX research assistant. In development." },
   {

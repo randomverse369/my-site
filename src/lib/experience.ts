@@ -50,7 +50,7 @@ export const experiences: Experience[] = [
       "Put UX analytics tooling inside both products.",
       "Mentor teammates on framing a problem before they draw screens.",
     ],
-    projects: "sensAI, Jumpp, Shoonya.",
+    projects: "Jumpp, Shoonya.",
   },
   {
     id: "digimantra",
