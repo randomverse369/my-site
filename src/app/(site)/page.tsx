@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { projectCounts, projects, spell } from "@/lib/projects";
+import { projectCounts, projectNumber, projects, spell } from "@/lib/projects";
 import ProcessTrack from "@/components/home/ProcessTrack";
 import ExperienceRows from "@/components/home/ExperienceRows";
 import VelocityMarquee from "@/components/home/VelocityMarquee";
@@ -16,7 +16,6 @@ function project(id: string) {
 }
 
 const shoonya = project("shoonya");
-const sensai = project("sensai");
 const amorphic = project("amorphic-idp");
 
 // Summaries are lifted from each case study's own approved copy. Shoonya's
@@ -34,23 +33,13 @@ const panels: WorkPanel[] = [
     image: { src: "/work-shoonya.webp", alt: shoonya.imageLabel },
   },
   {
-    id: sensai.id,
-    title: sensai.title,
-    href: sensai.href,
-    category: sensai.category,
-    meta: "Finvasia · 0 to 1 AI product",
-    summary:
-      "Two agents behind one interface: a screener that takes plain English, and a chat assistant that answers questions about a stock while you are looking at it.",
-    image: { src: "/work-sensai.png", alt: sensai.imageLabel },
-  },
-  {
     id: amorphic.id,
     title: amorphic.title,
     href: amorphic.href,
     category: amorphic.category,
     meta: "DigiMantra · Cloudwick",
     summary: amorphic.summary,
-    glyph: "03",
+    glyph: projectNumber(amorphic.id),
     ground: "#10151f",
   },
 ];

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import CaseHero from "@/components/case-study/CaseHero";
 import CaseSection from "@/components/case-study/CaseSection";
 import { Decisions, Media, NextProject, PullQuote } from "@/components/case-study/blocks";
@@ -9,9 +10,14 @@ import { Decisions, Media, NextProject, PullQuote } from "@/components/case-stud
 export const metadata: Metadata = {
   title: "sensAI",
   description: "First AI multi-agent trading intelligence platform in the Indian trading space.",
+  robots: { index: false },
 };
 
 export default function SensAICaseStudy() {
+  // Hidden for now: the project is marked `hidden` in src/lib/projects.ts.
+  // Remove this line along with that flag to publish the page again.
+  notFound();
+
   return (
     <>
       <CaseHero

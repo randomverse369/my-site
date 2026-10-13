@@ -38,9 +38,11 @@ export type Project = {
   caseStudy: "published" | "coming-soon" | "live-site";
   /** Appears in the home page's Selected Works. */
   featured: boolean;
+  /** Kept in the source but left off the site: no listing, no page, no sitemap entry. */
+  hidden?: boolean;
 };
 
-export const projects: Project[] = [
+const allProjects: Project[] = [
   {
     id: "shoonya",
     title: "Shoonya",
@@ -81,6 +83,8 @@ export const projects: Project[] = [
     imageLabel: "SensAI — Multi-Agent Intelligence",
     caseStudy: "published",
     featured: true,
+    // Hidden for now at Sachin's request (Oct 2026). Delete this line to bring it back.
+    hidden: true,
   },
   {
     id: "amorphic-idp",
@@ -227,6 +231,9 @@ export const projects: Project[] = [
     featured: false,
   },
 ];
+
+/** Every project the site shows. Numbering, counts and "next" all run off this list. */
+export const projects = allProjects.filter((project) => !project.hidden);
 
 export const featuredProjects = projects.filter((project) => project.featured);
 
